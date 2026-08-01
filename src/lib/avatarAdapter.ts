@@ -25,7 +25,8 @@ interface DaGlobal {
   loadMods: () => void
   Player: new (config: Record<string, unknown>) => PlayerInstance
   Expression: Record<string, unknown>
-  draw: (player: PlayerInstance, canvas: HTMLCanvasElement, config: Record<string, unknown>) => void
+  draw: (container: HTMLElement, player: PlayerInstance, config: Record<string, unknown>) => void
+  getCanvasGroup: (container: HTMLElement, opts: Record<string, unknown>) => void
   Jacket: new (opts?: Record<string, unknown>) => unknown
   LooseJacket: new (opts?: Record<string, unknown>) => unknown
   DressShirt: new (opts?: Record<string, unknown>) => unknown
@@ -60,7 +61,6 @@ let da: DaGlobal | null = null
 let player: PlayerInstance | null = null
 let loadedFlag = false
 let loadPromise: Promise<boolean> | null = null
-let rafId = 0
 
 /** 动态加载 da.js 脚本并等待资源就绪 */
 export function loadAvatarLib(): Promise<boolean> {
@@ -200,23 +200,28 @@ function buildPlayer(state: AvatarState): PlayerInstance | null {
   }
 }
 
-/** 创建/更新立绘并绘制到 canvas */
-export function renderAvatar(canvas: HTMLCanvasElement, state: AvatarState): boolean {
+/** 创建/更新立绘并绘制到容器（container 内部由库创建分层画布） */
+export function renderAvatar(container: HTMLElement, state: AvatarState): boolean {
   if (!da || !loadedFlag) return false
   try {
     if (!player) {
       player = buildPlayer(state)
       if (!player) return false
     }
+    // 首次绘制：由库在容器内创建分层画布组
+    if (!container.dataset.daReady) {
+      if (!container.id) {
+        container.id = 'cf-avatar-' + Math.random().toString(36).slice(2, 9)
+      }
+      da.getCanvasGroup(container, { width: '180', height: '400' })
+      container.dataset.daReady = '1'
+    }
     player.removeAllClothing()
     for (const c of clothingFor(state)) player.wearClothing(c)
     player.applyExpression(da.Expression[expressionKey(state)] ?? da.Expression.neutral)
-    const ctx = canvas.getContext('2d')
-    if (!ctx) return false
-    ctx.clearRect(0, 0, canvas.width, canvas.height)
     da.draw(
+      container,
       player,
-      canvas,
       {
         nameColor: '#00000000',
         genderColor: '#00000000',
@@ -238,27 +243,4 @@ export function renderAvatar(canvas: HTMLCanvasElement, state: AvatarState): boo
 
 export function resetAvatar(): void {
   player = null
-}
-
-/** 渐变过渡：在 duration 毫秒内把 mods 从 from 平滑过渡到 to（每帧重绘） */
-export function tweenAvatar(canvas: HTMLCanvasElement, from: AvatarState, to: AvatarState, duration = 400, onDone?: () => void): void {
-  cancelAnimationFrame(rafId)
-  const start = performance.now()
-  const step = (now: number) => {
-    const t = Math.min(1, (now - start) / duration)
-    // 简化：混合表达式与立绘状态
-    const mixed: AvatarState = {
-      ...to,
-      expression: t < 0.5 ? from.expression : to.expression,
-      mind: t < 0.5 ? from.mind : to.mind,
-    }
-    renderAvatar(canvas, mixed)
-    if (t < 1) {
-      rafId = requestAnimationFrame(step)
-    } else {
-      renderAvatar(canvas, to)
-      onDone?.()
-    }
-  }
-  rafId = requestAnimationFrame(step)
 }

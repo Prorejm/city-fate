@@ -42,7 +42,7 @@ interface Props {
 }
 
 export function AvatarPortrait({ data, run, expression = 'normal', size = 220 }: Props) {
-  const canvasRef = useRef<HTMLCanvasElement>(null)
+  const containerRef = useRef<HTMLDivElement>(null)
   const [ready, setReady] = useState(false)
   const [failed, setFailed] = useState(false)
   const prevKey = useRef('')
@@ -60,13 +60,13 @@ export function AvatarPortrait({ data, run, expression = 'normal', size = 220 }:
   }, [])
 
   useEffect(() => {
-    const canvas = canvasRef.current
-    if (!canvas || failed) return
+    const container = containerRef.current
+    if (!container || failed) return
     if (!ready) return
     const state = buildAvatarState(data, run, expression)
     const key = `${state.gender}|${Math.floor(state.age / 12)}|${state.mind}|${state.identity}|${state.expression}|${state.sinType ?? ''}`
     if (key !== prevKey.current) {
-      const ok = renderAvatar(canvas, state)
+      const ok = renderAvatar(container, state)
       if (!ok) setFailed(true)
       prevKey.current = key
     }
@@ -90,13 +90,11 @@ export function AvatarPortrait({ data, run, expression = 'normal', size = 220 }:
   return (
     <div className="relative" style={{ width: size, height: size * 1.6 }}>
       {ready ? (
-        <canvas
-          ref={canvasRef}
-          width={180}
-          height={400}
-          className="absolute inset-0 m-auto animate-breathe"
+        <div
+          ref={containerRef}
+          className="absolute left-1/2 top-0 animate-breathe"
           style={{
-            transform: isChild ? 'scale(0.62)' : 'scale(0.92)',
+            transform: `translateX(-50%) ${isChild ? 'scale(0.62)' : 'scale(0.92)'}`,
             transformOrigin: 'center bottom',
             filter: run.distortionFormId ? 'hue-rotate(-20deg) saturate(1.4)' : undefined,
           }}
