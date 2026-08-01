@@ -37,6 +37,45 @@
     ]
   },
   {
+    "id": "singularity-path",
+    "name": "奇点之路",
+    "description": "奇迹是有专利的规则。当你开始理解它，都市的黑暗也随之向你敞开。",
+    "stages": [
+      {
+        "id": "sp-1",
+        "title": "实验室的灯光",
+        "text": "你第一次走进翼公司的实验室。奇点的光芒在培养皿中流转——那不是科学，是'奇迹'。一个研究员低声对你说：'奇迹属于翼。但理解奇迹的人，属于自己。'",
+        "trigger": { "type": "action", "actionId": "wing-project" },
+        "next": "sp-2",
+        "effects": { "intelligence": 1, "synergy": 1 }
+      },
+      {
+        "id": "sp-2",
+        "title": "专利的阴影",
+        "text": "你参与的奇点项目有了进展，但一个研究员因'私自记录数据'被带走了。他的座位第二天就坐了新人。你第一次意识到：奇点的背后，是爪牙的阴影。",
+        "trigger": { "type": "action", "actionId": "wing-project" },
+        "next": "sp-3",
+        "reward": { "gold": 300 }
+      },
+      {
+        "id": "sp-3",
+        "title": "兑换处的暗语",
+        "text": "奇点兑换处的管理员认出了你。他压低声音：'你手里的脑啡肽，是从'那家'流出来的。记住——L公司的过去，比任何奇点都危险。'你捏紧了安瓿。",
+        "trigger": { "type": "action", "actionId": "singularity-exchange" },
+        "next": "sp-4",
+        "effects": { "synergy": 2, "pressure": 5 }
+      },
+      {
+        "id": "sp-4",
+        "title": "奇迹的代价",
+        "text": "你终于理解：每一个奇点背后，都是被榨干的人、被抹去的记忆、被回收的失败品。'奇迹'这个词在都市里，从来都带着血腥味。但你选择了继续。",
+        "trigger": { "type": "action", "actionId": "wing-project" },
+        "effects": { "will": 2, "pressure": 10 },
+        "reward": { "trait": "singularity-affinity" }
+      }
+    ]
+  },
+  {
     "id": "stand-on-feet",
     "name": "立足线",
     "description": "从桥洞到有产者——在都市站稳脚跟的成长之路。",

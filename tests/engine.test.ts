@@ -39,6 +39,8 @@ function makeRun(overrides: Partial<RunState> = {}): RunState {
     subclassChoice: {},
     deepNightWindow: false,
     eyeWatchLevel: 0,
+    singularityPoints: 0,
+    workshopTrust: 0,
     ...overrides,
   }
 }

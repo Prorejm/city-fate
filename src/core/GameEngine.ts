@@ -98,6 +98,8 @@ export function createTraverseRun(
     subclassChoice: {},
     deepNightWindow: false,
     eyeWatchLevel: 0,
+    singularityPoints: 0,
+    workshopTrust: 0,
   }
   // 初始化 NPC 状态（依赖 run 完成后再处理）
   run.npcStates = initNpcStates(run)

@@ -17,6 +17,8 @@ export interface ActionOutcome {
   unlockedAction?: string
   unlockLocation?: string
   storylineProgress?: number
+  singularityExchange?: boolean
+  craftWeapon?: boolean
 }
 
 /** 行动成功率：基础 + 属性偏向 + 现代人学识 + 装备加成 */
@@ -123,6 +125,42 @@ export function executeAction(
     }
   }
 
+  // 奇点亲和：翼/工坊系行动累积奇点点数（成功时）
+  if (ok) {
+    const SINGULARITY_ACTIONS = new Set([
+      'wing-project', 'wing-exam', 'wing-meeting', 'singularity-exchange',
+      'master-forge', 'signature-weapon', 'commission-weapon',
+    ])
+    if (SINGULARITY_ACTIONS.has(actionId)) {
+      run.singularityPoints += actionId === 'wing-project' || actionId === 'signature-weapon' ? 8 : 5
+    }
+    // 工坊锻造信任累积
+    if (['apprentice-forge', 'commission-weapon', 'master-forge', 'signature-weapon'].includes(actionId)) {
+      run.workshopTrust += actionId === 'signature-weapon' ? 8 : actionId === 'master-forge' ? 5 : 2
+    }
+  }
+
+  // 奇点亲和天赋：翼/工坊系行动金币收益 +15%
+  if (data.traits.includes('singularity-affinity')) {
+    const SINGULARITY_GOLD_ACTIONS = new Set(['wing-project', 'wing-meeting', 'master-forge', 'signature-weapon'])
+    if (SINGULARITY_GOLD_ACTIONS.has(actionId) && gold > 0) {
+      gold += Math.floor(gold * 0.15)
+    }
+  }
+
+  // 定制武器：产出随机品质武器（智力与工坊信任提升高品质概率）
+  if (ok && outcome.craftWeapon) {
+    const base = 0.4 + data.stats.intelligence * 0.03 + Math.min(0.25, run.workshopTrust * 0.02)
+    const r = Math.random()
+    let crafted: string
+    if (r < base) crafted = 'w-fixer-sword'
+    else if (r < base + 0.25) crafted = 'w-plasma-blade'
+    else if (r < base + 0.4) crafted = 'w-zwei-greatsword'
+    else crafted = 'w-moonlight-saber'
+    data.inventory = [...data.inventory, { id: crafted, durability: findItem(crafted)?.durability ?? 0 }]
+    data.lifeLog = [...data.lifeLog.slice(-300), `你定制了一把 ${findItem(crafted)?.name}。`]
+  }
+
   // 文案选择
   const texts = Array.isArray(outcome.text) ? outcome.text : [outcome.text]
   const text = texts[Math.floor(rand() * texts.length)]
@@ -136,6 +174,7 @@ export function executeAction(
     npcDelta,
     effects,
     unlockedAction,
+    singularityExchange: outcome.singularityExchange,
   }
 }
 

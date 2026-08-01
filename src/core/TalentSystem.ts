@@ -50,8 +50,9 @@ export function applyTraverseTalents(
   }
 }
 
-/** 系统持有者：每 10 回合签到获得属性点 */
+/** 系统持有者：每 10 回合签到获得属性点（仅系统持有者特质生效） */
 export function systemHolderCheck(data: CityFateData, roundCount: number): boolean {
+  if (!data.traits.includes('system-holder')) return false
   if (roundCount > 0 && roundCount % 10 === 0) {
     const lowest = (Object.keys(data.stats) as (keyof CityFateData['stats'])[]).reduce((a, b) =>
       data.stats[a] <= data.stats[b] ? a : b,

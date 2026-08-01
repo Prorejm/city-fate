@@ -6,6 +6,7 @@ import { StatBar } from '../Effects'
 import { InventoryModal } from '../InventoryModal'
 import { ShopModal } from '../ShopModal'
 import { CompendiumModal } from '../CompendiumModal'
+import { SingularityShopModal } from '../SingularityShopModal'
 import { findLocation, findAction, findNpc, findAssociation, findIdentity, PROFESSIONS } from '@/core/data'
 import { actionChance } from '@/core/ActionSystem'
 import { actionAvailable } from '@/core/LocationSystem'
@@ -70,6 +71,11 @@ function StatPanel() {
         <div className="flex justify-between"><span className="text-ash-500">伙食</span><span className="text-ash-300">{run.foodLevel > 0 ? '已进食' : '饥饿'}</span></div>
         <div className="flex justify-between"><span className="text-ash-500">住处</span><span className="text-ash-300">{['桥洞', '廉价房', '公寓', '巢内'][run.shelterLevel]}</span></div>
       </div>
+      {run.singularityPoints > 0 && (
+        <div className="mt-2 rounded border border-gold-400/30 bg-gold-400/5 px-2 py-1 font-mono text-[10px] text-gold-400">
+          奇点亲和 {run.singularityPoints} 点
+        </div>
+      )}
     </div>
   )
 }
@@ -682,6 +688,7 @@ export function GameScreen() {
       {currentEvent?.kind === 'inventory' && <InventoryModal />}
       {currentEvent?.kind === 'shop' && <ShopModal />}
       {currentEvent?.kind === 'compendium' && <CompendiumModal />}
+      {currentEvent?.kind === 'singularity' && <SingularityShopModal />}
       {daySummary && <DaySummaryModal />}
       {currentEvent?.kind === 'event' && currentEvent.text === '叩问自我' && <VoiceCrisisModal />}
     </div>

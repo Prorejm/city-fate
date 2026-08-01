@@ -56,7 +56,7 @@ export interface CharacterDraft {
 }
 
 export interface CurrentEvent {
-  kind: 'event' | 'npc' | 'storyline' | 'result' | 'action' | 'commission' | 'commission-result' | 'inventory' | 'shop' | 'compendium'
+  kind: 'event' | 'npc' | 'storyline' | 'result' | 'action' | 'commission' | 'commission-result' | 'inventory' | 'shop' | 'compendium' | 'singularity'
   event?: GameEvent
   npcId?: string
   storyId?: string
@@ -266,6 +266,10 @@ export const useGameStore = create<GameStore>()(
         }
         if (actionId === 'market-buy') {
           set({ currentEvent: { kind: 'shop' } })
+          return
+        }
+        if (actionId === 'singularity-exchange') {
+          set({ currentEvent: { kind: 'singularity' } })
           return
         }
         if (actionId === 'open-inventory') {

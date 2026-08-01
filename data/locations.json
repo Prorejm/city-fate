@@ -60,7 +60,7 @@
     "stage": "SETTLED",
     "unlock": { "reputation": 15, "stat": { "attr": "intelligence", "value": 6 } },
     "staminaCost": 2,
-    "actions": ["wing-exam", "wing-apply", "study-city", "talk-winston", "talk-obrien", "wing-meeting", "wing-project", "taboo-hunt", "taboo-trace", "serve-noble", "manage-estate"]
+    "actions": ["wing-exam", "wing-apply", "study-city", "talk-winston", "talk-obrien", "wing-meeting", "wing-project", "taboo-hunt", "taboo-trace", "serve-noble", "manage-estate", "singularity-exchange"]
   },
   {
     "id": "finger-den",

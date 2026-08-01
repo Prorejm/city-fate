@@ -399,9 +399,10 @@
     "statBias": { "attr": "intelligence", "weight": 0.3 },
     "conditions": { "attribute": "wealth", "operator": ">=", "value": 500 },
     "success": {
-      "text": ["哑巴修把一件趁手的兵器拍在你面前：'拿好，别丢了。'", "定制武器到手，你感觉踏实多了。"],
+      "text": ["哑巴修把一件趁手的兵器拍在你面前：'拿好，别丢了。'", "定制武器到手，你感觉踏实多了。", "哑巴修花了一整晚，打出一件难得的好货。"],
       "gold": -400,
-      "effects": { "physique": 1, "reputation": 3 }
+      "effects": { "physique": 1, "reputation": 3 },
+      "craftWeapon": true
     },
     "fail": {
       "text": ["哑巴修摇头：'料不够，下次吧。'"],
@@ -1169,6 +1170,27 @@
     },
     "encounterChance": 0.05,
     "xp": { "profession": "butler", "amount": 40 }
+  },
+  {
+    "id": "singularity-exchange",
+    "name": "奇点兑换",
+    "description": "凭奇点亲和点数，在翼公司兑换处换取奇点产物——时间胶囊、脑啡肽、空间撕裂刃……每一件都来自某个翼的'奇迹'。",
+    "locationId": "wing-plaza",
+    "stage": "ADVENTURE",
+    "apCost": 1,
+    "staminaCost": 1,
+    "baseChance": 1.0,
+    "conditions": { "attribute": "reputation", "operator": ">=", "value": 30 },
+    "success": {
+      "text": ["兑换处的工作人员核对了你的奇点亲和记录。"],
+      "singularityExchange": true
+    },
+    "fail": {
+      "text": ["兑换处今天不对外开放。"],
+      "effects": { "pressure": 2 }
+    },
+    "encounterChance": 0,
+    "xp": { "profession": "wing", "amount": 10 }
   },
   {
     "id": "suburb-expedition",

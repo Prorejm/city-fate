@@ -241,5 +241,78 @@
     ],
     "portrait": "star",
     "tags": ["special", "star"]
+  },
+  {
+    "id": 1213,
+    "title": "奇点事故",
+    "description": "翼公司的实验区发生了奇点泄露。扭曲的光在走廊里蔓延，工作人员尖叫着逃离。你正好在场——要么帮忙疏散，要么趁乱偷取样品。",
+    "type": "special",
+    "ageRange": [25, 90],
+    "weight": 2,
+    "repeatable": true,
+    "cooldown": 15,
+    "branches": [
+      {
+        "id": "b1",
+        "text": "协助疏散，在翼公司留个好印象。",
+        "conditions": { "op": "AND", "conditions": [ { "attribute": "intelligence", "operator": ">=", "value": 6 }, { "attribute": "synergy", "operator": ">=", "value": 4 } ] },
+        "effects": { "reputation": 10, "intelligence": 1, "pressure": 8 }
+      },
+      {
+        "id": "b2",
+        "text": "趁乱偷取奇点样品。",
+        "conditions": { "attribute": "instinct", "operator": ">=", "value": 6 },
+        "effects": { "wealth": 1200, "instinct": 1, "pressure": 12, "synergy": 1 }
+      },
+      { "id": "b3", "text": "转身就走，离得越远越好。", "effects": { "pressure": 5 } }
+    ],
+    "portrait": "wing",
+    "pressureGain": 8,
+    "tags": ["special", "singularity", "wing"]
+  },
+  {
+    "id": 1214,
+    "title": "专利禁忌",
+    "description": "你无意间得知一个秘密：某个工坊在未经授权的情况下仿制了翼公司的奇点。这是头号禁忌——仿制奇点，等于向首脑宣战。你该如何处置这个秘密？",
+    "type": "special",
+    "ageRange": [25, 90],
+    "weight": 2,
+    "repeatable": true,
+    "cooldown": 18,
+    "branches": [
+      { "id": "b1", "text": "向翼公司举报，换取赏金。", "effects": { "wealth": 1500, "reputation": 5, "pressure": 5 } },
+      {
+        "id": "b2",
+        "text": "向工坊索取封口费。",
+        "conditions": { "attribute": "will", "operator": ">=", "value": 6 },
+        "effects": { "wealth": 2000, "pressure": 10, "reputation": -5 }
+      },
+      { "id": "b3", "text": "装作什么都不知道。", "effects": { "will": 1, "pressure": 3 } }
+    ],
+    "portrait": "claw",
+    "pressureGain": 8,
+    "tags": ["special", "taboo", "claw"]
+  },
+  {
+    "id": 1215,
+    "title": "脑啡肽黑市",
+    "description": "后巷的暗市里，有人偷偷出售L公司的脑啡肽。这是被严格管制的物资——但黑市的货，往往带着'故事'。卖家看着你：'要多少？'",
+    "type": "special",
+    "ageRange": [25, 90],
+    "weight": 3,
+    "repeatable": true,
+    "cooldown": 12,
+    "branches": [
+      {
+        "id": "b1",
+        "text": "买下所有脑啡肽。",
+        "conditions": { "attribute": "wealth", "operator": ">=", "value": 800 },
+        "effects": { "wealth": -800, "pressure": -20, "synergy": 1 }
+      },
+      { "id": "b2", "text": "举报这个黑市窝点。", "effects": { "reputation": 6, "pressure": 5 } },
+      { "id": "b3", "text": "只是看看，然后离开。", "effects": { "instinct": 1 } }
+    ],
+    "portrait": "enkephalin",
+    "tags": ["special", "singularity", "blackmarket"]
   }
 ]

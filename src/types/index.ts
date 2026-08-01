@@ -409,6 +409,8 @@ export interface ActionResult {
   grantTrait?: string
   itemDrops?: string[]
   repair?: boolean
+  singularityExchange?: boolean
+  craftWeapon?: boolean
   storyline?: string
   storylineProgress?: number
 }
@@ -532,4 +534,7 @@ export interface RunState {
   // ---- 扩展机制 ----
   deepNightWindow: boolean // 当日是否处于深宵窗口（3:13-4:34）
   eyeWatchLevel: number // 首脑之眼监视程度（0-100）
+  // ---- 奇点亲和 ----
+  singularityPoints: number // 奇点亲和点数（参与翼/工坊研发累积）
+  workshopTrust: number // 工坊信任度（锻造成功累积）
 }

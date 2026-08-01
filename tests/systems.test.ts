@@ -11,6 +11,8 @@ import { checkStorylines } from '@/core/StorylineSystem'
 import { ensureFixerGrade, generateCommissionPool, resolveCommission, promoteFixer, isFingerMember } from '@/core/CommissionSystem'
 import { grantXp, chooseSubclass, canChooseSubclass, totalProfessionLevel, XP_THRESHOLDS } from '@/core/ProfessionSystem'
 import { addItem, equipItem, consumeItem, equipmentBonuses, rollQuality } from '@/core/ItemSystem'
+import { singularityLevel, singularityGoldBonus, workshopTrustLevel } from '@/core/SingularitySystem'
+import { systemHolderCheck } from '@/core/TalentSystem'
 import type { GlobalMeta } from '@/types'
 
 function makeMeta(): GlobalMeta {
@@ -360,5 +362,37 @@ describe('物品系统', () => {
     expect(['white', 'green', 'blue', 'purple', 'gold']).toContain(q)
     const q2 = rollQuality(() => 0.99)
     expect(['white', 'green', 'blue', 'purple', 'gold']).toContain(q2)
+  })
+})
+
+describe('奇点亲和系统', () => {
+  it('奇点等级随点数提升', () => {
+    expect(singularityLevel(0).level).toBe(1)
+    expect(singularityLevel(25).level).toBe(2)
+    expect(singularityLevel(60).level).toBe(3)
+    expect(singularityLevel(120).level).toBe(4)
+  })
+
+  it('奇点亲和天赋提供金币加成', () => {
+    const { data } = makeTraverseRun(makeMeta())
+    data.traits.push('singularity-affinity')
+    expect(singularityGoldBonus(data, 1000)).toBe(150)
+    data.traits = data.traits.filter((t) => t !== 'singularity-affinity')
+    expect(singularityGoldBonus(data, 1000)).toBe(0)
+  })
+
+  it('工坊信任等级', () => {
+    expect(workshopTrustLevel(0)).toBe(0)
+    expect(workshopTrustLevel(5)).toBe(1)
+    expect(workshopTrustLevel(15)).toBe(2)
+    expect(workshopTrustLevel(30)).toBe(3)
+  })
+
+  it('系统持有者签到需特质', () => {
+    const { data } = makeTraverseRun(makeMeta())
+    data.traits = data.traits.filter((t) => t !== 'system-holder')
+    expect(systemHolderCheck(data, 10)).toBe(false)
+    data.traits.push('system-holder')
+    expect(systemHolderCheck(data, 10)).toBe(true)
   })
 })
