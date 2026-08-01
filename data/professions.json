@@ -1,0 +1,115 @@
+[
+  {
+    "id": "fixer",
+    "name": "收尾人",
+    "description": "都市中最具特色的职业。为金钱与情报，无所不能。收尾人体系的枢纽职业，多数职业由此衍生。",
+    "maxLevel": 5,
+    "xpSources": ["commission", "combat", "investigation"],
+    "subclassAt": 3,
+    "subclasses": [
+      { "id": "assoc-path", "name": "协会系", "description": "加入十二协会成为直属收尾人，获得协会的庇护与委托。" },
+      { "id": "finger-path", "name": "帮派系", "description": "投靠手指等帮派，以武力与义气在后巷立足。" },
+      { "id": "independent-path", "name": "独立系", "description": "以一人事务所的形式自由接单，不受协会与帮派束缚。" }
+    ],
+    "levels": [
+      { "level": 1, "unlockActions": ["fixer-board", "train-combat"], "passive": "" },
+      { "level": 2, "unlockActions": ["guild-bounty"], "passive": "委托精通：委托成功率 +3%" },
+      { "level": 3, "unlockActions": ["assoc-board"], "passive": "子职开启：选择协会系/帮派系/独立系", "chooseSubclass": true },
+      { "level": 4, "unlockActions": [], "passive": "巷口声望：声望获取 +10%" },
+      { "level": 5, "unlockActions": [], "passive": "都市老手：所有委托成功率 +5%" }
+    ]
+  },
+  {
+    "id": "wing",
+    "name": "翼公司系",
+    "description": "巢内的体面职业。从低级羽毛到掌握奇点的高管，这是一条用文件与会议铺成的路。",
+    "maxLevel": 5,
+    "xpSources": ["wing-work"],
+    "subclassAt": 3,
+    "subclasses": [
+      { "id": "finance-path", "name": "财务司", "description": "掌管翼的账目与税收。数字就是你的武器。" },
+      { "id": "hr-path", "name": "人事司", "description": "掌握员工的升降去留。人脉即权力。" },
+      { "id": "research-path", "name": "奇点研发司", "description": "触碰奇点技术的秘密。最危险也最荣耀。" }
+    ],
+    "levels": [
+      { "level": 1, "unlockActions": ["wing-apply"], "passive": "" },
+      { "level": 2, "unlockActions": [], "passive": "巢内庇护：压力积累 -20%" },
+      { "level": 3, "unlockActions": [], "passive": "子职开启：选择财务司/人事司/奇点研发司", "chooseSubclass": true },
+      { "level": 4, "unlockActions": ["wing-meeting"], "passive": "翼的话语：谈判类行动成功率 +5%" },
+      { "level": 5, "unlockActions": ["wing-project"], "passive": "羽毛变翼：翼公司收益 +15%" }
+    ]
+  },
+  {
+    "id": "workshop",
+    "name": "工坊系",
+    "description": "后巷的匠人。锻造、维修、鉴定——没有他们造不出的武器，只有他们不想造的。",
+    "maxLevel": 5,
+    "xpSources": ["forge", "repair", "identify"],
+    "subclassAt": 3,
+    "subclasses": [
+      { "id": "forge-path", "name": "锻造师", "description": "专注于打造兵器。你的作品将被收尾人随身携带。" },
+      { "id": "repair-path", "name": "维修师", "description": "让破损的装备重获新生。后巷离不开你。" },
+      { "id": "identify-path", "name": "鉴定师", "description": "辨别遗物与武器的来历。知识就是财富。" }
+    ],
+    "levels": [
+      { "level": 1, "unlockActions": ["apprentice-forge"], "passive": "" },
+      { "level": 2, "unlockActions": [], "passive": "巧手：维修/锻造成功率 +5%" },
+      { "level": 3, "unlockActions": [], "passive": "子职开启：选择锻造师/维修师/鉴定师", "chooseSubclass": true },
+      { "level": 4, "unlockActions": ["master-forge"], "passive": "工坊声誉：定制武器折扣 10%" },
+      { "level": 5, "unlockActions": ["signature-weapon"], "passive": "名匠：锻造品质 +1 档" }
+    ]
+  },
+  {
+    "id": "blood-hunter",
+    "name": "血魔猎人",
+    "description": "专门追踪血魔、以解决血魔危害为使命的古老职业。其历史或许比'收尾人'之名更久。",
+    "maxLevel": 3,
+    "xpSources": ["blood-hunt"],
+    "subclassAt": 3,
+    "subclasses": [
+      { "id": "pursuit-path", "name": "追猎者", "description": "穷追不舍，直到血魔倒下。" },
+      { "id": "blood-oath-path", "name": "血契者", "description": "与血魔的古老血脉立下契约，以血驭血。" }
+    ],
+    "levels": [
+      { "level": 1, "unlockActions": ["hunt-blood"], "passive": "血之嗅觉：血魔事件触发率 +10%" },
+      { "level": 2, "unlockActions": ["track-blood"], "passive": "猎杀本能：对血魔伤害 +15%" },
+      { "level": 3, "unlockActions": [], "passive": "血魔猎人的宿命：血魔相关委托报酬 +20%", "chooseSubclass": true }
+    ]
+  },
+  {
+    "id": "taboo-hunter",
+    "name": "禁忌猎人",
+    "description": "被翼公司雇佣、负责追查与处理禁忌触犯者的收尾人。拥有调查特权，制裁无所顾忌。",
+    "maxLevel": 3,
+    "xpSources": ["taboo-hunt"],
+    "levels": [
+      { "level": 1, "unlockActions": ["taboo-hunt"], "passive": "禁忌直觉：发现禁忌事件概率 +10%" },
+      { "level": 2, "unlockActions": ["taboo-trace"], "passive": "制裁豁免：触犯禁忌的处罚减免 30%" },
+      { "level": 3, "unlockActions": [], "passive": "翼的信任：翼公司报酬 +15%" }
+    ]
+  },
+  {
+    "id": "distortion-detective",
+    "name": "扭曲侦探",
+    "description": "处理'扭曲'事件的收尾人。白夜黑昼之后，扭曲委托爆发式增长，他们应运而生。",
+    "maxLevel": 3,
+    "xpSources": ["distortion-investigation"],
+    "levels": [
+      { "level": 1, "unlockActions": ["detect-distortion"], "passive": "洞察：扭曲事件发现率 +10%" },
+      { "level": 2, "unlockActions": ["investigate-distortion"], "passive": "心理剖析：扭曲事件成功率 +10%" },
+      { "level": 3, "unlockActions": [], "passive": "扭曲精通：扭曲相关委托报酬 +20%" }
+    ]
+  },
+  {
+    "id": "butler",
+    "name": "管家",
+    "description": "收尾人转职的细分职业。只接受家族与个人的雇佣，围绕特定人士与宅邸提供服务。",
+    "maxLevel": 3,
+    "xpSources": ["service"],
+    "levels": [
+      { "level": 1, "unlockActions": ["serve-noble"], "passive": "礼仪：压力积累 -15%" },
+      { "level": 2, "unlockActions": ["manage-estate"], "passive": "人脉：结识 NPC 概率 +10%" },
+      { "level": 3, "unlockActions": [], "passive": "家族信任：巢内资源 +15%" }
+    ]
+  }
+]

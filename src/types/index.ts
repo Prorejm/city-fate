@@ -2,7 +2,7 @@
 
 export type CoreAttr = 'physique' | 'intelligence' | 'instinct' | 'will' | 'fortune' | 'synergy'
 
-export type EffectKey = CoreAttr | 'health' | 'pressure' | 'wealth' | 'distortion' | 'reputation'
+export type EffectKey = CoreAttr | 'health' | 'pressure' | 'wealth' | 'distortion' | 'reputation' | 'foodLevel' | 'karma'
 
 /** 数值型效果（事件分支/EGO/扭曲的加减） */
 export type AttributeEffects = Partial<Record<EffectKey, number>>
@@ -215,6 +215,221 @@ export interface Identity {
   description: string
 }
 
+// ============ 穿越者生存模拟 新增类型 ============
+
+/** 委托难度（对应都市灾害等级，由 Hana 协会评定） */
+export type CommissionTier = '传闻' | '都市传说' | '都市恶疾' | '都市梦魇' | '都市之星'
+
+/** 十二协会定义 */
+export interface AssociationDef {
+  id: string
+  number: number
+  name: string
+  etymology: string
+  role: string
+  color: string
+  tiers: CommissionTier[]
+}
+
+/** 委托模板（按协会 + 难度分类） */
+export interface CommissionDef {
+  id: string
+  associationId: string
+  tier: CommissionTier
+  name: string
+  description: string
+  statBias?: { attr: CoreAttr; weight: number }
+  baseChance: number
+  success: {
+    text: string | string[]
+    gold: number
+    effects?: AttributeEffects
+    assocDelta?: number
+  }
+  fail: {
+    text: string | string[]
+    gold: number
+    effects?: AttributeEffects
+    assocDelta?: number
+  }
+}
+
+/** 委托执行结果 */
+export interface CommissionResult {
+  commission: CommissionDef
+  success: boolean
+  text: string
+  gold: number
+  effects: AttributeEffects
+  promoted?: string // 晋升后的身份 id
+  assocDelta: number
+}
+
+// ============ DND 式职业系统 ============
+
+/** 职业子职 */
+export interface ProfessionSubclass {
+  id: string
+  name: string
+  description: string
+}
+
+/** 职业等级特性 */
+export interface ProfessionLevel {
+  level: number
+  unlockActions: string[]
+  passive: string
+  chooseSubclass?: boolean
+}
+
+/** 职业定义 */
+export interface ProfessionDef {
+  id: string
+  name: string
+  description: string
+  maxLevel: number
+  xpSources: string[]
+  subclassAt?: number
+  subclasses?: ProfessionSubclass[]
+  levels: ProfessionLevel[]
+}
+
+/** 行动经验来源标记 */
+export interface XpSource {
+  profession: string
+  amount: number
+}
+
+/** 天赋分类：穿越天赋 / 开局身份天赋 */
+export type TalentKind = 'traverse' | 'identity' | 'regular'
+
+export interface TraverseTalent {
+  id: string
+  name: string
+  kind: TalentKind
+  description: string
+  effects?: AttributeEffects
+  passive?: string
+  /** 身份天赋：初始身份/地点/资源/NPC 关系 */
+  identity?: {
+    initialIdentity: string
+    initialLocation: string
+    initialWealth: number
+    initialAffiliation: string
+    traits: string[]
+    npcAffinities: Record<string, number>
+    unlockActions: string[]
+  }
+}
+
+export type Stage = 'SURVIVAL' | 'SETTLED' | 'ADVENTURE'
+
+export interface LocationDef {
+  id: string
+  name: string
+  description: string
+  stage: Stage
+  /** 解锁条件 */
+  unlock: {
+    reputation?: number
+    stat?: { attr: CoreAttr; value: number }
+    actionId?: string
+    trait?: string
+  }
+  /** 进入消耗体力 */
+  staminaCost: number
+  actions: string[]
+}
+
+export type ActionResultType = 'success' | 'fail' | 'event' | 'npc'
+
+export interface ActionResult {
+  text: string
+  effects?: AttributeEffects
+  gold?: number
+  eventId?: number
+  npcId?: string
+  npcDelta?: number
+  stage?: Stage
+  unlockAction?: string
+  grantTrait?: string
+  storyline?: string
+  storylineProgress?: number
+}
+
+export interface GameAction {
+  id: string
+  name: string
+  description: string
+  locationId: string
+  stage: Stage
+  /** 消耗行动点与体力 */
+  apCost: number
+  staminaCost: number
+  /** 前置条件 */
+  conditions?: ConditionSpec
+  /** 成功率（0-1），受属性修正 */
+  baseChance: number
+  statBias?: { attr: CoreAttr; weight: number }
+  /** 结果 */
+  success: Omit<ActionResult, 'text'> & { text: string | string[] }
+  fail: Omit<ActionResult, 'text'> & { text: string | string[] }
+  /** 触发随机遭遇权重 */
+  encounterChance?: number
+  /** 职业经验来源 */
+  xp?: XpSource
+}
+
+export type NpcRelation = '路人' | '熟人' | '盟友' | '恋人' | '仇敌'
+
+export interface NpcDef {
+  id: string
+  name: string
+  title: string
+  description: string
+  avatar: string
+  locationId: string
+  /** 初始好感 */
+  affinity: number
+  /** 专属事件（好感达到触发） */
+  events: { affinity: number; eventId: number }[]
+  storylineId?: string
+}
+
+export interface NpcState {
+  id: string
+  affinity: number
+  relation: NpcRelation
+  met: boolean
+  metLocation: string
+}
+
+export interface StorylineDef {
+  id: string
+  name: string
+  description: string
+  stages: {
+    id: string
+    title: string
+    text: string
+    trigger: {
+      type: 'action' | 'round' | 'npcAffinity' | 'storyline' | 'stat' | 'location'
+      actionId?: string
+      round?: number
+      npcId?: string
+      affinity?: number
+      storylineId?: string
+      stat?: { attr: CoreAttr; value: number }
+      locationId?: string
+    }
+    next?: string
+    effects?: AttributeEffects
+    reward?: { gold?: number; trait?: string; actionId?: string }
+  }[]
+}
+
+export type RelationShip = 'none' | 'ally' | 'rival' | 'lover' | 'mentor'
+
 /** 运行期状态（不入存档） */
 export interface RunState {
   health: number
@@ -228,4 +443,28 @@ export interface RunState {
   egoMemoryApplied: boolean
   voiceCrisisDone: boolean
   voiceWhisperDone: boolean
+  // ---- 生存模拟扩展 ----
+  stamina: number
+  locationId: string
+  stage: Stage
+  actionPoints: number
+  npcStates: NpcState[]
+  storylineProgress: Record<string, string> // storylineId -> stageId
+  roundCount: number
+  daysInCity: number
+  unlockedActions: string[]
+  unlockedLocations: string[]
+  shelterLevel: number // 0=桥洞 1=廉价房 2=公寓 3=巢内
+  foodLevel: number // 当日进食状态
+  karma: number
+  // ---- 委托系统扩展 ----
+  fixerGrade: number // 0=未入行 1~9=九阶~一阶 10=色彩级
+  assocRep: Record<string, number> // associationId -> 声望(0~100)
+  assocTotal: number // 累计协会声望（晋升判定）
+  commissionPool: CommissionDef[] // 当日委托池
+  commissionsDone: number // 累计完成委托数
+  // ---- 职业系统扩展 ----
+  professionLevels: Record<string, number> // professionId -> 等级
+  professionXp: Record<string, number> // professionId -> 当前经验
+  subclassChoice: Record<string, string> // professionId -> 子职 id
 }

@@ -30,7 +30,7 @@ export function AllocateScreen() {
 
   const handleStart = () => {
     if (!draft) return
-    startNewLife({ originId: draft.originId, stats, name: draft.name, gender: draft.gender })
+    startNewLife({ stats, name: draft.name, gender: draft.gender, traverseId: draft.traverseId, identityId: draft.identityId })
   }
 
   return (

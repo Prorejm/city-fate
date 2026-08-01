@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { getAllEvents, ACHIEVEMENTS, ORIGINS, EGO_TEMPLATES, SINS, DISTORTION_FORMS, DEATH_TYPES } from '@/core/data'
+import { getAllEvents, ACHIEVEMENTS, ORIGINS, EGO_TEMPLATES, SINS, DISTORTION_FORMS, DEATH_TYPES, TRAVERSE_TALENTS, LOCATIONS, ACTIONS, NPCS, STORYLINES, ASSOCIATIONS, COMMISSIONS } from '@/core/data'
 
 describe('数据完整性', () => {
   it('事件 ID 全局唯一', () => {
@@ -52,5 +52,40 @@ describe('数据完整性', () => {
     const crisis = getAllEvents().find((e) => e.id === 9001)
     expect(crisis?.voiceTrigger).toBe(true)
     expect(crisis?.branches?.length).toBe(3)
+  })
+
+  it('穿越天赋包含穿越类与身份类', () => {
+    expect(TRAVERSE_TALENTS.filter((t) => t.kind === 'traverse').length).toBeGreaterThanOrEqual(6)
+    expect(TRAVERSE_TALENTS.filter((t) => t.kind === 'identity').length).toBeGreaterThanOrEqual(7)
+  })
+
+  it('地点与行动数据完整', () => {
+    expect(LOCATIONS.length).toBeGreaterThanOrEqual(8)
+    expect(ACTIONS.length).toBeGreaterThanOrEqual(20)
+    for (const loc of LOCATIONS) {
+      expect(loc.actions.length).toBeGreaterThan(0)
+    }
+  })
+
+  it('NPC 头像引用存在且剧情线完整', () => {
+    expect(NPCS.length).toBeGreaterThanOrEqual(18)
+    for (const n of NPCS) {
+      expect(n.avatar.length).toBeGreaterThan(0)
+    }
+    expect(STORYLINES.length).toBeGreaterThanOrEqual(15)
+    for (const s of STORYLINES) {
+      expect(s.stages.length).toBeGreaterThanOrEqual(2)
+    }
+  })
+
+  it('十二协会完整且委托引用合法', () => {
+    expect(ASSOCIATIONS.length).toBe(12)
+    expect(new Set(ASSOCIATIONS.map((a) => a.id)).size).toBe(12)
+    expect(COMMISSIONS.length).toBeGreaterThanOrEqual(20)
+    const assocIds = new Set(ASSOCIATIONS.map((a) => a.id))
+    for (const c of COMMISSIONS) {
+      expect(assocIds.has(c.associationId)).toBe(true)
+      expect(['传闻', '都市传说', '都市恶疾', '都市梦魇', '都市之星']).toContain(c.tier)
+    }
   })
 })

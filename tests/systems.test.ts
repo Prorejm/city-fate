@@ -1,11 +1,15 @@
 import { describe, expect, it } from 'vitest'
 import { checkDeath, makeDeath } from '@/core/DeathSystem'
-import { canAwakenEgo, awakenEgo } from '@/core/EgoSystem'
+import { canAwakenEgo } from '@/core/EgoSystem'
 import { applyDistortion, resolveSin } from '@/core/DistortionSystem'
-import { finalizeDeath, computeRebirthPoints } from '@/core/RebirthSystem'
-import { createRun, resolveBranch, rollYear, endYear } from '@/core/GameEngine'
-import { findEvent } from '@/core/data'
-import { MAX_AGE } from '@/engine/GameConfig'
+import { finalizeDeath } from '@/core/RebirthSystem'
+import { createTraverseRun, beginRound } from '@/core/GameEngine'
+import { executeAction, actionChance } from '@/core/ActionSystem'
+import { travelTo, currentStage, actionAvailable } from '@/core/LocationSystem'
+import { adjustAffinity, meetNpcsAtLocation } from '@/core/NpcSystem'
+import { checkStorylines } from '@/core/StorylineSystem'
+import { ensureFixerGrade, generateCommissionPool, resolveCommission, promoteFixer, isFingerMember } from '@/core/CommissionSystem'
+import { grantXp, chooseSubclass, canChooseSubclass, totalProfessionLevel, XP_THRESHOLDS } from '@/core/ProfessionSystem'
 import type { GlobalMeta } from '@/types'
 
 function makeMeta(): GlobalMeta {
@@ -16,27 +20,14 @@ function makeStats() {
   return { physique: 5, intelligence: 5, instinct: 5, will: 5, fortune: 3, synergy: 2 }
 }
 
+function makeTraverseRun(meta: GlobalMeta) {
+  return createTraverseRun(makeStats(), '穿越者', '男', meta, 'modern-knowledge', 'backalley-orphan')
+}
+
 describe('死亡系统', () => {
-  it('150 岁强制自然老死', () => {
-    const { data, run } = createRun('backalley-rat', makeStats(), 'X', '男', makeMeta())
-    data.age = MAX_AGE
-    const d = checkDeath(data, run)
-    expect(d?.deathId).toBe('natural')
-    expect(d?.isAgeMax).toBe(true)
-  })
-
-  it('扭曲进度 100 触发扭曲化死亡', () => {
-    const { data, run } = createRun('backalley-rat', makeStats(), 'X', '男', makeMeta())
-    data.ego.distortionProgress = 100
-    expect(checkDeath(data, run)?.deathId).toBe('distorted')
-  })
-
-  it('健康归零死亡，幼年记为夭折', () => {
-    const { data, run } = createRun('backalley-rat', makeStats(), 'X', '男', makeMeta())
+  it('健康归零死亡', () => {
+    const { data, run } = makeTraverseRun(makeMeta())
     run.health = 0
-    data.age = 5
-    expect(checkDeath(data, run)?.deathId).toBe('young')
-    data.age = 40
     expect(checkDeath(data, run)?.deathId).toBe('disease')
   })
 
@@ -47,139 +38,288 @@ describe('死亡系统', () => {
   })
 })
 
-describe('EGO 系统', () => {
-  it('满足意志/共鸣/直觉条件可觉醒', () => {
-    const { data } = createRun('backalley-rat', makeStats(), 'X', '男', makeMeta())
-    data.stats.will = 7
-    data.stats.synergy = 5
-    data.stats.instinct = 4
-    expect(canAwakenEgo(data)).toBe(true)
+describe('天赋系统', () => {
+  it('身份天赋决定初始身份/地点/财富', () => {
+    const { data, run } = makeTraverseRun(makeMeta())
+    expect(data.identity).toBe('后巷遗孤')
+    expect(run.locationId).toBe('backalley-7')
+    expect(data.wealth).toBe(30)
+    expect(data.stats.instinct).toBeGreaterThanOrEqual(6)
   })
 
-  it('意志不足不可觉醒', () => {
-    const { data } = createRun('backalley-rat', makeStats(), 'X', '男', makeMeta())
+  it('收尾人学徒初始地点为协会', () => {
+    const meta = makeMeta()
+    const { run } = createTraverseRun(makeStats(), 'X', '男', meta, null, 'fixer-apprentice')
+    expect(run.locationId).toBe('fixer-guild')
+    expect(run.unlockedActions).toContain('fixer-board')
+  })
+})
+
+describe('地点与行动系统', () => {
+  it('阶段判定：生存期→立足期', () => {
+    const { data, run } = makeTraverseRun(makeMeta())
+    expect(currentStage(data, run)).toBe('SURVIVAL')
+    data.wealth = 800
+    run.shelterLevel = 1
+    expect(currentStage(data, run)).toBe('SETTLED')
+    run.reputation = 30
+    expect(currentStage(data, run)).toBe('ADVENTURE')
+  })
+
+  it('travelTo 消耗体力并移动', () => {
+    const { data, run } = makeTraverseRun(makeMeta())
+    run.unlockedLocations.push('alley-market')
+    const before = run.stamina
+    const res = travelTo(data, run, 'alley-market')
+    expect(res.ok).toBe(true)
+    expect(run.locationId).toBe('alley-market')
+    expect(run.stamina).toBe(before - 1)
+  })
+
+  it('体力不足无法移动', () => {
+    const { data, run } = makeTraverseRun(makeMeta())
+    run.unlockedLocations.push('alley-market')
+    run.stamina = 0
+    expect(travelTo(data, run, 'alley-market').ok).toBe(false)
+  })
+
+  it('executeAction 消耗 AP 与体力并返回结果', () => {
+    const { data, run } = makeTraverseRun(makeMeta())
+    run.actionPoints = 3
+    run.stamina = 10
+    const outcome = executeAction(data, run, 'odd-job', () => 0.5)
+    expect(outcome).not.toBeNull()
+    expect(run.actionPoints).toBe(2)
+    expect(run.stamina).toBe(8)
+    expect(outcome!.success).toBe(true)
+    expect(outcome!.gold).toBeGreaterThan(0)
+  })
+
+  it('行动成功率随属性变化', () => {
+    const { data } = makeTraverseRun(makeMeta())
+    const { findAction } = { findAction: null } as never
+    void findAction
+    const action = { baseChance: 0.5, statBias: { attr: 'physique' as const, weight: 1 } } as never
+    const p1 = actionChance(data, action as never)
+    data.stats.physique = 10
+    const p2 = actionChance(data, action as never)
+    expect(p2).toBeGreaterThan(p1)
+  })
+})
+
+describe('NPC 系统', () => {
+  it('初始地点 NPC 已结识', () => {
+    const { run } = makeTraverseRun(makeMeta())
+    expect(run.locationId).toBe('backalley-7')
+    const butcher = run.npcStates.find((s) => s.id === 'butcher-kai')
+    expect(butcher?.met).toBe(true)
+    expect(butcher?.metLocation).toBe('backalley-7')
+  })
+
+  it('进入新地点结识该地 NPC', () => {
+    const { data, run } = makeTraverseRun(makeMeta())
+    run.unlockedLocations.push('alley-market')
+    travelTo(data, run, 'alley-market')
+    const met = meetNpcsAtLocation(run, 'alley-market')
+    expect(met.length).toBeGreaterThan(0)
+    const ali = run.npcStates.find((s) => s.id === 'ali')
+    expect(ali?.met).toBe(true)
+  })
+
+  it('好感度与关系联动', () => {
+    const { run } = makeTraverseRun(makeMeta())
+    const st = run.npcStates.find((s) => s.id === 'old-zhou')!
+    st.affinity = 15
+    st.relation = '熟人'
+    const res = adjustAffinity(run, 'old-zhou', 30)
+    expect(res).not.toBeNull()
+    expect(st.relation).toBe('盟友')
+  })
+})
+
+describe('剧情线系统', () => {
+  it('回合触发剧情线', () => {
+    const meta = makeMeta()
+    const { data, run } = makeTraverseRun(meta)
+    run.roundCount = 1
+    const progressed = checkStorylines(data, run)
+    expect(progressed.some((p) => p.stageId === 'tm-1')).toBe(true)
+  })
+
+  it('NPC 好感触发剧情线（前置阶段完成后）', () => {
+    const meta = makeMeta()
+    const { data, run } = makeTraverseRun(meta)
+    // 先完成 tm-1（回合 1 触发）
+    run.roundCount = 1
+    checkStorylines(data, run)
+    expect(run.storylineProgress['traverse-mystery']).toBe('tm-1')
+    // 再提高阿梨好感触发 tm-2
+    const st = run.npcStates.find((s) => s.id === 'ali')!
+    st.affinity = 45
+    const progressed = checkStorylines(data, run)
+    expect(progressed.some((p) => p.stageId === 'tm-2')).toBe(true)
+  })
+})
+
+describe('回合系统', () => {
+  it('beginRound 重置行动点并推进天数', () => {
+    const meta = makeMeta()
+    const { data, run } = makeTraverseRun(meta)
+    run.actionPoints = 0
+    const round = beginRound(data, run, meta)
+    expect(run.roundCount).toBe(1)
+    expect(run.daysInCity).toBe(1)
+    expect(run.actionPoints).toBe(3)
+    expect(round.log.length).toBeGreaterThan(0)
+  })
+
+  it('饥饿时健康流失', () => {
+    const meta = makeMeta()
+    const { data, run } = makeTraverseRun(meta)
+    run.foodLevel = 0
+    const before = run.health
+    beginRound(data, run, meta)
+    expect(run.health).toBeLessThan(before)
+  })
+})
+
+describe('EGO / 扭曲 / 大罪', () => {
+  it('觉醒 EGO 需属性达标', () => {
+    const { data } = makeTraverseRun(makeMeta())
+    data.stats.will = 8
+    data.stats.synergy = 6
+    data.stats.instinct = 5
+    expect(canAwakenEgo(data)).toBe(true)
     data.stats.will = 3
     expect(canAwakenEgo(data)).toBe(false)
   })
 
-  it('觉醒后写入 egoName/type 并回退扭曲进度', () => {
-    const { data, run } = createRun('backalley-rat', makeStats(), 'X', '男', makeMeta())
-    data.stats.will = 8
-    data.stats.synergy = 6
-    data.stats.instinct = 5
-    data.ego.distortionProgress = 60
-    const res = awakenEgo(data, run, () => 0)
-    expect(data.ego.isAwakened).toBe(true)
-    expect(data.ego.egoName).toBe(res.ego.name)
-    expect(data.ego.distortionProgress).toBeLessThan(60)
-    expect(run.pressureLocked).toBe(true)
-  })
-})
-
-describe('扭曲与大罪', () => {
-  it('applyDistortion 设定形态并提升进度', () => {
-    const { data, run } = createRun('backalley-rat', makeStats(), 'X', '男', makeMeta())
+  it('applyDistortion 设定形态', () => {
+    const { data, run } = makeTraverseRun(makeMeta())
     const res = applyDistortion(data, run, () => 0)
-    expect(res.form.id).toBeTruthy()
     expect(run.distortionFormId).toBe(res.form.id)
-    expect(data.ego.distortionProgress).toBeGreaterThanOrEqual(30)
   })
 
-  it('resolveSin 按画像匹配七宗罪', () => {
-    const { data, run } = createRun('backalley-rat', makeStats(), 'X', '男', makeMeta())
+  it('resolveSin 匹配七宗罪', () => {
+    const { data, run } = makeTraverseRun(makeMeta())
     data.stats.physique = 8
     data.stats.will = 2
     run.reputation = 5
     const fate = resolveSin(data, run)
     expect(['傲慢', '嫉妒', '暴怒', '倦怠', '暴食', '忧郁', '色欲']).toContain(fate.type)
-    expect(run.sinType).toBe(fate.type)
   })
 })
 
 describe('轮回系统', () => {
-  it('finalizeDeath 累加 playCount/totalLifespan 并给出遗产点', () => {
+  it('finalizeDeath 累加全局数据', () => {
     const meta = makeMeta()
-    const { data, run } = createRun('backalley-rat', makeStats(), 'X', '男', meta)
-    data.age = 50
+    const { data, run } = makeTraverseRun(meta)
     data.wealth = 10000
     const { points } = finalizeDeath(data, meta, run)
     expect(meta.playCount).toBe(1)
-    expect(meta.totalLifespan).toBe(50)
     expect(points).toBeGreaterThan(0)
-    expect(meta.rebirthPoints).toBe(points)
-    expect(data.isAlive).toBe(false)
-  })
-
-  it('computeRebirthPoints 随成就/EGO 提升', () => {
-    const meta = makeMeta()
-    const { data, run } = createRun('backalley-rat', makeStats(), 'X', '男', meta)
-    data.age = 100
-    data.ego.isAwakened = true
-    run.distortionFormId = 'piano-body'
-    meta.unlockedAchievements = ['a', 'b']
-    const p = computeRebirthPoints(data, meta, run)
-    expect(p).toBeGreaterThan(100)
   })
 })
 
-describe('主引擎', () => {
-  it('rollYear 在年龄上限返回死亡', () => {
-    const { data, run } = createRun('backalley-rat', makeStats(), 'X', '男', makeMeta())
-    data.age = MAX_AGE
-    const plan = rollYear(data, run)
-    expect(plan.death?.deathId).toBe('natural')
+describe('委托系统', () => {
+  it('声望 8 自动授予九阶', () => {
+    const { data, run } = makeTraverseRun(makeMeta())
+    run.reputation = 8
+    expect(ensureFixerGrade(data, run)).toBe(true)
+    expect(run.fixerGrade).toBe(1)
+    expect(data.traits).toContain('fixer-license')
   })
 
-  it('endYear 年龄推进且老年健康衰减', () => {
-    const { data, run } = createRun('backalley-rat', makeStats(), 'X', '男', makeMeta())
-    data.age = 61
-    const before = run.health
-    endYear(data, run)
-    expect(data.age).toBe(62)
-    expect(run.health).toBeLessThanOrEqual(before)
+  it('委托池按阶位过滤难度', () => {
+    const { run } = makeTraverseRun(makeMeta())
+    run.fixerGrade = 1
+    run.reputation = 10
+    const pool = generateCommissionPool(run, 4, () => 0.5)
+    for (const c of pool) {
+      expect(['传闻', '都市传说']).toContain(c.tier)
+    }
+    // 九阶看不到都市之星
+    const hasStar = pool.some((c) => c.tier === '都市之星')
+    expect(hasStar).toBe(false)
   })
 
-  it('叩问自我三分支：EGO/扭曲/大罪', () => {
-    // EGO 分支
-    const meta1 = makeMeta()
-    const b1 = createRun('backalley-rat', makeStats(), 'X', '男', meta1)
-    b1.data.stats.will = 8
-    b1.data.stats.synergy = 6
-    b1.data.stats.instinct = 5
-    b1.run.pressure = 85
-    const voice = findEvent(9001)!
-    const egoBranch = voice.branches!.find((b) => b.outcome === 'ego')!
-    const r1 = resolveBranch(b1.data, b1.run, meta1, voice, egoBranch)
-    expect(r1.egoAwaken).toBeTruthy()
-    expect(b1.data.ego.isAwakened).toBe(true)
-
-    // 扭曲分支
-    const meta2 = makeMeta()
-    const b2 = createRun('backalley-rat', makeStats(), 'X', '男', meta2)
-    b2.run.pressure = 85
-    const distBranch = voice.branches!.find((b) => b.outcome === 'distortion')!
-    const r2 = resolveBranch(b2.data, b2.run, meta2, voice, distBranch)
-    expect(r2.distortionForm).toBeTruthy()
-
-    // 大罪分支
-    const meta3 = makeMeta()
-    const b3 = createRun('backalley-rat', makeStats(), 'X', '男', meta3)
-    b3.data.stats.physique = 8
-    b3.data.stats.will = 2
-    const sinBranch = voice.branches!.find((b) => b.outcome === 'sin')!
-    const r3 = resolveBranch(b3.data, b3.run, meta3, voice, sinBranch)
-    expect(r3.sinFate).toBeTruthy()
-    expect(b3.data.isAlive).toBe(false)
-    expect(meta3.playCount).toBe(1)
+  it('resolveCommission 成功更新协会声望', () => {
+    const { data, run } = makeTraverseRun(makeMeta())
+    run.fixerGrade = 1
+    run.reputation = 10
+    const res = resolveCommission(data, run, 'cm-zwei-escort', () => 0.1)
+    expect(res).not.toBeNull()
+    expect(res!.success).toBe(true)
+    expect(run.assocRep['zwei']).toBeGreaterThan(0)
+    expect(run.commissionsDone).toBe(1)
+    expect(data.wealth).toBeGreaterThan(0)
   })
 
-  it('死亡链事件直接致死', () => {
-    const meta = makeMeta()
-    const { data, run } = createRun('backalley-rat', makeStats(), 'X', '男', meta)
-    const deathEvent = findEvent(9501)!
-    const branch = deathEvent.branches![0]
-    const r = resolveBranch(data, run, meta, deathEvent, branch)
-    expect(r.death?.deathId).toBe('claw')
-    expect(data.isAlive).toBe(false)
+  it('promoteFixer 按阈值晋升', () => {
+    const { data, run } = makeTraverseRun(makeMeta())
+    run.fixerGrade = 1
+    run.assocTotal = 20
+    const promoted = promoteFixer(data, run)
+    expect(promoted).toBe('fixer-8')
+    expect(run.fixerGrade).toBe(2)
+  })
+
+  it('加入手指后协会委托板不可用', () => {
+    const { data, run } = makeTraverseRun(makeMeta())
+    data.traits.push('finger-member')
+    run.unlockedActions.push('assoc-board')
+    run.locationId = 'fixer-guild'
+    run.actionPoints = 3
+    expect(isFingerMember(data)).toBe(true)
+    expect(actionAvailable(data, run, 'assoc-board')).toBe(false)
+  })
+
+  it('成为收尾人后帮派任务不可用', () => {
+    const { data, run } = makeTraverseRun(makeMeta())
+    run.fixerGrade = 1
+    run.unlockedActions.push('finger-job')
+    run.locationId = 'finger-den'
+    run.actionPoints = 3
+    run.stamina = 10
+    expect(actionAvailable(data, run, 'finger-job')).toBe(false)
+  })
+})
+
+describe('职业系统', () => {
+  it('行动经验累积并升级解锁行动', () => {
+    const { run } = makeTraverseRun(makeMeta())
+    grantXp(run, 'fixer', 120)
+    expect(run.professionLevels['fixer']).toBe(2)
+    expect(run.unlockedActions).toContain('guild-bounty')
+  })
+
+  it('升级门槛递增', () => {
+    expect(XP_THRESHOLDS[0]).toBe(0)
+    expect(XP_THRESHOLDS[1]).toBe(100)
+    expect(XP_THRESHOLDS[2]).toBe(250)
+  })
+
+  it('达到子职等级后可选择子职', () => {
+    const { run } = makeTraverseRun(makeMeta())
+    grantXp(run, 'fixer', 300)
+    expect(run.professionLevels['fixer']).toBe(3)
+    expect(canChooseSubclass({ id: 'fixer', subclassAt: 3, subclasses: [], levels: [] } as never, run)).toBe(true)
+    expect(chooseSubclass(run, 'fixer', 'assoc-path')).toBe(true)
+    expect(run.subclassChoice['fixer']).toBe('assoc-path')
+  })
+
+  it('总职业等级为各职业之和', () => {
+    const { run } = makeTraverseRun(makeMeta())
+    grantXp(run, 'fixer', 120)
+    grantXp(run, 'workshop', 120)
+    expect(totalProfessionLevel(run)).toBe(4)
+  })
+
+  it('委托完成经验流入收尾人职业', () => {
+    const { data, run } = makeTraverseRun(makeMeta())
+    run.fixerGrade = 1
+    run.reputation = 10
+    resolveCommission(data, run, 'cm-zwei-escort', () => 0.1)
+    expect(run.professionXp['fixer']).toBeGreaterThan(0)
   })
 })

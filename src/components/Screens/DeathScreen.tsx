@@ -11,9 +11,9 @@ export function DeathScreen() {
   return (
     <div className="mx-auto flex min-h-screen max-w-3xl flex-col items-center justify-center px-4 py-12">
       <div className="paper-panel w-full p-8 text-center">
-        <div className="mb-2 font-mono text-xs tracking-[0.5em] text-blood-400">终 局</div>
+        <div className="mb-2 font-mono text-xs tracking-[0.5em] text-blood-400">终 局 · 再 次 穿 越</div>
         <h1 className="title-serif mb-6 text-4xl text-ash-300">
-          {data.name} · {data.age} 岁
+          {data.name} · 第 {run.daysInCity} 天
         </h1>
         <div className="mb-6 font-mono text-sm text-blood-300">死因：{death.cause}</div>
         <div className="mx-auto mb-8 max-w-lg border-l-2 border-blood-500/60 pl-4 text-left text-sm italic leading-relaxed text-ash-400">
@@ -71,7 +71,7 @@ export function DeathScreen() {
             onClick={goToCreate}
             className="border border-blood-500 bg-blood-600/20 px-8 py-3 font-serifcn tracking-[0.3em] text-ash-300 transition-all hover:bg-blood-600/50 hover:text-white"
           >
-            重开一世
+            再次穿越
           </button>
           <button
             onClick={goToMenu}

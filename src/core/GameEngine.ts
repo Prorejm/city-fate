@@ -1,88 +1,69 @@
 import type {
-  Achievement,
   CityFateData,
-  EventBranch,
   Gender,
   GlobalMeta,
-  GameEvent,
   RunState,
-  SinFate,
   Stats,
 } from '@/types'
-import {
-  ageHealthDecay,
-  initHealth,
-  initPressure,
-} from '@/engine/GameConfig'
-import { evalConditions } from '@/engine/ConditionEvaluator'
+import { ageHealthDecay, initHealth, initPressure } from '@/engine/GameConfig'
 import { uid, truncate } from '@/lib/utils'
 import { DeathResult, checkDeath, deathFromChain } from './DeathSystem'
-import { applyEffects, snapshotContext } from './PropertySystem'
-import { EventSelection, markCooldown, planYear } from './EventSystem'
-import { EgoAwakenResult, awakenEgo, canAwakenEgo } from './EgoSystem'
-import { DistortionApplyResult, applyDistortion, applyDistortionSideEffects, resolveSin } from './DistortionSystem'
+import { snapshotContext } from './PropertySystem'
+import { applyTraverseTalents, systemHolderCheck } from './TalentSystem'
+import { applyDistortionSideEffects } from './DistortionSystem'
 import { checkAchievements } from './AchievementSystem'
 import { finalizeDeath } from './RebirthSystem'
-import { findOrigin, nextFixerTier } from './data'
+import { initNpcStates, meetNpcsAtLocation } from './NpcSystem'
+import { currentStage, refreshUnlockedLocations } from './LocationSystem'
+import { checkStorylines, applyStorylineEffects } from './StorylineSystem'
+import { generateCommissionPool } from './CommissionSystem'
 
 export interface RunBundle {
   data: CityFateData
   run: RunState
 }
 
-export interface BranchResolution {
-  log: string
-  death?: DeathResult
-  egoAwaken?: EgoAwakenResult
-  distortionForm?: DistortionApplyResult
-  sinFate?: SinFate
-  nextEventId?: number
-  newlyAchieved: Achievement[]
-  bankrupt: boolean
+/** 基础属性（合计 25 点，玩家分配后传入） */
+export const BASE_ALLOC: Stats = {
+  physique: 5,
+  intelligence: 5,
+  instinct: 5,
+  will: 5,
+  fortune: 3,
+  synergy: 2,
 }
 
-/** 创建新人生 */
-export function createRun(
-  originId: string,
+/** 创建穿越者：分配属性 + 穿越天赋 + 身份天赋 */
+export function createTraverseRun(
   stats: Stats,
   name: string,
   gender: Gender,
   meta: GlobalMeta,
+  traverseId: string | null,
+  identityId: string | null,
 ): RunBundle {
-  const origin = findOrigin(originId)
-  const mergedStats: Stats = {
-    physique: Math.max(0, Math.min(10, stats.physique + (origin?.stats.physique ?? 0))),
-    intelligence: Math.max(0, Math.min(10, stats.intelligence + (origin?.stats.intelligence ?? 0))),
-    instinct: Math.max(0, Math.min(10, stats.instinct + (origin?.stats.instinct ?? 0))),
-    will: Math.max(0, Math.min(10, stats.will + (origin?.stats.will ?? 0))),
-    fortune: Math.max(0, Math.min(10, stats.fortune + (origin?.stats.fortune ?? 0))),
-    synergy: Math.max(0, Math.min(10, stats.synergy + (origin?.stats.synergy ?? 0))),
-  }
   const data: CityFateData = {
     id: uid('cf_'),
     name,
     gender,
-    age: 0,
+    age: 20,
     isAlive: true,
     deathCause: '',
-    stats: mergedStats,
+    stats: { ...stats },
     ego: { isAwakened: false, egoName: '', egoType: '武器', distortionProgress: 0 },
-    identity: origin?.identity ?? '后巷耗子',
-    affiliation: origin?.affiliation ?? '无',
-    wealth: origin?.wealth ?? 100,
-    traits: [...(origin?.traits ?? [])],
+    identity: '穿越者',
+    affiliation: '无',
+    wealth: 0,
+    traits: [],
     lifeLog: [],
     keyMoments: [],
     unlockedAchievements: [],
     playCount: 1,
     totalLifespan: 0,
   }
-  if (meta.egoMemory) {
-    data.traits.push('light-receiver')
-  }
   const run: RunState = {
-    health: initHealth(mergedStats),
-    pressure: initPressure(mergedStats),
+    health: initHealth(stats),
+    pressure: initPressure(stats),
     reputation: 0,
     pressureLocked: false,
     lastEventIds: [],
@@ -90,175 +71,142 @@ export function createRun(
     egoMemoryApplied: !!meta.egoMemory,
     voiceCrisisDone: false,
     voiceWhisperDone: false,
+    stamina: 10,
+    locationId: 'backalley-7',
+    stage: 'SURVIVAL',
+    actionPoints: 3,
+    npcStates: initNpcStates(runPlaceholder()),
+    storylineProgress: {},
+    roundCount: 0,
+    daysInCity: 0,
+    unlockedActions: ['odd-job', 'scavenge', 'beg', 'ask-rumors', 'rest-street', 'rest-shelter', 'listen-bridge', 'market-buy'],
+    unlockedLocations: ['backalley-7', 'bridge-cave'],
+    shelterLevel: 0,
+    foodLevel: 0,
+    karma: 0,
+    fixerGrade: 0,
+    assocRep: {},
+    assocTotal: 0,
+    commissionPool: [],
+    commissionsDone: 0,
+    professionLevels: {},
+    professionXp: {},
+    subclassChoice: {},
   }
+  // 初始化 NPC 状态（依赖 run 完成后再处理）
+  run.npcStates = initNpcStates(run)
+  // 应用天赋
+  applyTraverseTalents(data, run, traverseId, identityId)
+  // 身份天赋解锁初始行动/地点
+  if (meta.egoMemory) data.traits.push('light-receiver')
+  // 初始地点结识 NPC
+  meetNpcsAtLocation(run, run.locationId)
+  refreshUnlockedLocations(data, run)
   return { data, run }
 }
 
-export interface YearPlanResult {
-  events: EventSelection[]
-  death?: DeathResult
+// 占位函数（initNpcStates 不需要 run 内容）
+function runPlaceholder(): RunState {
+  return { locationId: 'backalley-7' } as RunState
+}
+
+/** 兼容旧 API：无天赋的默认穿越者 */
+export function createRun(
+  originId: string,
+  stats: Stats,
+  name: string,
+  gender: Gender,
+  meta: GlobalMeta,
+): RunBundle {
+  void originId
+  return createTraverseRun(stats, name, gender, meta, null, null)
+}
+
+export interface RoundResult {
   log: string
+  death?: DeathResult
+  storylines: string[]
+  newNpcs: string[]
 }
 
-/** 推进一年：返回本年度事件计划；若年龄已达上限则直接死亡 */
-export function rollYear(data: CityFateData, run: RunState, rand: () => number = Math.random): YearPlanResult {
-  // 死亡检查（年龄上限 / 扭曲满值 / 健康归零）
-  const death = checkDeath(data, run)
-  if (death) {
-    return { events: [], death, log: '' }
-  }
-  const events = planYear(data, run, rand)
-  return { events, log: '' }
-}
+/** 开始新回合：重置行动点、消耗食物、饥饿判定、阶段刷新 */
+export function beginRound(data: CityFateData, run: RunState, meta: GlobalMeta): RoundResult {
+  const stage = currentStage(data, run)
+  run.stage = stage
+  run.actionPoints = stage === 'SURVIVAL' ? 3 : 4
+  run.roundCount += 1
+  run.daysInCity += 1
 
-/** 结算一年（无更多事件时调用）：年龄 +1、老年衰减、扭曲副作用、死亡检查 */
-export function endYear(data: CityFateData, run: RunState): { log: string; death?: DeathResult } {
-  data.age += 1
-  // 老年健康自然衰减
-  const decay = ageHealthDecay(data.age)
-  if (decay > 0) {
-    run.health = Math.max(0, run.health - decay)
+  const logParts: string[] = []
+  const storylines: string[] = []
+
+  // 食物消耗：每回合需要进食（0 = 饥饿）
+  if (run.foodLevel <= 0) {
+    run.health = Math.max(0, run.health - 3)
+    run.pressure = Math.min(100, run.pressure + 5)
+    logParts.push('你饥肠辘辘，饿得眼冒金星。')
+  } else {
+    run.foodLevel -= 1
   }
-  // 都市生活逐年累积精神压力（EGO 觉醒后免疫）
-  if (data.age >= 18 && !run.pressureLocked) {
-    const creep = data.age >= 60 ? 2 : 1
-    run.pressure = Math.min(100, run.pressure + creep)
+
+  // 住处条件：无住处（shelterLevel 0）时体力恢复减半
+  if (run.shelterLevel <= 0) {
+    run.stamina = Math.min(20, run.stamina + 2)
+    logParts.push('你在桥洞勉强睡了一觉，浑身酸痛。')
+  } else {
+    run.stamina = Math.min(20, run.stamina + 4)
   }
-  // 高压之下，扭曲倾向蔓延（内心之声的预兆）
-  if (run.pressure >= 60 && data.ego.distortionProgress > 0 && !data.ego.isAwakened) {
-    data.ego.distortionProgress = Math.min(100, data.ego.distortionProgress + 1)
+
+  // 都市生活压力积累（EGO 觉醒后免疫）
+  if (run.roundCount >= 7 && !run.pressureLocked) {
+    run.pressure = Math.min(100, run.pressure + 1)
   }
-  // 扭曲形态副作用
+
+  // 系统持有者签到
+  if (systemHolderCheck(data, run.roundCount)) {
+    logParts.push('【系统】签到奖励：一项属性 +1。')
+  }
+
+  // 剧情线检查（按回合触发的）
+  const progressed = checkStorylines(data, run)
+  for (const p of progressed) {
+    storylines.push(p.stageId)
+    applyStorylineEffects(data, run, p.effects)
+  }
+
+  // 每日刷新委托池（入行后生效）
+  if (run.fixerGrade > 0) {
+    run.commissionPool = generateCommissionPool(run, 4)
+  }
+
+  // 老年衰减（穿越者 20 岁起，60 岁后生效，150 岁封顶）
+  if (data.age >= 60) {
+    const decay = ageHealthDecay(data.age)
+    if (decay > 0) run.health = Math.max(0, run.health - decay)
+  }
   if (run.distortionFormId) {
     applyDistortionSideEffects(data, run)
     data.ego.distortionProgress = Math.min(100, data.ego.distortionProgress + 1)
   }
-  const log = `第${data.age}年：时光流逝。`
-  const death = checkDeath(data, run)
-  return death ? { log, death } : { log }
-}
 
-/** 结算事件分支：应用效果、特质、身份、关键节点、结局分叉 */
-export function resolveBranch(
-  data: CityFateData,
-  run: RunState,
-  meta: GlobalMeta,
-  event: GameEvent,
-  branch: EventBranch,
-  rand: () => number = Math.random,
-): BranchResolution {
-  // 分支前置条件（分支不可选时 UI 已禁用，这里兜底）
-  const newlyAchieved: Achievement[] = []
-  let bankrupt = false
-
-  const applyAll = (effects: Record<string, number> | undefined) => {
-    const r = applyEffects(data, run, effects)
-    bankrupt = bankrupt || r.bankrupt
-  }
-
-  applyAll(event.effects)
-  applyAll(branch.effects)
-  // 事件基础精神压力
-  if (event.pressureGain && !run.pressureLocked) {
-    run.pressure = Math.max(0, Math.min(100, run.pressure + event.pressureGain))
-  }
-
-  // 特质变更
-  if (branch.grantTrait && !data.traits.includes(branch.grantTrait)) data.traits.push(branch.grantTrait)
-  if (branch.loseTrait) data.traits = data.traits.filter((t) => t !== branch.loseTrait)
-
-  // 身份/所属变更
-  if (branch.setIdentity) {
-    data.identity = branch.setIdentity === 'fixer-next' ? nextFixerTier(data.identity) ?? data.identity : branch.setIdentity
-  }
-  if (branch.setAffiliation) data.affiliation = branch.setAffiliation
-
-  // 关键节点
-  if (branch.keyMoment && !data.keyMoments.includes(branch.keyMoment)) data.keyMoments.push(branch.keyMoment)
-  for (const tag of event.tags ?? []) {
-    if (tag.startsWith('key:')) {
-      const km = tag.slice(4)
-      if (!data.keyMoments.includes(km)) data.keyMoments.push(km)
-    }
-  }
-
-  // 日志
-  const logText = `${data.age}岁｜${event.title}：${branch.text}`
-  data.lifeLog = truncate([...data.lifeLog, logText], 500)
-
-  markCooldown(run, event, data.age)
-
-  // 财富清零标记
-  if (bankrupt && !data.keyMoments.includes('bankrupt')) data.keyMoments.push('bankrupt')
-
-  let death: DeathResult | undefined
-  let egoAwaken: EgoAwakenResult | undefined
-  let distortionForm: DistortionApplyResult | undefined
-  let sinFate: SinFate | undefined
-  let nextEventId: number | undefined
-
-  // 结局分叉（内心之声）
-  if (branch.outcome === 'ego') {
-    if (canAwakenEgo(data)) {
-      egoAwaken = awakenEgo(data, run, rand)
-    } else {
-      distortionForm = applyDistortion(data, run, rand)
-    }
-  } else if (branch.outcome === 'distortion') {
-    distortionForm = applyDistortion(data, run, rand)
-  } else if (branch.outcome === 'sin') {
-    sinFate = resolveSin(data, run)
-    data.deathCause = `大罪化（${sinFate.type}）`
-    data.isAlive = false
-    death = {
-      deathId: 'sin',
-      name: sinFate.name,
-      cause: `大罪化`,
-      epitaph: sinFate.endingText,
-    }
-  }
-
-  // 死亡链
-  if (!death && branch.deathChainId) {
-    death = deathFromChain(branch.deathChainId)
-    data.deathCause = death.cause
-    data.isAlive = false
-  }
-
-  // 链式事件
-  if (!death && branch.nextEventId) {
-    nextEventId = branch.nextEventId
-  }
-
-  // 常规死亡检查
-  if (!death) {
-    const d = checkDeath(data, run)
-    if (d) {
-      death = d
-      data.deathCause = death.cause
-      data.isAlive = false
-    }
-  }
-
-  // 死亡后立即结算成就与全局数据
+  const death: DeathResult | undefined = checkDeath(data, run) ?? undefined
   if (death) {
     data.deathCause = data.deathCause || death.cause
     data.isAlive = false
     finalizeDeath(data, meta, run)
-    newlyAchieved.push(...checkAchievements(data, meta, run))
+    const gained = checkAchievements(data, meta, run)
+    for (const g of gained) {
+      logParts.push(`成就解锁：${g.name}`)
+    }
   }
 
-  return { log: logText, death, egoAwaken, distortionForm, sinFate, nextEventId, newlyAchieved, bankrupt }
+  const log = logParts.length > 0 ? logParts.join(' ') : `第 ${run.daysInCity} 天，新的一天开始了。`
+  return { log, death, storylines, newNpcs: [] }
 }
 
-/** 应用 EGO 觉醒确认（UI 演出后调用） */
-export function confirmEgo(data: CityFateData, run: RunState): void {
-  // awakenEgo 已在 resolveBranch 中调用；此处仅保证状态一致
-  void data
-  void run
-}
+export { checkDeath, deathFromChain }
 
-/** 直接死亡（兜底，如玩家选择自杀类分支） */
+/** 供 store 使用的死亡兜底 */
 export function forceDeath(data: CityFateData, run: RunState, meta: GlobalMeta, deathId: string): DeathResult {
   const d = deathFromChain(deathId)
   data.deathCause = d.cause
@@ -267,7 +215,14 @@ export function forceDeath(data: CityFateData, run: RunState, meta: GlobalMeta, 
   return d
 }
 
-/** 事件是否可触发（分支条件） */
-export function branchAvailable(data: CityFateData, run: RunState, branch: EventBranch): boolean {
-  return evalConditions(branch.conditions, snapshotContext(data, run))
+/** 行动后结算（供 ActionSystem 之外的状态刷新） */
+export function afterAction(data: CityFateData, run: RunState): void {
+  refreshUnlockedLocations(data, run)
+  // 行动后剧情检查（由 store 用 lastActionId 调用）
 }
+
+export function branchContext(data: CityFateData, run: RunState) {
+  return snapshotContext(data, run)
+}
+
+export { truncate }

@@ -1,0 +1,200 @@
+[
+  {
+    "id": "ali",
+    "name": "阿梨",
+    "title": "当铺老板娘",
+    "description": "第七区当铺的老板娘。精明、圆滑、消息灵通。她的柜台后面，藏着半条街的秘密。她看人很准——尤其是看穿你的来历。",
+    "avatar": "ali.svg",
+    "locationId": "alley-market",
+    "affinity": 20,
+    "events": [],
+    "storylineId": "traverse-mystery"
+  },
+  {
+    "id": "old-zhou",
+    "name": "老周",
+    "title": "落魄收尾人",
+    "description": "曾在三阶收尾人，如今瘸了一条腿，在协会打杂度日。他话不多，但每句话都带着江湖的分量。他看出你有收尾人的根骨。",
+    "avatar": "old-zhou.svg",
+    "locationId": "fixer-guild",
+    "affinity": 20,
+    "events": [],
+    "storylineId": "fixer-road"
+  },
+  {
+    "id": "bai-lan",
+    "name": "白岚",
+    "title": "翼人事官",
+    "description": "第七区翼公司的人事官。冷峻、干练、深不可测。她的微笑是职场礼仪，不是善意——但她的提携，是真的能改变一个人的命运。",
+    "avatar": "bai-lan.svg",
+    "locationId": "wing-plaza",
+    "affinity": 10,
+    "events": [],
+    "storylineId": "stand-on-feet"
+  },
+  {
+    "id": "ling-zero",
+    "name": "零",
+    "title": "异想体亲和者",
+    "description": "一个总是独自坐在收容所门口的少女。异想体在她身边会安静下来。她说她能'听见'它们的声音——包括你内心深处的那个。",
+    "avatar": "ling-zero.svg",
+    "locationId": "abno-facility",
+    "affinity": 20,
+    "events": [],
+    "storylineId": "spirit-line"
+  },
+  {
+    "id": "butcher-kai",
+    "name": "屠夫凯",
+    "title": "帮派头目",
+    "description": "第七区最大的帮派头目。他递给你一根烟：'在这条街上，要么跟我，要么躺下。'他的威胁从来不是玩笑。",
+    "avatar": "butcher-kai.svg",
+    "locationId": "backalley-7",
+    "affinity": 0,
+    "events": [],
+    "storylineId": "alley-power"
+  },
+  {
+    "id": "blood-mother",
+    "name": "血娘",
+    "title": "血魔长老",
+    "description": "旧血魔聚居地的长老。优雅、古老、危险。她看着你的眼神像在看一件失而复得的宝物。",
+    "avatar": "blood-mother.svg",
+    "locationId": "blood-den",
+    "affinity": 20,
+    "events": [],
+    "storylineId": "bloodline"
+  },
+  {
+    "id": "gu-doctor",
+    "name": "顾博士",
+    "title": "前脑叶研究员",
+    "description": "前脑叶公司的研究员，如今靠倒卖旧时代的奇点知识为生。他知道的太多，活得又太久——久到已经不太像人了。",
+    "avatar": "gu-doctor.svg",
+    "locationId": "abno-facility",
+    "affinity": 10,
+    "events": [],
+    "storylineId": "city-secrets"
+  },
+  {
+    "id": "du-mute",
+    "name": "哑巴修",
+    "title": "工坊主",
+    "description": "从不说话，只用手艺说话。他的工坊是后巷最可靠的武器来源。他偶尔会盯着你看很久，像是在琢磨一块好料。",
+    "avatar": "du-mute.svg",
+    "locationId": "workshop-du",
+    "affinity": 10,
+    "events": [],
+    "storylineId": null
+  },
+  {
+    "id": "ya-night",
+    "name": "夜莺",
+    "title": "酒吧歌女",
+    "description": "夜莺酒吧的主人。歌声动人，笑容危险。她认识这条街上所有人，也记住了所有人的秘密。你第一次见她时，她正在擦拭一把匕首。",
+    "avatar": "ya-night.svg",
+    "locationId": "bar-night",
+    "affinity": 15,
+    "events": [],
+    "storylineId": "love-line"
+  },
+  {
+    "id": "old-beggar",
+    "name": "老乞丐",
+    "title": "深宵见证者",
+    "description": "桥洞下最老的流浪汉。没人知道他叫什么，只知道他见过都市最深处的黑暗。他偶尔会念叨一些没人听得懂的预言。",
+    "avatar": "old-beggar.svg",
+    "locationId": "bridge-cave",
+    "affinity": 20,
+    "events": [],
+    "storylineId": "city-secrets"
+  },
+  {
+    "id": "jane-eyre",
+    "name": "简小姐",
+    "title": "Hana协会评级书记官",
+    "description": "孤儿院长大的孤女，如今是 Hana 协会南部四科的评级书记官。她的字迹工整得像印刷体，待人接物不卑不亢。后巷的人说她'油盐不进'——她知道，那叫尊严。",
+    "avatar": "jane-eyre.svg",
+    "locationId": "fixer-guild",
+    "affinity": 10,
+    "events": [],
+    "storylineId": "equal-heart"
+  },
+  {
+    "id": "winston",
+    "name": "温斯顿",
+    "title": "旧印刷局职员",
+    "description": "翼公司旧印刷局的低级羽毛。每天核对成千上万份通稿，却偷偷在笔记本的空白页写下'真相'。他的字迹发抖——因为他知道，首脑之眼无处不在。",
+    "avatar": "winston.svg",
+    "locationId": "wing-plaza",
+    "affinity": 5,
+    "events": [],
+    "storylineId": "eye-of-truth"
+  },
+  {
+    "id": "obrien",
+    "name": "奥勃良",
+    "title": "翼内部调查官",
+    "description": "翼公司内部调查官。微笑永远恰到好处，语调永远温和平缓。他劝你'相信翼的安排'——那双眼睛却在评估你的每一个反应。",
+    "avatar": "obrien.svg",
+    "locationId": "wing-plaza",
+    "affinity": 5,
+    "events": [],
+    "storylineId": "loyalty-truth"
+  },
+  {
+    "id": "valjean",
+    "name": "冉·阿让",
+    "title": "后巷收容所主人",
+    "description": "苦役犯出身的收容所主人。他力气大得惊人，却从不与人争执——他怕自己一出手，就会回到那个被编号的过去。墙角的床铺上，睡着几个他捡回来的孩子。",
+    "avatar": "valjean.svg",
+    "locationId": "backalley-7",
+    "affinity": 15,
+    "events": [],
+    "storylineId": "redemption-24601"
+  },
+  {
+    "id": "dr-jekyll",
+    "name": "杰基尔博士",
+    "title": "前奇点研究员",
+    "description": "Seven 协会的情报分析师，彬彬有礼、学识渊博。他偶尔会在深夜出现在协会走廊尽头，眼神里有一种说不清的东西在翻涌。他研究的课题，叫'自我'。",
+    "avatar": "dr-jekyll.svg",
+    "locationId": "abno-facility",
+    "affinity": 5,
+    "events": [],
+    "storylineId": "monster-within"
+  },
+  {
+    "id": "holmes",
+    "name": "夏洛克",
+    "title": "扭曲侦探",
+    "description": "后巷最有名的扭曲侦探。他一眼就能看出你的职业、你昨晚睡在哪、你身上的伤是怎么来的。收费高昂，从不解释推理过程——'演绎'对他来说如同呼吸。",
+    "avatar": "holmes.svg",
+    "locationId": "fixer-guild",
+    "affinity": 10,
+    "events": [],
+    "storylineId": "deduction-line"
+  },
+  {
+    "id": "monte-cristo",
+    "name": "埃德蒙",
+    "title": "神秘富商",
+    "description": "半年前突然出现在第七区的神秘富商。没人知道他怎么发家的，只知道他对后巷的旧怨了如指掌。他请每个人喝酒，眼神却在人群里寻找着什么——像在核对一份名单。",
+    "avatar": "monte-cristo.svg",
+    "locationId": "bar-night",
+    "affinity": 0,
+    "events": [],
+    "storylineId": "vengeance-grace"
+  },
+  {
+    "id": "santiago",
+    "name": "圣地亚哥",
+    "title": "大湖退役捕鲸人",
+    "description": "桥洞下的老渔夫，曾在大湖捕鲸三十年。他的手上全是老茧与鲸油的味道，说起大湖五灾时眼睛会发亮。他说自己太老了——却总在深夜望向出城的方向。",
+    "avatar": "santiago.svg",
+    "locationId": "bridge-cave",
+    "affinity": 15,
+    "events": [],
+    "storylineId": "indomitable-sea"
+  }
+]

@@ -1,0 +1,1168 @@
+[
+  {
+    "id": "odd-job",
+    "name": "打零工",
+    "description": "帮杂货店搬货、替摊主看摊、给工坊跑腿。挣得不多，但总比饿着强。",
+    "locationId": "backalley-7",
+    "stage": "SURVIVAL",
+    "apCost": 1,
+    "staminaCost": 2,
+    "baseChance": 0.85,
+    "statBias": { "attr": "physique", "weight": 0.5 },
+    "success": {
+      "text": ["你搬了一天的货，工头满意地数出几张钞票。", "今天的活干得利索，老板娘多给了你几个眼。", "你替人跑了一趟腿，挣了点辛苦钱。"],
+      "gold": 40,
+      "effects": { "physique": 1, "pressure": -2 }
+    },
+    "fail": {
+      "text": ["活被抢了，工头不耐烦地挥手让你走。", "你累得腰都直不起来，只挣到几个零钱。"],
+      "gold": 10,
+      "effects": { "stamina": -2, "pressure": 3 }
+    },
+    "encounterChance": 0.1,
+    "xp": { "profession": "fixer", "amount": 8 }
+  },
+  {
+    "id": "scavenge",
+    "name": "捡废品",
+    "description": "在废弃堆里翻找还能换钱的零件。运气好，能捡到值钱的东西；运气不好，可能翻出不该翻的东西。",
+    "locationId": "backalley-7",
+    "stage": "SURVIVAL",
+    "apCost": 1,
+    "staminaCost": 1,
+    "baseChance": 0.6,
+    "statBias": { "attr": "fortune", "weight": 0.6 },
+    "success": {
+      "text": ["你翻出一块完好的义体零件，黑市能卖个好价钱。", "废品堆里竟有一件没拆封的旧大衣，正好御寒。", "你找到一把还能用的旧匕首。"],
+      "gold": 60,
+      "effects": { "instinct": 1 }
+    },
+    "fail": {
+      "text": ["翻了一下午，只找到几个废铁片。", "你差点被垃圾堆里的针头扎到。"],
+      "gold": 5,
+      "effects": { "pressure": 2 }
+    },
+    "encounterChance": 0.15
+  },
+  {
+    "id": "beg",
+    "name": "乞讨",
+    "description": "放下尊严，在巷口讨一口饭吃。有些过路人会丢下几个眼，有些则会踢你一脚。",
+    "locationId": "backalley-7",
+    "stage": "SURVIVAL",
+    "apCost": 1,
+    "staminaCost": 0,
+    "baseChance": 0.5,
+    "statBias": { "attr": "fortune", "weight": 0.7 },
+    "success": {
+      "text": ["一位老妇人往你的碗里放了几枚眼，低声道：'活下去。'", "今天的运气不错，讨到的钱够买一顿饭。"],
+      "gold": 25,
+      "effects": { "pressure": -3, "foodLevel": 1 }
+    },
+    "fail": {
+      "text": ["巡逻的帮派成员一脚踢翻了你的碗。", "一整天只讨到几个硬币。"],
+      "gold": 5,
+      "effects": { "pressure": 4 }
+    },
+    "encounterChance": 0.08
+  },
+  {
+    "id": "ask-rumors",
+    "name": "打听消息",
+    "description": "蹲在巷口的茶摊，听三教九流闲聊。消息就是后巷的货币——关键时候能救命。",
+    "locationId": "backalley-7",
+    "stage": "SURVIVAL",
+    "apCost": 1,
+    "staminaCost": 0,
+    "baseChance": 0.75,
+    "statBias": { "attr": "intelligence", "weight": 0.4 },
+    "success": {
+      "text": ["你打听到哪条街最近不安全，哪家工坊在招人。", "茶摊老头讲了个旧事：前脑叶公司的人偶尔会在废墟出没。"],
+      "effects": { "intelligence": 1, "reputation": 2 }
+    },
+    "fail": {
+      "text": ["没打听到有用的消息，还被小偷摸走了钱袋。"],
+      "gold": -10,
+      "effects": { "pressure": 2 }
+    },
+    "encounterChance": 0.12
+  },
+  {
+    "id": "rest-street",
+    "name": "街角歇息",
+    "description": "找个避风的角落，靠墙歇一会儿。身体太累的时候，连睡眠都是奢侈品。",
+    "locationId": "backalley-7",
+    "stage": "SURVIVAL",
+    "apCost": 1,
+    "staminaCost": 0,
+    "baseChance": 1,
+    "success": {
+      "text": ["你靠着墙打了个盹，恢复了些许体力。", "短暂的休息让你重新有了力气。"],
+      "effects": { "stamina": 3, "health": 1 }
+    },
+    "fail": {
+      "text": ["刚睡着就被巡逻的人踹醒。"],
+      "effects": { "pressure": 3 }
+    },
+    "encounterChance": 0.1
+  },
+  {
+    "id": "rest-shelter",
+    "name": "桥洞休息",
+    "description": "回到桥洞，用破布裹紧自己睡上一觉。潮湿，但至少能躲雨。",
+    "locationId": "bridge-cave",
+    "stage": "SURVIVAL",
+    "apCost": 1,
+    "staminaCost": 0,
+    "baseChance": 1,
+    "success": {
+      "text": ["你睡了个囫囵觉，清晨的露水打湿了被角。", "桥洞的流浪汉分了你半块干饼。"],
+      "effects": { "stamina": 6, "health": 2, "pressure": -3 }
+    },
+    "fail": {
+      "text": ["桥洞夜里来了醉汉，你一夜没睡踏实。"],
+      "effects": { "stamina": 2, "pressure": 4 }
+    },
+    "encounterChance": 0.06
+  },
+  {
+    "id": "listen-bridge",
+    "name": "桥洞听夜",
+    "description": "深夜的桥洞是流民们交换情报的地方。有老乞丐讲过都市最深处的秘密。",
+    "locationId": "bridge-cave",
+    "stage": "SURVIVAL",
+    "apCost": 1,
+    "staminaCost": 0,
+    "baseChance": 0.6,
+    "statBias": { "attr": "synergy", "weight": 0.4 },
+    "success": {
+      "text": ["老乞丐压着嗓子，讲起深宵时分的传说——清道夫会为某些人让路。", "你听到了一个关于图书馆遗址的传闻。"],
+      "effects": { "instinct": 1, "synergy": 1 }
+    },
+    "fail": {
+      "text": ["除了鼾声，你什么也没听见。"],
+      "effects": {}
+    },
+    "encounterChance": 0.1
+  },
+  {
+    "id": "fixer-board",
+    "name": "查看委托板",
+    "description": "协会的委托板上贴满了任务。从送信到押运，从调查到讨债——这是收尾人起步的地方。",
+    "locationId": "fixer-guild",
+    "stage": "SURVIVAL",
+    "apCost": 1,
+    "staminaCost": 1,
+    "baseChance": 0.8,
+    "statBias": { "attr": "instinct", "weight": 0.3 },
+    "success": {
+      "text": ["你接下一单送信委托，顺利完成，委托人很满意。", "一单简单的调查委托，报酬虽少但信誉+1。"],
+      "gold": 80,
+      "effects": { "reputation": 4 }
+    },
+    "fail": {
+      "text": ["好委托都被抢光了，剩下的不是危险就是报酬太低。"],
+      "effects": { "pressure": 2 }
+    },
+    "encounterChance": 0.1,
+    "xp": { "profession": "fixer", "amount": 25 }
+  },
+  {
+    "id": "train-combat",
+    "name": "训练战斗",
+    "description": "在协会的训练场对着沙袋挥拳。技术是练出来的——每一次出拳，都让你离'活下去'更近一步。",
+    "locationId": "fixer-guild",
+    "stage": "SURVIVAL",
+    "apCost": 1,
+    "staminaCost": 3,
+    "baseChance": 0.9,
+    "statBias": { "attr": "physique", "weight": 0.5 },
+    "success": {
+      "text": ["你打烂了一个沙袋，教官点了点头。", "今天的训练让你感觉身体更结实了。"],
+      "effects": { "physique": 2, "stamina": -3 }
+    },
+    "fail": {
+      "text": ["训练过度，手臂酸得抬不起来。"],
+      "effects": { "stamina": -4, "health": -1 }
+    },
+    "encounterChance": 0.05,
+    "xp": { "profession": "fixer", "amount": 12 }
+  },
+  {
+    "id": "guild-bounty",
+    "name": "缉拿悬赏",
+    "description": "委托板上最高报酬的那栏——通缉犯的悬赏。危险，但一单就能翻身。",
+    "locationId": "fixer-guild",
+    "stage": "SETTLED",
+    "apCost": 2,
+    "staminaCost": 4,
+    "baseChance": 0.45,
+    "statBias": { "attr": "physique", "weight": 0.5 },
+    "conditions": { "attribute": "reputation", "operator": ">=", "value": 10 },
+    "success": {
+      "text": ["你盯梢三天，终于将通缉犯堵在巷尾。战斗后，你带着他的徽章回到协会。", "悬赏目标比想象中弱，你轻松得手。"],
+      "gold": 500,
+      "effects": { "reputation": 10, "pressure": 8 }
+    },
+    "fail": {
+      "text": ["悬赏目标是个硬茬，你差点交代在巷子里。", "情报有误，目标早已闻风而逃。"],
+      "gold": -50,
+      "effects": { "health": -8, "pressure": 8 }
+    },
+    "encounterChance": 0.2,
+    "xp": { "profession": "fixer", "amount": 45 }
+  },
+  {
+    "id": "market-buy",
+    "name": "购买补给",
+    "description": "在集市买食物、药品和装备。钱要花在刀刃上——每一样都可能救命。",
+    "locationId": "alley-market",
+    "stage": "SURVIVAL",
+    "apCost": 1,
+    "staminaCost": 1,
+    "baseChance": 1,
+    "success": {
+      "text": ["你买到了干粮、绷带和一把廉价匕首。", "补给到手，心里踏实了些。"],
+      "gold": -60,
+      "effects": { "health": 5, "stamina": 3, "foodLevel": 3 }
+    },
+    "fail": {
+      "text": ["集市上有人打架，你被误伤，钱也没花出去。"],
+      "effects": { "health": -3 }
+    },
+    "encounterChance": 0.08
+  },
+  {
+    "id": "market-sell",
+    "name": "变卖物品",
+    "description": "把捡到的东西拿去换钱。识货的能卖高价，不识货的只能被压价。",
+    "locationId": "alley-market",
+    "stage": "SURVIVAL",
+    "apCost": 1,
+    "staminaCost": 0,
+    "baseChance": 0.7,
+    "statBias": { "attr": "intelligence", "weight": 0.5 },
+    "success": {
+      "text": ["你凭三寸不烂之舌把破烂卖了个好价。", "今天的旧货识货的人多，卖得不错。"],
+      "gold": 90,
+      "effects": { "intelligence": 1 }
+    },
+    "fail": {
+      "text": ["被当铺老板娘狠狠压了一刀。"],
+      "gold": 20,
+      "effects": { "pressure": 2 }
+    },
+    "encounterChance": 0.12
+  },
+  {
+    "id": "gamble-street",
+    "name": "街头赌局",
+    "description": "集市的骰子摊。十赌九输，但万一赢了呢？愿力在这条街上是真的存在的东西。",
+    "locationId": "alley-market",
+    "stage": "SURVIVAL",
+    "apCost": 1,
+    "staminaCost": 0,
+    "baseChance": 0.4,
+    "statBias": { "attr": "fortune", "weight": 0.8 },
+    "success": {
+      "text": ["骰子滚出个豹子！庄家脸色铁青地数钱。", "今天的愿力站在你这边。"],
+      "gold": 200,
+      "effects": { "pressure": -4 }
+    },
+    "fail": {
+      "text": ["骰子像是被施了咒，你输光了口袋里所有钱。", "庄家摇骰的手比你想象的快。"],
+      "gold": -80,
+      "effects": { "pressure": 6 }
+    },
+    "encounterChance": 0.1
+  },
+  {
+    "id": "drink",
+    "name": "喝一杯",
+    "description": "在夜莺酒吧要一杯劣质酒。酒精麻痹神经，也麻痹痛苦。",
+    "locationId": "bar-night",
+    "stage": "SETTLED",
+    "apCost": 1,
+    "staminaCost": 0,
+    "baseChance": 1,
+    "success": {
+      "text": ["一杯劣酒下肚，紧绷的神经松弛下来。", "醉意上涌，你暂时忘记了都市的残酷。"],
+      "gold": -20,
+      "effects": { "pressure": -8, "health": -2 }
+    },
+    "fail": {
+      "text": ["你喝多了，在吧台睡了一夜，被店家赶走。"],
+      "gold": -30,
+      "effects": { "pressure": -5, "health": -4 }
+    },
+    "encounterChance": 0.08
+  },
+  {
+    "id": "socialize",
+    "name": "结识酒客",
+    "description": "在酒吧里与人攀谈。三教九流都爱在酒桌上吹牛——说不定哪个就是关键人物。",
+    "locationId": "bar-night",
+    "stage": "SETTLED",
+    "apCost": 1,
+    "staminaCost": 0,
+    "baseChance": 0.7,
+    "statBias": { "attr": "synergy", "weight": 0.5 },
+    "success": {
+      "text": ["你与一名落魄收尾人相谈甚欢，他讲起年轻时的传奇。", "酒桌上有人透露了协会的一个空缺职位。"],
+      "effects": { "synergy": 1, "reputation": 3 }
+    },
+    "fail": {
+      "text": ["你搭话的对象是个骗子，灌了你几杯酒后溜了。"],
+      "gold": -30,
+      "effects": { "pressure": 3 }
+    },
+    "encounterChance": 0.15
+  },
+  {
+    "id": "info-buy",
+    "name": "购买情报",
+    "description": "夜莺的耳朵是整个后巷最灵的。只要出得起价，她什么都知道。",
+    "locationId": "bar-night",
+    "stage": "SETTLED",
+    "apCost": 1,
+    "staminaCost": 0,
+    "baseChance": 0.9,
+    "statBias": { "attr": "intelligence", "weight": 0.3 },
+    "conditions": { "attribute": "wealth", "operator": ">=", "value": 200 },
+    "success": {
+      "text": ["夜莺压低声音：'那条巷子最近死了人，别去。'她的情报从不出错。", "你花重金买下一个关于图书馆遗址的消息。"],
+      "gold": -150,
+      "effects": { "intelligence": 2, "instinct": 1 }
+    },
+    "fail": {
+      "text": ["夜莺摇头：'这个消息，你付不起价。'"],
+      "effects": {}
+    },
+    "encounterChance": 0.05
+  },
+  {
+    "id": "flirt",
+    "name": "与夜莺调情",
+    "description": "夜莺是个危险又迷人的女人。她的微笑背后是刀锋——但飞蛾扑火，总是控制不住。",
+    "locationId": "bar-night",
+    "stage": "SETTLED",
+    "apCost": 1,
+    "staminaCost": 0,
+    "baseChance": 0.5,
+    "statBias": { "attr": "synergy", "weight": 0.6 },
+    "success": {
+      "text": ["夜莺挑眉一笑，没有拒绝你的靠近。", "她给你倒了杯免费的酒：'有点意思。'"],
+      "effects": { "synergy": 1, "pressure": -5 },
+      "npcId": "ya-night",
+      "npcDelta": 5
+    },
+    "fail": {
+      "text": ["夜莺的冷笑让你后背发凉：'少来这套。'"],
+      "effects": { "pressure": 3 },
+      "npcId": "ya-night",
+      "npcDelta": -2
+    },
+    "encounterChance": 0.1
+  },
+  {
+    "id": "apprentice-forge",
+    "name": "工坊学徒",
+    "description": "给哑巴修打下手。累，但能学手艺——这是后巷最靠谱的生存技能之一。",
+    "locationId": "workshop-du",
+    "stage": "SETTLED",
+    "apCost": 1,
+    "staminaCost": 3,
+    "baseChance": 0.85,
+    "statBias": { "attr": "intelligence", "weight": 0.5 },
+    "success": {
+      "text": ["你帮哑巴修磨了一天的刀刃，他罕见地点了点头。", "在工坊打下手，你学会了几手锻造的皮毛。"],
+      "gold": 60,
+      "effects": { "intelligence": 2, "physique": 1 }
+    },
+    "fail": {
+      "text": ["你砸坏了一块铁坯，哑巴修瞪了你一眼。"],
+      "gold": -20,
+      "effects": { "pressure": 3 }
+    },
+    "encounterChance": 0.05
+  },
+  {
+    "id": "commission-weapon",
+    "name": "定制武器",
+    "description": "让哑巴修给你打一件趁手的兵器。好武器是收尾人的命。",
+    "locationId": "workshop-du",
+    "stage": "SETTLED",
+    "apCost": 1,
+    "staminaCost": 0,
+    "baseChance": 1,
+    "statBias": { "attr": "intelligence", "weight": 0.3 },
+    "conditions": { "attribute": "wealth", "operator": ">=", "value": 500 },
+    "success": {
+      "text": ["哑巴修把一件趁手的兵器拍在你面前：'拿好，别丢了。'", "定制武器到手，你感觉踏实多了。"],
+      "gold": -400,
+      "effects": { "physique": 1, "reputation": 3 }
+    },
+    "fail": {
+      "text": ["哑巴修摇头：'料不够，下次吧。'"],
+      "effects": {}
+    },
+    "encounterChance": 0.05
+  },
+  {
+    "id": "repair-gear",
+    "name": "维修装备",
+    "description": "保养你的武器和装备。在都市，一件趁手的家伙事比命还重要。",
+    "locationId": "workshop-du",
+    "stage": "SETTLED",
+    "apCost": 1,
+    "staminaCost": 1,
+    "baseChance": 0.9,
+    "statBias": { "attr": "intelligence", "weight": 0.4 },
+    "success": {
+      "text": ["你细心保养了装备，它在关键时不会掉链子。", "哑巴修借给你工具，你自己修好了磨损的部位。"],
+      "effects": { "intelligence": 1 }
+    },
+    "fail": {
+      "text": ["工具太破旧，反而弄坏了零件。"],
+      "gold": -30,
+      "effects": { "pressure": 2 }
+    },
+    "encounterChance": 0.05
+  },
+  {
+    "id": "wing-exam",
+    "name": "翼公司入职考试",
+    "description": "翼公司的招聘考试，决定你能否进入巢内工作。竞争激烈，考场外挤满了考生与陪考的父母。",
+    "locationId": "wing-plaza",
+    "stage": "SETTLED",
+    "apCost": 2,
+    "staminaCost": 3,
+    "baseChance": 0.5,
+    "statBias": { "attr": "intelligence", "weight": 0.7 },
+    "conditions": { "op": "AND", "conditions": [ { "attribute": "intelligence", "operator": ">=", "value": 7 }, { "attribute": "reputation", "operator": ">=", "value": 10 } ] },
+    "success": {
+      "text": ["你通过了翼公司的入职考试！人事官白岚朝你点头：'欢迎入职。'", "笔试与面试都顺利，你拿到了羽毛的资格。"],
+      "effects": { "reputation": 15, "synergy": 1 },
+      "unlockAction": "wing-apply",
+      "storyline": "stand-on-feet",
+      "storylineProgress": 1
+    },
+    "fail": {
+      "text": ["考试失败。考场外的父母们默默搀走了自己的孩子——每年都是这样。"],
+      "effects": { "pressure": 10, "will": -1 }
+    },
+    "encounterChance": 0.05
+  },
+  {
+    "id": "wing-apply",
+    "name": "翼公司工作",
+    "description": "作为翼公司的低级羽毛，你在巢内上班。税很高，加班很长——但至少，你有了一个巢的身份。",
+    "locationId": "wing-plaza",
+    "stage": "SETTLED",
+    "apCost": 2,
+    "staminaCost": 4,
+    "baseChance": 0.9,
+    "statBias": { "attr": "intelligence", "weight": 0.4 },
+    "conditions": { "attribute": "reputation", "operator": ">=", "value": 15 },
+    "success": {
+      "text": ["你处理完一天的文件，上司难得夸了你一句。", "加班到深夜，但工资到账的感觉不错。"],
+      "gold": 200,
+      "effects": { "intelligence": 2, "pressure": 6, "reputation": 3 }
+    },
+    "fail": {
+      "text": ["你犯了个低级错误，被上司当众训斥。"],
+      "gold": 80,
+      "effects": { "pressure": 8, "reputation": -2 }
+    },
+    "encounterChance": 0.06
+  },
+  {
+    "id": "study-city",
+    "name": "研习都市",
+    "description": "花时间研究都市的规则——翼的禁忌、后巷的规矩、协会的体系。知识就是后巷的护身符。",
+    "locationId": "wing-plaza",
+    "stage": "SURVIVAL",
+    "apCost": 1,
+    "staminaCost": 1,
+    "baseChance": 0.9,
+    "statBias": { "attr": "intelligence", "weight": 0.6 },
+    "success": {
+      "text": ["你借来旧报纸与手册，搞懂了巢与后巷的边界。", "研读收尾人手册，你明白了协会的体系。"],
+      "effects": { "intelligence": 2, "instinct": 1 }
+    },
+    "fail": {
+      "text": ["资料太晦涩，你看得头昏脑涨。"],
+      "effects": { "pressure": 3 }
+    },
+    "encounterChance": 0.08
+  },
+  {
+    "id": "join-finger",
+    "name": "加入手指",
+    "description": "在手指据点立下誓言。加入之后，你就是这条街的一部分——从此不能再回头。",
+    "locationId": "finger-den",
+    "stage": "ADVENTURE",
+    "apCost": 2,
+    "staminaCost": 2,
+    "baseChance": 0.7,
+    "statBias": { "attr": "reputation", "weight": 0.5 },
+    "conditions": { "attribute": "reputation", "operator": ">=", "value": 25 },
+    "success": {
+      "text": ["你被收入中指麾下。弟兄们拍着你的肩：'从今往后，你的仇就是我们的仇。'", "拇指的教官认可了你的纪律。"],
+      "effects": { "reputation": 15, "physique": 1 },
+      "grantTrait": "finger-member",
+      "unlockAction": "finger-job"
+    },
+    "fail": {
+      "text": ["手指对你摇了摇头：'你还没资格。'"],
+      "effects": { "pressure": 5 }
+    },
+    "encounterChance": 0.1
+  },
+  {
+    "id": "finger-job",
+    "name": "执行帮派任务",
+    "description": "手指交给你的任务——收保护费、处理'麻烦'、抢占地盘。危险，但报酬丰厚。",
+    "locationId": "finger-den",
+    "stage": "ADVENTURE",
+    "apCost": 2,
+    "staminaCost": 4,
+    "baseChance": 0.6,
+    "statBias": { "attr": "physique", "weight": 0.5 },
+    "conditions": { "attribute": "reputation", "operator": ">=", "value": 30 },
+    "success": {
+      "text": ["任务完成，手指头目满意地点头。", "你为帮派摆平了一桩麻烦，威望上涨。"],
+      "gold": 350,
+      "effects": { "reputation": 8, "pressure": 8 }
+    },
+    "fail": {
+      "text": ["任务出了岔子，你带着一身伤回来。"],
+      "gold": 100,
+      "effects": { "health": -10, "pressure": 10, "reputation": -3 }
+    },
+    "encounterChance": 0.2
+  },
+  {
+    "id": "learn-finger",
+    "name": "修习帮派武艺",
+    "description": "手指的武艺是拿命换来的。每学一招，都是在刀尖上跳舞。",
+    "locationId": "finger-den",
+    "stage": "ADVENTURE",
+    "apCost": 1,
+    "staminaCost": 3,
+    "baseChance": 0.85,
+    "statBias": { "attr": "physique", "weight": 0.5 },
+    "success": {
+      "text": ["你学会了手指的搏击架势。", "今天的训练让你更强了。"],
+      "effects": { "physique": 2, "instinct": 1 }
+    },
+    "fail": {
+      "text": ["陪练的兄弟出手太重，你吃了苦头。"],
+      "effects": { "health": -4 }
+    },
+    "encounterChance": 0.05
+  },
+  {
+    "id": "abno-explore",
+    "name": "探索收容所",
+    "description": "潜入废弃的异想体收容设施。里面的东西既危险又值钱——脑啡肽、金枝、异想体的碎片。",
+    "locationId": "abno-facility",
+    "stage": "ADVENTURE",
+    "apCost": 2,
+    "staminaCost": 4,
+    "baseChance": 0.45,
+    "statBias": { "attr": "instinct", "weight": 0.5 },
+    "conditions": { "attribute": "reputation", "operator": ">=", "value": 30 },
+    "success": {
+      "text": ["你在废弃设施里找到一支完好的脑啡肽安瓿。", "你收集到异想体的残留物，能卖出高价。"],
+      "gold": 400,
+      "effects": { "synergy": 1, "instinct": 2, "pressure": 10 }
+    },
+    "fail": {
+      "text": ["设施深处传来不该有的动静——你逃命般地跑了出去。", "你被守株待兔的拾荒者伏击，丢下了搜到的东西。"],
+      "gold": -100,
+      "effects": { "health": -8, "pressure": 12 }
+    },
+    "encounterChance": 0.3
+  },
+  {
+    "id": "study-abno",
+    "name": "研习异想体",
+    "description": "整理关于异想体的记录与传闻。了解它们，就是了解自己内心的深渊。",
+    "locationId": "abno-facility",
+    "stage": "ADVENTURE",
+    "apCost": 1,
+    "staminaCost": 1,
+    "baseChance": 0.8,
+    "statBias": { "attr": "intelligence", "weight": 0.5 },
+    "success": {
+      "text": ["你从残破的记录中拼凑出异想体的行为模式。", "一本泛黄的研究日志让你对'共鸣'有了新理解。"],
+      "effects": { "intelligence": 2, "synergy": 1 }
+    },
+    "fail": {
+      "text": ["记录残缺不全，你看得一头雾水。"],
+      "effects": { "pressure": 3 }
+    },
+    "encounterChance": 0.15
+  },
+  {
+    "id": "collect-relic",
+    "name": "搜寻遗物",
+    "description": "在废墟与遗址中搜寻前时代的遗物。值钱的古董，危险的奇物——都是可能改变命运的东西。",
+    "locationId": "library-ruin",
+    "stage": "ADVENTURE",
+    "apCost": 2,
+    "staminaCost": 3,
+    "baseChance": 0.4,
+    "statBias": { "attr": "fortune", "weight": 0.6 },
+    "conditions": { "attribute": "reputation", "operator": ">=", "value": 35 },
+    "success": {
+      "text": ["你在一堆灰烬中翻出一枚完好的金枝碎片。", "图书馆遗址里，你找到了一本未被焚毁的'书页'。"],
+      "gold": 600,
+      "effects": { "synergy": 2, "pressure": 8 }
+    },
+    "fail": {
+      "text": ["你被其他寻宝者盯上，夺路而逃。", "遗址里根本没有值钱的东西——都被人搬空了。"],
+      "gold": -50,
+      "effects": { "health": -5, "pressure": 8 }
+    },
+    "encounterChance": 0.25
+  },
+  {
+    "id": "library-explore",
+    "name": "深入图书馆遗址",
+    "description": "那座扭曲图书馆的残骸深处，仍残留着诡异的'力量'。冒险者说，那里能听到书页翻动的声音。",
+    "locationId": "library-ruin",
+    "stage": "ADVENTURE",
+    "apCost": 2,
+    "staminaCost": 4,
+    "baseChance": 0.3,
+    "statBias": { "attr": "synergy", "weight": 0.6 },
+    "conditions": { "attribute": "reputation", "operator": ">=", "value": 45 },
+    "success": {
+      "text": ["你在图书馆遗址深处获得了某种'共鸣'——它在你体内留下了什么。", "一本残卷上的文字令你心神震颤：'书是终局，也是新生。'"],
+      "effects": { "synergy": 3, "pressure": 15, "will": 1 }
+    },
+    "fail": {
+      "text": ["遗址里的'书页'试图将你同化，你拼死挣脱。", "你被废墟中的守卫（某种扭曲的残留物）追赶出来。"],
+      "effects": { "health": -12, "pressure": 15, "will": -1 }
+    },
+    "encounterChance": 0.35
+  },
+  {
+    "id": "hunt-blood",
+    "name": "猎杀血魔",
+    "description": "循着血腥味追踪落单的血魔。危险至极，但血魔身上的材料在黑市价值连城。",
+    "locationId": "blood-den",
+    "stage": "ADVENTURE",
+    "apCost": 2,
+    "staminaCost": 4,
+    "baseChance": 0.35,
+    "statBias": { "attr": "physique", "weight": 0.5 },
+    "conditions": { "attribute": "reputation", "operator": ">=", "value": 20 },
+    "success": {
+      "text": ["你与血魔缠斗至天明，终于将其击杀。材料足够你吃穿一年。", "你取回了血魔的獠牙——血魔猎人的传统在你手中延续。"],
+      "gold": 800,
+      "effects": { "reputation": 12, "pressure": 12 }
+    },
+    "fail": {
+      "text": ["你险些成为血魔的晚餐。", "血魔太强了——你只能丢下武器逃命。"],
+      "gold": -100,
+      "effects": { "health": -15, "pressure": 12 }
+    },
+    "encounterChance": 0.3,
+    "xp": { "profession": "blood-hunter", "amount": 40 }
+  },
+  {
+    "id": "blood-rite",
+    "name": "血之仪式",
+    "description": "血魔聚居地深处的禁忌仪式。饮下那杯红色的酒，你将获得力量——也会失去一些东西。",
+    "locationId": "blood-den",
+    "stage": "ADVENTURE",
+    "apCost": 1,
+    "staminaCost": 1,
+    "baseChance": 0.6,
+    "statBias": { "attr": "synergy", "weight": 0.5 },
+    "conditions": { "attribute": "synergy", "operator": ">=", "value": 4 },
+    "success": {
+      "text": ["你饮下血酒，血脉深处有什么东西苏醒了。", "仪式完成，血魔的祝福流入你的身体。"],
+      "effects": { "physique": 1, "synergy": 1, "pressure": 15 }
+    },
+    "fail": {
+      "text": ["仪式反噬，你呕出一口血。"],
+      "effects": { "health": -8, "pressure": 12 }
+    },
+    "encounterChance": 0.15
+  },
+  {
+    "id": "assoc-board",
+    "name": "协会委托板",
+    "description": "Hana 协会牵头的十二协会委托板。各协会在此发布委托——按难度分级，按协会分门别类。",
+    "locationId": "fixer-guild",
+    "stage": "SURVIVAL",
+    "apCost": 1,
+    "staminaCost": 0,
+    "baseChance": 1,
+    "success": {
+      "text": ["你走向协会大厅中央的委托板，各协会的徽记在灯光下排成一列。"],
+      "effects": {}
+    },
+    "fail": {
+      "text": ["委托板今日维护，你只好改天再来。"],
+      "effects": {}
+    },
+    "encounterChance": 0
+  },
+  {
+    "id": "talk-jane",
+    "name": "与简小姐交谈",
+    "description": "和 Hana 协会的评级书记官聊一会儿。她的公正与倔强，让你想起一些不该忘的东西。",
+    "locationId": "fixer-guild",
+    "stage": "SETTLED",
+    "apCost": 1,
+    "staminaCost": 1,
+    "baseChance": 0.85,
+    "statBias": { "attr": "synergy", "weight": 0.5 },
+    "success": {
+      "text": ["简小姐与你聊起评级细则，末了补了一句：'你比上次见你，站得更直了些。'", "你们在协会走廊里交谈，她难得地笑了：'不是每个人都有勇气问我那些问题。'"],
+      "effects": { "pressure": -2 },
+      "npcId": "jane-eyre",
+      "npcDelta": 5
+    },
+    "fail": {
+      "text": ["简小姐正忙着整理卷宗，只和你简短说了几句。"],
+      "effects": { "pressure": 1 },
+      "npcId": "jane-eyre",
+      "npcDelta": 1
+    },
+    "encounterChance": 0.05
+  },
+  {
+    "id": "talk-winston",
+    "name": "与温斯顿交谈",
+    "description": "和旧印刷局的职员聊几句。他总在警惕地环顾四周，像在确认没有人盯着你们。",
+    "locationId": "wing-plaza",
+    "stage": "SETTLED",
+    "apCost": 1,
+    "staminaCost": 1,
+    "baseChance": 0.85,
+    "statBias": { "attr": "synergy", "weight": 0.5 },
+    "success": {
+      "text": ["温斯顿压低声音和你交换了几句'见不得光'的见闻，眼神又惊又喜。", "你们躲在印刷局仓库里聊了一会儿，他托你替他保管一个小包裹。"],
+      "effects": { "intelligence": 1, "pressure": 2 },
+      "npcId": "winston",
+      "npcDelta": 5
+    },
+    "fail": {
+      "text": ["温斯顿话说到一半，突然被巡视的同事打断，他立刻闭嘴了。"],
+      "effects": { "pressure": 2 },
+      "npcId": "winston",
+      "npcDelta": 1
+    },
+    "encounterChance": 0.05
+  },
+  {
+    "id": "talk-obrien",
+    "name": "与奥勃良交谈",
+    "description": "和翼的内部调查官喝一杯。他的每一句闲聊，都像在收集情报。",
+    "locationId": "wing-plaza",
+    "stage": "SETTLED",
+    "apCost": 1,
+    "staminaCost": 1,
+    "baseChance": 0.85,
+    "statBias": { "attr": "synergy", "weight": 0.5 },
+    "success": {
+      "text": ["奥勃良微笑着听完你的话，送你一张翼的咖啡券：'保持联系，朋友。'", "你们的谈话被他的通讯器打断，他离开前意味深长地看了你一眼。"],
+      "effects": { "pressure": 2, "intelligence": 1 },
+      "npcId": "obrien",
+      "npcDelta": 5
+    },
+    "fail": {
+      "text": ["奥勃良全程只是礼貌地微笑，你感觉自己像在接受审讯。"],
+      "effects": { "pressure": 3 },
+      "npcId": "obrien",
+      "npcDelta": 1
+    },
+    "encounterChance": 0.05
+  },
+  {
+    "id": "talk-valjean",
+    "name": "与冉·阿让交谈",
+    "description": "帮收容所主人干点活，听他讲讲那些被编号的日子。",
+    "locationId": "backalley-7",
+    "stage": "SURVIVAL",
+    "apCost": 1,
+    "staminaCost": 1,
+    "baseChance": 0.85,
+    "statBias": { "attr": "synergy", "weight": 0.5 },
+    "success": {
+      "text": ["你帮冉·阿让劈了一堆柴，他分你一碗热汤：'力气是老天给的，用来帮人，就不亏。'", "冉·阿让教你辨认旧监狱的编号规律，末了叹口气：'都是过去了。'"],
+      "effects": { "pressure": -3, "physique": 1 },
+      "npcId": "valjean",
+      "npcDelta": 5
+    },
+    "fail": {
+      "text": ["收容所里来了个闹事的，你们把话咽回了肚子里。"],
+      "effects": { "pressure": 2 },
+      "npcId": "valjean",
+      "npcDelta": 1
+    },
+    "encounterChance": 0.05
+  },
+  {
+    "id": "talk-jekyll",
+    "name": "与杰基尔博士交谈",
+    "description": "和 Seven 协会的分析师讨论'自我'的课题。他的眼神偶尔会变得陌生。",
+    "locationId": "abno-facility",
+    "stage": "ADVENTURE",
+    "apCost": 1,
+    "staminaCost": 1,
+    "baseChance": 0.85,
+    "statBias": { "attr": "intelligence", "weight": 0.5 },
+    "success": {
+      "text": ["杰基尔博士和你分享了一个关于'镜像自我'的实验数据，讲得眉飞色舞。", "你们讨论了都市人的双重生活，他若有所思：'你比大多数人诚实。'"],
+      "effects": { "intelligence": 1, "synergy": 1, "pressure": 3 },
+      "npcId": "dr-jekyll",
+      "npcDelta": 5
+    },
+    "fail": {
+      "text": ["杰基尔博士讲到一半突然沉默，像在压制什么，你们匆匆告别。"],
+      "effects": { "pressure": 4 },
+      "npcId": "dr-jekyll",
+      "npcDelta": 1
+    },
+    "encounterChance": 0.05
+  },
+  {
+    "id": "talk-holmes",
+    "name": "与夏洛克交谈",
+    "description": "让后巷最著名的扭曲侦探分析你。他的推理总让人又敬畏又恼火。",
+    "locationId": "fixer-guild",
+    "stage": "SETTLED",
+    "apCost": 1,
+    "staminaCost": 1,
+    "baseChance": 0.85,
+    "statBias": { "attr": "intelligence", "weight": 0.5 },
+    "success": {
+      "text": ["夏洛克三句话道破你最近的经历，你甚至怀疑他在你身上装了摄像头：'没有——是观察，我的朋友。'", "你陪夏洛克破了一桩小案，他难得承认：'你的推理，有长进。'"],
+      "effects": { "intelligence": 1, "instinct": 1, "pressure": -2 },
+      "npcId": "holmes",
+      "npcDelta": 5
+    },
+    "fail": {
+      "text": ["夏洛克指出你三个逻辑漏洞后，自顾自地抽起了烟斗。"],
+      "effects": { "pressure": 3 },
+      "npcId": "holmes",
+      "npcDelta": 1
+    },
+    "encounterChance": 0.05
+  },
+  {
+    "id": "talk-montecristo",
+    "name": "与埃德蒙交谈",
+    "description": "和这位神秘富商共饮。他请客的酒总是最好的——但你总觉得他在打量你。",
+    "locationId": "bar-night",
+    "stage": "SETTLED",
+    "apCost": 1,
+    "staminaCost": 0,
+    "baseChance": 0.85,
+    "statBias": { "attr": "synergy", "weight": 0.5 },
+    "success": {
+      "text": ["埃德蒙请你喝了一杯年份最好的酒，聊起后巷的往事，他眼中闪过冷光又归于平静。", "你们聊到'复仇'这个词，埃德蒙笑了笑：'复仇是门生意，投入越多，亏得越多。'"],
+      "effects": { "pressure": -3, "intelligence": 1 },
+      "npcId": "monte-cristo",
+      "npcDelta": 5
+    },
+    "fail": {
+      "text": ["埃德蒙今日兴致不高，只淡淡回应了几句便继续看他的酒杯。"],
+      "effects": { "pressure": 1 },
+      "npcId": "monte-cristo",
+      "npcDelta": 1
+    },
+    "encounterChance": 0.05
+  },
+  {
+    "id": "talk-santiago",
+    "name": "与圣地亚哥交谈",
+    "description": "坐在桥洞的篝火旁，听老渔夫讲大湖的故事。",
+    "locationId": "bridge-cave",
+    "stage": "SURVIVAL",
+    "apCost": 1,
+    "staminaCost": 0,
+    "baseChance": 0.85,
+    "statBias": { "attr": "will", "weight": 0.5 },
+    "success": {
+      "text": ["圣地亚哥分你半条烤鱼，讲起年轻时在风暴里钓鲸的事，火光映着他的皱纹。", "老渔夫教你打绳结的手法：'大湖上，一个结能救一条命。'"],
+      "effects": { "pressure": -4, "stamina": 2 },
+      "npcId": "santiago",
+      "npcDelta": 5
+    },
+    "fail": {
+      "text": ["圣地亚哥今日咳得厉害，讲了几句便靠在墙角睡着了。"],
+      "effects": { "pressure": 1 },
+      "npcId": "santiago",
+      "npcDelta": 1
+    },
+    "encounterChance": 0.05
+  },
+  {
+    "id": "wing-meeting",
+    "name": "高层会议",
+    "description": "作为翼公司的一员，出席部门高层会议。每一句话都可能影响你的仕途。",
+    "locationId": "wing-plaza",
+    "stage": "SETTLED",
+    "apCost": 1,
+    "staminaCost": 1,
+    "baseChance": 0.7,
+    "statBias": { "attr": "synergy", "weight": 0.5 },
+    "conditions": { "attribute": "reputation", "operator": ">=", "value": 30 },
+    "success": {
+      "text": ["你在会议上发言得体，上司们交换了赞许的眼神。", "你帮部门理清了一份难缠的预算，声望大涨。"],
+      "gold": 150,
+      "effects": { "reputation": 8, "pressure": 3 }
+    },
+    "fail": {
+      "text": ["你在会议上说错了话，被当众驳了面子。"],
+      "effects": { "pressure": 8, "reputation": -2 }
+    },
+    "encounterChance": 0.05,
+    "xp": { "profession": "wing", "amount": 30 }
+  },
+  {
+    "id": "wing-project",
+    "name": "奇点项目",
+    "description": "参与翼的奇点研发项目。这是最接近'奇迹'的地方，也是最危险的地方。",
+    "locationId": "wing-plaza",
+    "stage": "ADVENTURE",
+    "apCost": 2,
+    "staminaCost": 3,
+    "baseChance": 0.5,
+    "statBias": { "attr": "intelligence", "weight": 0.6 },
+    "conditions": { "attribute": "intelligence", "operator": ">=", "value": 7 },
+    "success": {
+      "text": ["你参与的奇点项目取得了突破，你的名字被写进研发报告。", "奇点技术的秘密向你敞开了一角。"],
+      "gold": 400,
+      "effects": { "reputation": 12, "intelligence": 2, "pressure": 8 }
+    },
+    "fail": {
+      "text": ["奇点实验失控，你差点被卷进事故现场。"],
+      "gold": 100,
+      "effects": { "health": -10, "pressure": 12 }
+    },
+    "encounterChance": 0.15,
+    "xp": { "profession": "wing", "amount": 45 }
+  },
+  {
+    "id": "master-forge",
+    "name": "大师锻造",
+    "description": "调动工坊的全部技艺，锻造一件真正的精品武器。名匠的手艺，值得等待。",
+    "locationId": "workshop-du",
+    "stage": "ADVENTURE",
+    "apCost": 2,
+    "staminaCost": 4,
+    "baseChance": 0.55,
+    "statBias": { "attr": "intelligence", "weight": 0.5 },
+    "conditions": { "attribute": "wealth", "operator": ">=", "value": 800 },
+    "success": {
+      "text": ["你亲手锻造出一件精品武器，哑巴修难得地竖起了大拇指。", "这件武器会成为后巷的传说——以及你的招牌。"],
+      "gold": -600,
+      "effects": { "reputation": 10, "physique": 1, "intelligence": 2 }
+    },
+    "fail": {
+      "text": ["锻造失败，一炉好钢毁于一旦。"],
+      "gold": -300,
+      "effects": { "pressure": 10 }
+    },
+    "encounterChance": 0.05,
+    "xp": { "profession": "workshop", "amount": 50 }
+  },
+  {
+    "id": "signature-weapon",
+    "name": "招牌武器",
+    "description": "为你自己量身打造一件独一无二的招牌武器。收尾人认得出你的刀。",
+    "locationId": "workshop-du",
+    "stage": "ADVENTURE",
+    "apCost": 2,
+    "staminaCost": 3,
+    "baseChance": 0.6,
+    "statBias": { "attr": "intelligence", "weight": 0.4 },
+    "conditions": { "attribute": "wealth", "operator": ">=", "value": 1500 },
+    "success": {
+      "text": ["招牌武器成型。握在手里的那一刻，你知道它能陪你走很远。", "'那把刀是工坊的招牌——'后巷的人开始这样谈论你。"],
+      "gold": -1000,
+      "effects": { "reputation": 15, "physique": 2, "will": 1 }
+    },
+    "fail": {
+      "text": ["材料不足，招牌武器只完成了一半。"],
+      "gold": -500,
+      "effects": { "pressure": 8 }
+    },
+    "encounterChance": 0.05,
+    "xp": { "profession": "workshop", "amount": 60 }
+  },
+  {
+    "id": "track-blood",
+    "name": "追踪血魔",
+    "description": "循着血腥味的痕迹，追踪落单的血魔。猎人的嗅觉，比狗还灵。",
+    "locationId": "blood-den",
+    "stage": "ADVENTURE",
+    "apCost": 2,
+    "staminaCost": 3,
+    "baseChance": 0.6,
+    "statBias": { "attr": "instinct", "weight": 0.5 },
+    "conditions": { "attribute": "reputation", "operator": ">=", "value": 20 },
+    "success": {
+      "text": ["你追踪到一处血魔巢穴，掌握了它们的动向。", "猎物就在前方——你压低了身子，握紧了武器。"],
+      "gold": 200,
+      "effects": { "reputation": 6, "instinct": 1 }
+    },
+    "fail": {
+      "text": ["血魔的巢穴比你想象的危险，你只得撤退。"],
+      "gold": 50,
+      "effects": { "health": -6, "pressure": 6 }
+    },
+    "encounterChance": 0.2,
+    "xp": { "profession": "blood-hunter", "amount": 35 }
+  },
+  {
+    "id": "taboo-hunt",
+    "name": "处理禁忌",
+    "description": "翼公司雇佣你追查一名触犯禁忌的逃犯。禁忌猎人拥有调查特权——但代价是，你会看见很多不该看的东西。",
+    "locationId": "wing-plaza",
+    "stage": "ADVENTURE",
+    "apCost": 2,
+    "staminaCost": 3,
+    "baseChance": 0.55,
+    "statBias": { "attr": "instinct", "weight": 0.5 },
+    "conditions": { "attribute": "reputation", "operator": ">=", "value": 30 },
+    "success": {
+      "text": ["你追上了那名触犯禁忌的逃犯，将他绳之以法。翼的人事官朝你点头。", "禁忌猎人的名号，开始在巢内流传。"],
+      "gold": 500,
+      "effects": { "reputation": 12, "pressure": 10 }
+    },
+    "fail": {
+      "text": ["那名逃犯触犯的禁忌比你想象的深——你惊动了不该惊动的东西。"],
+      "gold": 150,
+      "effects": { "health": -12, "pressure": 12 }
+    },
+    "encounterChance": 0.2,
+    "xp": { "profession": "taboo-hunter", "amount": 40 }
+  },
+  {
+    "id": "taboo-trace",
+    "name": "追踪禁忌触犯者",
+    "description": "循着翼的档案线索，追踪一名长期逍遥法外的禁忌触犯者。这是禁忌猎人的本职。",
+    "locationId": "wing-plaza",
+    "stage": "ADVENTURE",
+    "apCost": 2,
+    "staminaCost": 2,
+    "baseChance": 0.6,
+    "statBias": { "attr": "intelligence", "weight": 0.5 },
+    "conditions": { "attribute": "reputation", "operator": ">=", "value": 40 },
+    "success": {
+      "text": ["你从档案的字里行间挖出了他的藏身之处。", "线索闭合——猎物逃不出你的掌心。"],
+      "gold": 300,
+      "effects": { "reputation": 8, "intelligence": 1 }
+    },
+    "fail": {
+      "text": ["档案是伪造的——你被目标耍了。"],
+      "gold": 100,
+      "effects": { "pressure": 6 }
+    },
+    "encounterChance": 0.1,
+    "xp": { "profession": "taboo-hunter", "amount": 35 }
+  },
+  {
+    "id": "detect-distortion",
+    "name": "侦测扭曲",
+    "description": "在人群中寻找'扭曲'的痕迹。白夜之后，人心是最危险的地方。",
+    "locationId": "fixer-guild",
+    "stage": "SETTLED",
+    "apCost": 1,
+    "staminaCost": 1,
+    "baseChance": 0.7,
+    "statBias": { "attr": "synergy", "weight": 0.5 },
+    "success": {
+      "text": ["你敏锐地察觉到巷口那人举止的异常——他可能在扭曲的边缘。", "你的直觉告诉你，这附近藏着某个扭曲的源头。"],
+      "effects": { "synergy": 1, "instinct": 1, "pressure": 4 }
+    },
+    "fail": {
+      "text": ["你什么也没发现——或者，你不想发现。"],
+      "effects": { "pressure": 3 }
+    },
+    "encounterChance": 0.15,
+    "xp": { "profession": "distortion-detective", "amount": 25 }
+  },
+  {
+    "id": "investigate-distortion",
+    "name": "调查扭曲",
+    "description": "深入调查一桩扭曲事件。扭曲侦探的日常：在人心与真相之间走钢丝。",
+    "locationId": "abno-facility",
+    "stage": "ADVENTURE",
+    "apCost": 2,
+    "staminaCost": 3,
+    "baseChance": 0.55,
+    "statBias": { "attr": "intelligence", "weight": 0.5 },
+    "conditions": { "attribute": "reputation", "operator": ">=", "value": 25 },
+    "success": {
+      "text": ["你拼凑出扭曲事件的真相——那比任何怪谈都更令人心寒。", "你的调查报告救下了几个将被扭曲吞噬的人。"],
+      "gold": 350,
+      "effects": { "reputation": 10, "synergy": 2, "pressure": 10 }
+    },
+    "fail": {
+      "text": ["你直视了扭曲的核心，差点被它拉进去。"],
+      "gold": 100,
+      "effects": { "health": -10, "pressure": 15, "distortion": 5 }
+    },
+    "encounterChance": 0.2,
+    "xp": { "profession": "distortion-detective", "amount": 40 }
+  },
+  {
+    "id": "serve-noble",
+    "name": "服务贵族",
+    "description": "接受一名巢内贵族的雇佣，处理宅邸内外的事务。管家的工作，始于礼仪，终于忠诚。",
+    "locationId": "wing-plaza",
+    "stage": "SETTLED",
+    "apCost": 1,
+    "staminaCost": 1,
+    "baseChance": 0.8,
+    "statBias": { "attr": "synergy", "weight": 0.5 },
+    "conditions": { "attribute": "reputation", "operator": ">=", "value": 15 },
+    "success": {
+      "text": ["你把贵族宅邸的事务打理得井井有条，主人很满意。", "你处理了一桩棘手的家事，贵族记住了你的名字。"],
+      "gold": 180,
+      "effects": { "reputation": 6, "pressure": -3 }
+    },
+    "fail": {
+      "text": ["你打翻了贵族心爱的茶具，场面一度十分尴尬。"],
+      "gold": -50,
+      "effects": { "pressure": 5 }
+    },
+    "encounterChance": 0.05,
+    "xp": { "profession": "butler", "amount": 30 }
+  },
+  {
+    "id": "manage-estate",
+    "name": "管理宅邸",
+    "description": "全权管理一处宅邸的日常运转。人脉、账目、仆役——管家的权柄与责任。",
+    "locationId": "wing-plaza",
+    "stage": "ADVENTURE",
+    "apCost": 2,
+    "staminaCost": 2,
+    "baseChance": 0.7,
+    "statBias": { "attr": "intelligence", "weight": 0.5 },
+    "conditions": { "attribute": "reputation", "operator": ">=", "value": 30 },
+    "success": {
+      "text": ["宅邸运转如常，贵族逢人便夸你。", "你通过管理宅邸织起了一张人脉网。"],
+      "gold": 300,
+      "effects": { "reputation": 8, "synergy": 1 }
+    },
+    "fail": {
+      "text": ["宅邸出了乱子，你焦头烂额地收拾残局。"],
+      "gold": 100,
+      "effects": { "pressure": 8 }
+    },
+    "encounterChance": 0.05,
+    "xp": { "profession": "butler", "amount": 40 }
+  }
+]

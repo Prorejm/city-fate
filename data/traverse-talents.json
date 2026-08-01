@@ -1,0 +1,162 @@
+[
+  {
+    "id": "modern-knowledge",
+    "name": "现代人学识",
+    "kind": "traverse",
+    "description": "你来自一个拥有医学、工程、商业与心理学常识的世界。这些知识在都市里是隐形的财富。",
+    "effects": { "intelligence": 2 },
+    "passive": "知识技术类行动收益大增；医疗/修理/谈判事件成功率提升。"
+  },
+  {
+    "id": "system-holder",
+    "name": "系统持有者",
+    "kind": "traverse",
+    "description": "你脑中浮现着一个简洁的面板——每日签到、任务发布、属性加点。这个世界的规则，对你来说多了一层。",
+    "effects": { "fortune": 1 },
+    "passive": "每日签到奖励；每 10 回合获得一次额外属性点。"
+  },
+  {
+    "id": "seer",
+    "name": "预知者",
+    "kind": "traverse",
+    "description": "你记得这个世界的故事——白夜黑昼、钢琴家、图书馆、边狱巴士。你知道哪些地方会死人，哪些人会崛起。",
+    "effects": { "instinct": 1 },
+    "passive": "可预判致命事件并规避；特殊剧情解锁概率提升。"
+  },
+  {
+    "id": "city-stars",
+    "name": "都市外的星星",
+    "kind": "traverse",
+    "description": "你记得都市之外、恐惧之外的那片星空——靛蓝老者毕生向往的'众星所在之地'。每当压力逼近极限，你总想起那片星空：它提醒你，这座城市不是世界的全部。",
+    "effects": { "will": 1, "synergy": 1 },
+    "passive": "解锁特殊探索选项「仰望星空」；洞察/共鸣成长提升；郊区与大湖事件触发率提升。"
+  },
+  {
+    "id": "singularity-affinity",
+    "name": "奇点亲和",
+    "kind": "traverse",
+    "description": "你对'奇点技术'有天然的亲和。翼公司的引擎、工坊的锻造、废墟的遗物——它们在你手中会安静下来。",
+    "effects": { "intelligence": 1 },
+    "passive": "翼公司/工坊系行动收益 +15%；奇点研发子职解锁提前。"
+  },
+  {
+    "id": "abno-empathy",
+    "name": "异想体共感",
+    "kind": "traverse",
+    "description": "你能'听见'异想体的声音。它们在你身边会安静下来——就像零一样。你与内心的深渊，天生有对话的渠道。",
+    "effects": { "synergy": 1 },
+    "passive": "异想体互动成功率 +15%；异想体相关剧情线触发率提升。"
+  },
+  {
+    "id": "deep-night-child",
+    "name": "深宵之子",
+    "kind": "identity",
+    "description": "你曾在凌晨三点十三分的后巷活下来。深宵的清道夫们记住了你的脚步声，为你让路。",
+    "effects": { "instinct": 1, "will": 1 },
+    "identity": {
+      "initialIdentity": "深宵之子",
+      "initialLocation": "bridge-cave",
+      "initialWealth": 20,
+      "initialAffiliation": "无",
+      "traits": ["deep-night-eyes"],
+      "npcAffinities": { "old-beggar": 50, "santiago": 30 },
+      "unlockActions": ["listen-bridge", "ask-rumors", "rest-shelter"]
+    }
+  },
+  {
+    "id": "backalley-orphan",
+    "name": "后巷遗孤",
+    "kind": "identity",
+    "description": "你在第七区的垃圾堆里醒来，身无分文。但这片后巷的每一块砖你都了如指掌——你曾是这里的孩子。",
+    "effects": { "instinct": 1, "fortune": -1 },
+    "identity": {
+      "initialIdentity": "后巷遗孤",
+      "initialLocation": "backalley-7",
+      "initialWealth": 30,
+      "initialAffiliation": "无",
+      "traits": ["backalley-born", "deep-night-eyes"],
+      "npcAffinities": { "old-beggar": 40, "butcher-kai": 10 },
+      "unlockActions": ["scavenge", "beg", "odd-job", "ask-rumors"]
+    }
+  },
+  {
+    "id": "nest-castaway",
+    "name": "巢内弃子",
+    "kind": "identity",
+    "description": "你曾是巢内的体面市民，如今被逐出高墙。你懂得巢的规矩与翼的行事逻辑——但墙外的生存之道，你要从头学起。",
+    "effects": { "intelligence": 1 },
+    "identity": {
+      "initialIdentity": "巢内弃子",
+      "initialLocation": "backalley-7",
+      "initialWealth": 500,
+      "initialAffiliation": "无",
+      "traits": ["nest-born"],
+      "npcAffinities": { "bai-lan": 30, "ali": 20 },
+      "unlockActions": ["odd-job", "ask-rumors", "study-city"]
+    }
+  },
+  {
+    "id": "fixer-apprentice",
+    "name": "收尾人学徒",
+    "kind": "identity",
+    "description": "你带着一柄入门武器和一身三脚猫功夫穿越而来。师父的债务还压在你肩上——但至少，你有活下去的本钱。",
+    "effects": { "physique": 1 },
+    "identity": {
+      "initialIdentity": "收尾人学徒",
+      "initialLocation": "fixer-guild",
+      "initialWealth": 150,
+      "initialAffiliation": "无名事务所",
+      "traits": ["combat-sense"],
+      "npcAffinities": { "old-zhou": 50 },
+      "unlockActions": ["odd-job", "train-combat", "fixer-board", "ask-rumors", "assoc-board"]
+    }
+  },
+  {
+    "id": "wing-exployee",
+    "name": "翼公司前职员",
+    "kind": "identity",
+    "description": "你曾是某家翼公司的低级羽毛。被裁员的那天，你的巢居住权一并被收回。但你懂行话、懂流程、懂那些墙内人不知道的门道。",
+    "effects": { "intelligence": 1, "synergy": 1 },
+    "identity": {
+      "initialIdentity": "失业羽毛",
+      "initialLocation": "backalley-7",
+      "initialWealth": 800,
+      "initialAffiliation": "无",
+      "traits": ["nest-born", "workshop-talent"],
+      "npcAffinities": { "bai-lan": 40, "gu-doctor": 20 },
+      "unlockActions": ["odd-job", "study-city", "ask-rumors"]
+    }
+  },
+  {
+    "id": "bloodkin-heir",
+    "name": "血魔眷属",
+    "kind": "identity",
+    "description": "你的血脉深处流淌着古老血魔的力量。你比常人更强、更敏锐——但血魔猎人的目光，从未离开过你这样的存在。",
+    "effects": { "physique": 1, "synergy": 1 },
+    "identity": {
+      "initialIdentity": "隐藏血脉者",
+      "initialLocation": "blood-den",
+      "initialWealth": 100,
+      "initialAffiliation": "无",
+      "traits": ["bloodkin"],
+      "npcAffinities": { "blood-mother": 50, "old-zhou": -10 },
+      "unlockActions": ["hunt-blood", "ask-rumors", "train-combat"]
+    }
+  },
+  {
+    "id": "exam-scholar",
+    "name": "应试村书生",
+    "kind": "identity",
+    "description": "你曾是应试村最用功的读书人，在逃离追捕的途中穿越至此。你手无缚鸡之力，但脑中的知识，可以考进任何一家巢的大学。",
+    "effects": { "intelligence": 2, "physique": -1 },
+    "identity": {
+      "initialIdentity": "逃难书生",
+      "initialLocation": "backalley-7",
+      "initialWealth": 60,
+      "initialAffiliation": "无",
+      "traits": ["exam-drilled"],
+      "npcAffinities": { "gu-doctor": 30, "ya-night": 20 },
+      "unlockActions": ["study-city", "ask-rumors", "odd-job"]
+    }
+  }
+]

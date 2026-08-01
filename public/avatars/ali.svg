@@ -1,0 +1,44 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" width="256" height="256">
+<defs>
+  <radialGradient id="bg" cx="50%" cy="38%" r="75%">
+    <stop offset="0%" stop-color="#3a4a45"/>
+    <stop offset="55%" stop-color="#1e2129"/>
+    <stop offset="100%" stop-color="#14161c"/>
+  </radialGradient>
+  <radialGradient id="rim" cx="50%" cy="30%" r="60%">
+    <stop offset="0%" stop-color="#c09a3f" stop-opacity="0.35"/>
+    <stop offset="100%" stop-color="#c09a3f" stop-opacity="0"/>
+  </radialGradient>
+</defs>
+<rect width="256" height="256" fill="url(#bg)"/>
+<rect width="256" height="256" fill="url(#rim)"/>
+<g opacity="0.5">
+  <circle cx="46" cy="60" r="1.5" fill="#8a8f98"/><circle cx="210" cy="90" r="1.2" fill="#8a8f98"/>
+  <circle cx="30" cy="170" r="1" fill="#8a8f98"/><circle cx="228" cy="180" r="1.4" fill="#8a8f98"/>
+  <circle cx="120" cy="28" r="1" fill="#8a8f98"/><circle cx="180" cy="220" r="1.1" fill="#8a8f98"/>
+</g>
+<g>
+  <path d="M58 256 Q58 200 96 178 L160 178 Q198 200 198 256 Z" fill="#20343b"/>
+  <path d="M96 178 Q96 164 128 162 Q160 164 160 178 L160 210 Q128 220 96 210 Z" fill="#d8c9a8"/>
+  <path d="M118 150 L138 150 L138 176 L118 176 Z" fill="#d9b48f"/>
+  <rect x="106" y="128" width="44" height="34" rx="20" fill="#d9b48f"/>
+  <circle cx="106" cy="150" r="9" fill="#d9b48f"/>
+  <circle cx="150" cy="150" r="9" fill="#d9b48f"/>
+  
+  <path d="M96 132 Q96 62 128 54 Q160 62 160 132 Z" fill="#2b2320"/>
+</g>
+<g>
+  <path d="M98 126 Q94 76 128 68 Q162 76 158 126 L158 90 Q152 72 128 66 Q104 72 98 90 Z" fill="#2b2320"/><circle cx="128" cy="56" r="17" fill="#2b2320"/>
+  <path d="M118 96 Q128 88 138 96 Q136 104 128 108 Q120 104 118 96 Z" fill="#8a8f98" opacity="0.8"/>
+  <path d="M104 132 Q108 120 128 118 Q148 120 152 132 Q150 138 142 140 Q132 142 122 140 Q110 138 104 132 Z" fill="#efe3d0"/>
+  <ellipse cx="114" cy="138" rx="4.4" ry="3" fill="#3a2a1a"/><circle cx="114" cy="137" r="1.1" fill="#14161c"/><ellipse cx="142" cy="138" rx="4.4" ry="3" fill="#3a2a1a"/><circle cx="142" cy="137" r="1.1" fill="#14161c"/>
+  <path d="M107 128 Q113 123 119 126" stroke="#1a1410" stroke-width="2.2" fill="none" stroke-linecap="round"/>
+  <path d="M107 128 Q113 123 119 126" stroke="#1a1410" stroke-width="2.2" fill="none" stroke-linecap="round"/>
+  <path d="M122 154 Q128 159 134 154" fill="none" stroke="#7a4a3a" stroke-width="2" stroke-linecap="round"/>
+  
+  
+  
+  
+  
+  <circle cx="150" cy="146" r="1.6" fill="#5c4632"/>
+</g></svg>

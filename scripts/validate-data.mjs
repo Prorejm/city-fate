@@ -11,9 +11,10 @@ const root = join(dirname(fileURLToPath(import.meta.url)), '..')
 const DATA = join(root, 'data')
 
 const CORE_ATTRS = ['physique', 'intelligence', 'instinct', 'will', 'fortune', 'synergy']
-const EFFECT_KEYS = [...CORE_ATTRS, 'health', 'pressure', 'wealth', 'distortion', 'reputation']
+const EFFECT_KEYS = [...CORE_ATTRS, 'health', 'pressure', 'wealth', 'distortion', 'reputation', 'foodLevel', 'karma']
 const OPERATORS = ['>=', '<=', '>', '<', '==']
 const ACH_TYPES = ['age', 'stat', 'identity', 'ego', 'distortion', 'sin', 'wealth', 'playCount', 'totalLifespan', 'trait', 'keyMoment', 'deathCause']
+const COMMISSION_TIERS = ['传闻', '都市传说', '都市恶疾', '都市梦魇', '都市之星']
 
 const errors = []
 const warns = []
@@ -157,7 +158,45 @@ for (const a of achievements) {
 if (readJson('ego.json').length === 0) errors.push('ego.json 为空')
 if (readJson('sins.json').length !== 7) errors.push(`sins.json 应有 7 条大罪，实际 ${readJson('sins.json').length}`)
 
-console.log(`校验完成：事件 ${allEvents.length} 条 / 成就 ${achievements.length} 条`)
+// ---------- 协会与委托校验 ----------
+const associations = readJson('associations.json')
+const assocIds = new Set()
+for (const a of associations) {
+  if (assocIds.has(a.id)) errors.push(`associations.json: ID 重复 ${a.id}`)
+  assocIds.add(a.id)
+  for (const t of a.tiers ?? []) {
+    if (!COMMISSION_TIERS.includes(t)) errors.push(`协会 ${a.id}: 难度非法 '${t}'`)
+  }
+}
+if (associations.length !== 12) errors.push(`associations.json 应有 12 协会，实际 ${associations.length}`)
+
+const commissions = readJson('commissions.json')
+const cmIds = new Set()
+for (const c of commissions) {
+  if (cmIds.has(c.id)) errors.push(`commissions.json: ID 重复 ${c.id}`)
+  cmIds.add(c.id)
+  if (!assocIds.has(c.associationId)) errors.push(`委托 ${c.id}: 引用未知协会 '${c.associationId}'`)
+  if (!COMMISSION_TIERS.includes(c.tier)) errors.push(`委托 ${c.id}: 难度非法 '${c.tier}'`)
+  for (const side of ['success', 'fail']) {
+    for (const [k] of Object.entries(c[side].effects ?? {})) {
+      if (!EFFECT_KEYS.includes(k)) errors.push(`委托 ${c.id}.${side}: 效果键非法 '${k}'`)
+    }
+  }
+}
+if (commissions.length < 20) errors.push(`commissions.json 委托模板偏少（${commissions.length}）`)
+
+// ---------- NPC 头像存在性 ----------
+const npcs = readJson('npcs.json')
+for (const n of npcs) {
+  const avatarPath = join(root, 'public', 'avatars', n.avatar)
+  try {
+    statSync(avatarPath)
+  } catch {
+    errors.push(`NPC ${n.id}: 头像文件缺失 public/avatars/${n.avatar}`)
+  }
+}
+
+console.log(`校验完成：事件 ${allEvents.length} 条 / 成就 ${achievements.length} 条 / 协会 ${associations.length} 个 / 委托 ${commissions.length} 条`)
 if (warns.length) {
   console.log(`\n⚠ 警告 ${warns.length} 条：`)
   warns.forEach((w) => console.log('  -', w))

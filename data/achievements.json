@@ -58,5 +58,8 @@
   { "id": "exam_pass", "name": "大学之路", "category": "职业", "tier": "common", "description": "通过巢的大学能力考试。", "condition": { "type": "keyMoment", "value": "exam-pass" } },
   { "id": "wish_gamble", "name": "愿力豪赌", "category": "财富", "tier": "silver", "description": "在第十区的赌场赢得一笔横财。", "condition": { "type": "keyMoment", "value": "gamble-win" } },
   { "id": "wish_lose", "name": "倾家荡产", "category": "财富", "tier": "common", "description": "在第十区的赌场输光一切。愿力就是这么无情。", "condition": { "type": "keyMoment", "value": "gamble-lose" } },
-  { "id": "street_legend", "name": "巷口传说", "category": "生存", "tier": "silver", "description": "你的名字被后巷的人记住了。", "condition": { "type": "keyMoment", "value": "street-legend" } }
+  { "id": "street_legend", "name": "巷口传说", "category": "生存", "tier": "silver", "description": "你的名字被后巷的人记住了。", "condition": { "type": "keyMoment", "value": "street-legend" } },
+  { "id": "commission_first", "name": "初出茅庐", "category": "委托", "tier": "common", "description": "完成第一桩协会委托。委托板上有你的名字了。", "condition": { "type": "keyMoment", "value": "commission-first" } },
+  { "id": "assoc_veteran", "name": "协会老手", "category": "委托", "tier": "silver", "description": "累计完成 30 单协会委托。协会的委托人与你称兄道弟。", "condition": { "type": "trait", "value": "assoc-veteran" } },
+  { "id": "urbanstar_job", "name": "都市之星委托", "category": "委托", "tier": "legend", "description": "完成一桩都市之星级委托。你的名字足以载入协会档案。", "condition": { "type": "keyMoment", "value": "commission-urbanstar" } }
 ]

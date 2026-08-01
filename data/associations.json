@@ -1,0 +1,14 @@
+[
+  { "id": "hana", "number": 1, "name": "Hana协会", "etymology": "韩语「一」", "role": "统管其余协会，评定收尾人阶位与灾害等级，授予色彩称号", "color": "#e8c9a0", "tiers": ["都市梦魇", "都市之星"] },
+  { "id": "zwei", "number": 2, "name": "Zwei协会", "etymology": "德语「二」", "role": "治安维持与护卫，'都市中所剩无几的正义'", "color": "#3f6ea8", "tiers": ["传闻", "都市传说"] },
+  { "id": "tres", "number": 3, "name": "Tres协会", "etymology": "西班牙语「三」", "role": "工坊与武器审查，向首脑上报装备税收", "color": "#8a6e3f", "tiers": ["传闻", "都市传说"] },
+  { "id": "shi", "number": 4, "name": "し协会", "etymology": "日语「四」（亦作「死」）", "role": "暗杀委托，公正无私地处理每一份死亡", "color": "#8a1f1f", "tiers": ["都市传说", "都市恶疾"] },
+  { "id": "cinq", "number": 5, "name": "Cinq协会", "etymology": "法语「五」", "role": "决斗委托，以剑与礼仪维护荣誉", "color": "#3f7ac0", "tiers": ["传闻", "都市传说"] },
+  { "id": "liu", "number": 6, "name": "六协会", "etymology": "汉语「六」", "role": "大规模集团作战，'和谐与温暖'的精锐雇佣兵", "color": "#a02020", "tiers": ["都市恶疾", "都市梦魇"] },
+  { "id": "seven", "number": 7, "name": "Seven协会", "etymology": "英语「七」", "role": "情报收集与调查，茶与刀刃并重的探子", "color": "#3f8a6a", "tiers": ["都市传说", "都市恶疾"] },
+  { "id": "eight", "number": 8, "name": "Eight协会", "etymology": "英语「八」", "role": "交通管理与航运审批，大湖航线的守门人", "color": "#5a6a8a", "tiers": ["都市传说", "都市恶疾"] },
+  { "id": "devyat", "number": 9, "name": "Devyat协会", "etymology": "俄语「九」", "role": "快递与运输，派送箱从不迟到", "color": "#8a8a9a", "tiers": ["传闻", "都市传说"] },
+  { "id": "dieci", "number": 10, "name": "Dieci协会", "etymology": "意大利语「十」", "role": "知识研究与遗物回收，废墟专家", "color": "#7a6a3f", "tiers": ["都市传说", "都市恶疾"] },
+  { "id": "oufi", "number": 11, "name": "Öufi协会", "etymology": "瑞士德语「十一」", "role": "契约公证与强制执行，合同即是法律", "color": "#6a3f8a", "tiers": ["传闻", "都市传说"] },
+  { "id": "dodeka", "number": 12, "name": "Dodeka协会", "etymology": "希腊语「十二」（推测）", "role": "职责成谜。其委托从不署名，只留下一枚黑色徽记", "color": "#1e1e26", "tiers": ["都市梦魇", "都市之星"] }
+]

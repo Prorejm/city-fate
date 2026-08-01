@@ -3,29 +3,30 @@ import { persist } from 'zustand/middleware'
 import type {
   Achievement,
   CityFateData,
-  EventBranch,
-  GameEvent,
   Gender,
   GlobalMeta,
+  GameEvent,
   RunState,
   SinFate,
   Stats,
 } from '@/types'
 import type { Phase } from '@/engine/StateManager'
-import {
-  BranchResolution,
-  RunBundle,
-  createRun,
-  endYear,
-  resolveBranch,
-  rollYear,
-} from '@/core/GameEngine'
+import { RunBundle, beginRound, createTraverseRun } from '@/core/GameEngine'
 import type { DeathResult } from '@/core/DeathSystem'
 import type { DistortionApplyResult } from '@/core/DistortionSystem'
 import type { EgoAwakenResult } from '@/core/EgoSystem'
-import type { EventSelection } from '@/core/EventSystem'
+import { ActionOutcome, executeAction, rollEncounter } from '@/core/ActionSystem'
+import { travelTo, actionAvailable, currentStage } from '@/core/LocationSystem'
+import { meetNpcsAtLocation } from '@/core/NpcSystem'
+import { checkStorylines, applyStorylineEffects } from '@/core/StorylineSystem'
 import { checkAchievements } from '@/core/AchievementSystem'
-import { findEvent } from '@/core/data'
+import { canAwakenEgo, awakenEgo } from '@/core/EgoSystem'
+import { applyDistortion, resolveSin } from '@/core/DistortionSystem'
+import { findAction, findIdentity, STORYLINES } from '@/core/data'
+import { resolveCommission, generateCommissionPool, ensureFixerGrade, isFingerMember } from '@/core/CommissionSystem'
+import { chooseSubclass as chooseSubclassCore } from '@/core/ProfessionSystem'
+import type { CommissionResult } from '@/types'
+import { useUiStore } from './uiStore'
 
 const INITIAL_META: GlobalMeta = {
   unlockedAchievements: [],
@@ -35,29 +36,31 @@ const INITIAL_META: GlobalMeta = {
   totalEarned: 0,
 }
 
-/** 平静之年的合成事件（事件池为空时兜底，避免空年循环） */
-const QUIET_EVENT: GameEvent = {
-  id: -1,
-  title: '平静的一年',
-  description: '这一年，都市的风平浪静。你安稳地度过了一岁。',
-  type: 'backalley',
-  weight: 1,
-  repeatable: true,
-  branches: [{ id: 'quiet', text: '继续生活。', effects: { health: 1 } }],
-  portrait: 'calm',
-}
-
 export interface NewLifeInput {
-  originId: string
   stats: Stats
   name: string
   gender: Gender
+  traverseId: string | null
+  identityId: string | null
 }
 
 export interface CharacterDraft {
-  originId: string
   name: string
   gender: Gender
+  traverseId: string | null
+  identityId: string | null
+}
+
+export interface CurrentEvent {
+  kind: 'event' | 'npc' | 'storyline' | 'result' | 'action' | 'commission' | 'commission-result'
+  event?: GameEvent
+  npcId?: string
+  storyId?: string
+  stageId?: string
+  title?: string
+  result?: ActionOutcome
+  commissionResult?: CommissionResult
+  text?: string
 }
 
 interface GameStore {
@@ -66,29 +69,45 @@ interface GameStore {
   run: RunState | null
   meta: GlobalMeta
   draft: CharacterDraft | null
-  currentEvents: EventSelection[]
-  currentIndex: number
+  currentEvent: CurrentEvent | null
   pendingEgo: EgoAwakenResult | null
   pendingDistortion: DistortionApplyResult | null
   pendingSin: SinFate | null
   death: DeathResult | null
   newlyAchieved: Achievement[]
-  yearLog: string
+  roundLog: string[]
+  storylineLog: string[]
 
   startNewLife: (input: NewLifeInput) => void
   setDraft: (draft: CharacterDraft) => void
-  advanceYear: () => void
-  chooseBranch: (branch: EventBranch) => void
+  startRound: () => void
+  performAction: (actionId: string) => void
+  performCommission: (commissionId: string) => void
+  chooseSubclass: (professionId: string, subclassId: string) => void
+  travelTo: (locationId: string) => void
+  resolveNpcEvent: (npcId: string) => void
+  nextEvent: () => void
   confirmEgo: () => void
   confirmDistortion: () => void
-  nextChainEvent: () => void
+  resolveVoiceBranch: (outcome: 'ego' | 'distortion' | 'sin') => void
   goToCreate: () => void
   goToMenu: () => void
   clearNewlyAchieved: () => void
 }
 
-function collectYearAchievements(data: CityFateData, run: RunState, meta: GlobalMeta): Achievement[] {
+function collectAchievements(data: CityFateData, run: RunState, meta: GlobalMeta): Achievement[] {
   return checkAchievements(data, meta, run)
+}
+
+/** 根据剧情阶段 id 构建剧情弹窗事件 */
+function storylineModalFor(stageId: string): CurrentEvent | null {
+  for (const sl of STORYLINES) {
+    const stage = sl.stages.find((s) => s.id === stageId)
+    if (stage) {
+      return { kind: 'storyline', storyId: sl.id, stageId, title: stage.title, text: stage.text }
+    }
+  }
+  return null
 }
 
 export const useGameStore = create<GameStore>()(
@@ -99,140 +118,272 @@ export const useGameStore = create<GameStore>()(
       run: null,
       meta: { ...INITIAL_META },
       draft: null,
-      currentEvents: [],
-      currentIndex: 0,
+      currentEvent: null,
       pendingEgo: null,
       pendingDistortion: null,
       pendingSin: null,
       death: null,
       newlyAchieved: [],
-      yearLog: '',
+      roundLog: [],
+      storylineLog: [],
 
       startNewLife: (input) => {
         const { meta } = get()
-        const bundle: RunBundle = createRun(input.originId, input.stats, input.name, input.gender, meta)
+        const bundle: RunBundle = createTraverseRun(
+          input.stats,
+          input.name,
+          input.gender,
+          meta,
+          input.traverseId,
+          input.identityId,
+        )
+        // 第一回合
+        const round = beginRound(bundle.data, bundle.run, meta)
+        // 开局剧情线（如穿越之谜·初醒）优先弹窗
+        const storyEv = round.storylines.length > 0 ? storylineModalFor(round.storylines[0]) : null
         set({
           data: bundle.data,
           run: bundle.run,
           phase: 'PLAYING',
           draft: null,
-          currentEvents: [],
-          currentIndex: 0,
+          currentEvent: storyEv,
           pendingEgo: null,
           pendingDistortion: null,
           pendingSin: null,
-          death: null,
+          death: round.death ?? null,
           newlyAchieved: [],
-          yearLog: '',
+          roundLog: [round.log],
+          storylineLog: round.storylines,
         })
-        get().advanceYear()
+        if (round.death) set({ phase: 'DEATH', currentEvent: null })
       },
 
       setDraft: (draft) => {
         set({ draft, phase: 'ALLOCATE' })
       },
 
-      advanceYear: () => {
+      startRound: () => {
         const { data, run, meta } = get()
         if (!data || !run) return
-        const plan = rollYear(data, run)
-        if (plan.death) {
-          data.deathCause = data.deathCause || plan.death.cause
-          data.isAlive = false
-          set({ phase: 'DEATH', death: plan.death, currentEvents: [], currentIndex: 0 })
-          return
+        const round = beginRound(data, run, meta)
+        // 收尾人资格自动授予（声望 ≥ 8 且非手指成员）
+        if (ensureFixerGrade(data, run)) {
+          useUiStore.getState().pushToast('Hana 协会认定你为九阶收尾人', 'info')
         }
-        let events = plan.events
-        if (events.length === 0) {
-          events = [{ event: QUIET_EVENT }]
-        }
-        // 年度成就检查
-        const gained = collectYearAchievements(data, run, meta)
-        if (gained.length > 0) set({ newlyAchieved: [...get().newlyAchieved, ...gained] })
-        set({ currentEvents: events, currentIndex: 0 })
+        const gained = collectAchievements(data, run, meta)
+        // 回合内触发的剧情线优先弹窗
+        const storyEv = round.storylines.length > 0 ? storylineModalFor(round.storylines[0]) : null
+        set((s) => ({
+          currentEvent: storyEv,
+          roundLog: [...s.roundLog.slice(-40), round.log],
+          storylineLog: [...s.storylineLog, ...round.storylines],
+          newlyAchieved: [...s.newlyAchieved, ...gained],
+          death: round.death ?? s.death,
+        }))
+        if (round.death) set({ phase: 'DEATH', currentEvent: null })
       },
 
-      chooseBranch: (branch) => {
-        const { data, run, meta, currentEvents, currentIndex } = get()
+      performAction: (actionId) => {
+        const { data, run, meta } = get()
         if (!data || !run) return
-        const current = currentEvents[currentIndex]
-        if (!current) return
-        const resolution: BranchResolution = resolveBranch(data, run, meta, current.event, branch)
+        const action = findAction(actionId)
+        if (!action) return
+        if (!actionAvailable(data, run, actionId)) return
 
-        const newly = [...get().newlyAchieved]
-        if (resolution.newlyAchieved.length > 0) newly.push(...resolution.newlyAchieved)
-        set({ newlyAchieved: newly, yearLog: resolution.log })
+        const outcome = executeAction(data, run, actionId)
+        if (!outcome) return
 
-        if (resolution.death) {
-          set({ phase: 'DEATH', death: resolution.death, currentEvents: [], currentIndex: 0 })
+        // 协会委托板：打开委托面板（不执行普通结果）
+        if (actionId === 'assoc-board') {
+          if (isFingerMember(data)) {
+            useUiStore.getState().pushToast('你已加入手指，协会拒绝你的委托申请', 'danger')
+            return
+          }
+          if (run.fixerGrade === 0) {
+            ensureFixerGrade(data, run)
+          }
+          if (run.commissionPool.length === 0) {
+            run.commissionPool = generateCommissionPool(run, 4)
+          }
+          set({ currentEvent: { kind: 'commission' } })
           return
         }
-        if (resolution.egoAwaken) {
-          set({ pendingEgo: resolution.egoAwaken, phase: 'EGO_AWAKEN' })
+
+        // 剧情线检查
+        const progressed = checkStorylines(data, run, actionId)
+        for (const p of progressed) {
+          applyStorylineEffects(data, run, p.effects)
+        }
+        const storylineLog = progressed.map((p) => p.stageId)
+
+        // 地点 NPC 结识
+        const newNpcs = meetNpcsAtLocation(run, run.locationId)
+        for (const npc of newNpcs) {
+          useUiStore.getState().pushToast(`你结识了 ${npc.name}（${npc.title}）`, 'info')
+        }
+
+        // 刷新阶段/地点
+        run.stage = currentStage(data, run)
+        if (run.stage !== 'SURVIVAL') {
+          run.actionPoints = 4
+        }
+
+        // 成就检查
+        const gained = collectAchievements(data, run, meta)
+
+        // 生命日志
+        data.lifeLog = [...data.lifeLog.slice(-300), `第${run.daysInCity}天｜${action.name}：${outcome.text}`]
+
+        // 内心之声：压力 ≥ 80 触发叩问自我
+        if (run.pressure >= 80 && !run.voiceCrisisDone) {
+          run.voiceCrisisDone = true
+          set({
+            currentEvent: { kind: 'event', text: '叩问自我' },
+            newlyAchieved: [...get().newlyAchieved, ...gained],
+            storylineLog: [...get().storylineLog, ...storylineLog],
+          })
           return
         }
-        if (resolution.distortionForm) {
-          set({ pendingDistortion: resolution.distortionForm, phase: 'DISTORTION' })
-          return
-        }
-        if (resolution.sinFate) {
-          set({ death: { deathId: 'sin', name: resolution.sinFate.name, cause: '大罪化', epitaph: resolution.sinFate.endingText }, phase: 'DEATH' })
-          return
-        }
-        if (resolution.nextEventId !== undefined) {
-          const next = findEvent(resolution.nextEventId)
-          if (next) {
-            set({ currentEvents: [{ event: next }], currentIndex: 0 })
+
+        // 剧情线推进优先弹窗
+        if (progressed.length > 0) {
+          const ev = storylineModalFor(progressed[0].stageId)
+          if (ev) {
+            set({
+              currentEvent: ev,
+              newlyAchieved: [...get().newlyAchieved, ...gained],
+              storylineLog: [...get().storylineLog, ...storylineLog],
+            })
             return
           }
         }
-        // 本年度下一个事件
-        if (currentIndex + 1 < currentEvents.length) {
-          set({ currentIndex: currentIndex + 1 })
-        } else {
-          const { log, death } = endYear(data, run)
-          if (death) {
-            data.deathCause = data.deathCause || death.cause
-            data.isAlive = false
-            set({ phase: 'DEATH', death, currentEvents: [], currentIndex: 0 })
-            return
-          }
-          const gained = collectYearAchievements(data, run, meta)
-          if (gained.length > 0) set({ newlyAchieved: [...get().newlyAchieved, ...gained] })
-          set({ currentEvents: [], currentIndex: 0, yearLog: log })
-          get().advanceYear()
+
+        // 随机遭遇
+        const encounter = rollEncounter(run, action)
+        if (encounter !== undefined) {
+          set({
+            currentEvent: { kind: 'npc', npcId: 'random' },
+            newlyAchieved: [...get().newlyAchieved, ...gained],
+            storylineLog: [...get().storylineLog, ...storylineLog],
+          })
+          return
         }
+
+        set({
+          currentEvent: { kind: 'result', result: outcome },
+          newlyAchieved: [...get().newlyAchieved, ...gained],
+          storylineLog: [...get().storylineLog, ...storylineLog],
+        })
+      },
+
+      performCommission: (commissionId) => {
+        const { data, run, meta } = get()
+        if (!data || !run) return
+        const commission = run.commissionPool.find((c) => c.id === commissionId)
+        if (!commission) return
+        const result = resolveCommission(data, run, commissionId)
+        if (!result) return
+        // 从委托池移除该单
+        run.commissionPool = run.commissionPool.filter((c) => c.id !== commissionId)
+
+        // 剧情线检查（委托完成后可能触发）
+        const progressed = checkStorylines(data, run, commissionId)
+        for (const p of progressed) {
+          applyStorylineEffects(data, run, p.effects)
+        }
+        const storylineLog = progressed.map((p) => p.stageId)
+
+        // 成就检查
+        const gained = collectAchievements(data, run, meta)
+
+        // 晋升提示
+        if (result.promoted) {
+          const ident = findIdentity(result.promoted)
+          if (ident) {
+            useUiStore.getState().pushToast(`你晋升为 ${ident.name}`, 'info')
+          }
+        }
+
+        // 生命日志
+        data.lifeLog = [...data.lifeLog.slice(-300), `第${run.daysInCity}天｜委托·${commission.name}：${result.text}`]
+
+        set({
+          currentEvent: { kind: 'commission-result', commissionResult: result },
+          newlyAchieved: [...get().newlyAchieved, ...gained],
+          storylineLog: [...get().storylineLog, ...storylineLog],
+        })
+      },
+
+      chooseSubclass: (professionId, subclassId) => {
+        const { run } = get()
+        if (!run) return
+        if (chooseSubclassCore(run, professionId, subclassId)) {
+          useUiStore.getState().pushToast('子职已确定', 'info')
+          set({})
+        }
+      },
+
+      travelTo: (locationId) => {
+        const { data, run } = get()
+        if (!data || !run) return
+        const res = travelTo(data, run, locationId)
+        if (!res.ok) {
+          useUiStore.getState().pushToast('无法前往该地点（体力不足或未解锁）', 'danger')
+          return
+        }
+        const newNpcs = meetNpcsAtLocation(run, locationId)
+        for (const npc of newNpcs) {
+          useUiStore.getState().pushToast(`你结识了 ${npc.name}（${npc.title}）`, 'info')
+        }
+        set({ currentEvent: null })
+      },
+
+      resolveNpcEvent: (npcId) => {
+        void npcId
+        set({ currentEvent: null })
+      },
+
+      nextEvent: () => {
+        set({ currentEvent: null })
       },
 
       confirmEgo: () => {
-        set({ pendingEgo: null, phase: 'PLAYING' })
-        const { currentEvents, currentIndex, data, run, meta } = get()
-        if (currentIndex + 1 < currentEvents.length) {
-          set({ currentIndex: currentIndex + 1 })
-        } else {
-          if (!data || !run) return
-          const { log, death } = endYear(data, run)
-          if (death) {
-            data.deathCause = data.deathCause || death.cause
-            data.isAlive = false
-            set({ phase: 'DEATH', death, currentEvents: [], currentIndex: 0 })
-            return
-          }
-          const gained = collectYearAchievements(data, run, meta)
-          if (gained.length > 0) set({ newlyAchieved: [...get().newlyAchieved, ...gained] })
-          set({ currentEvents: [], currentIndex: 0, yearLog: log })
-          get().advanceYear()
-        }
+        set({ pendingEgo: null, currentEvent: null, phase: 'PLAYING' })
       },
 
       confirmDistortion: () => {
-        set({ pendingDistortion: null, phase: 'PLAYING' })
-        get().confirmEgo() // 与 EGO 确认后的继续流程一致
+        set({ pendingDistortion: null, currentEvent: null, phase: 'PLAYING' })
       },
 
-      nextChainEvent: () => {
-        const { currentEvents, currentIndex } = get()
-        if (currentIndex + 1 < currentEvents.length) set({ currentIndex: currentIndex + 1 })
+      resolveVoiceBranch: (outcome) => {
+        const { data, run } = get()
+        if (!data || !run) return
+        if (outcome === 'ego') {
+          if (canAwakenEgo(data)) {
+            const ego = awakenEgo(data, run)
+            set({ pendingEgo: ego, phase: 'EGO_AWAKEN', currentEvent: null })
+            return
+          }
+          const dist = applyDistortion(data, run)
+          set({ pendingDistortion: dist, phase: 'DISTORTION', currentEvent: null })
+          return
+        }
+        if (outcome === 'distortion') {
+          const dist = applyDistortion(data, run)
+          set({ pendingDistortion: dist, phase: 'DISTORTION', currentEvent: null })
+          return
+        }
+        // sin
+        const sin = resolveSin(data, run)
+        data.deathCause = `大罪化（${sin.type}）`
+        data.isAlive = false
+        const death: DeathResult = {
+          deathId: 'sin',
+          name: sin.name,
+          cause: '大罪化',
+          epitaph: sin.endingText,
+        }
+        set({ pendingSin: sin, death, phase: 'DEATH', currentEvent: null })
       },
 
       goToCreate: () => {
@@ -240,8 +391,7 @@ export const useGameStore = create<GameStore>()(
           phase: 'CREATE',
           data: null,
           run: null,
-          currentEvents: [],
-          currentIndex: 0,
+          currentEvent: null,
           pendingEgo: null,
           pendingDistortion: null,
           pendingSin: null,
@@ -254,8 +404,7 @@ export const useGameStore = create<GameStore>()(
           phase: 'MENU',
           data: null,
           run: null,
-          currentEvents: [],
-          currentIndex: 0,
+          currentEvent: null,
           pendingEgo: null,
           pendingDistortion: null,
           pendingSin: null,
@@ -267,7 +416,7 @@ export const useGameStore = create<GameStore>()(
     }),
     {
       name: 'cityFateData',
-      version: 1,
+      version: 2,
       partialize: (state) => ({
         meta: state.meta,
       }),

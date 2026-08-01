@@ -1,13 +1,21 @@
 import type {
   Achievement,
+  AssociationDef,
+  CommissionDef,
   DeathType,
   DistortionForm,
   EgoTemplate,
+  GameAction,
   GameEvent,
   Identity,
+  LocationDef,
+  NpcDef,
   Origin,
+  ProfessionDef,
   SinFate,
+  StorylineDef,
   Talent,
+  TraverseTalent,
 } from '@/types'
 
 import originsData from '../../data/origins.json'
@@ -18,6 +26,14 @@ import sinsData from '../../data/sins.json'
 import identitiesData from '../../data/identities.json'
 import achievementsData from '../../data/achievements.json'
 import deathsData from '../../data/deaths.json'
+import traverseTalentsData from '../../data/traverse-talents.json'
+import locationsData from '../../data/locations.json'
+import actionsData from '../../data/actions.json'
+import npcsData from '../../data/npcs.json'
+import storylinesData from '../../data/storylines.json'
+import associationsData from '../../data/associations.json'
+import commissionsData from '../../data/commissions.json'
+import professionsData from '../../data/professions.json'
 import eventsChild from '../../data/events/events-child.json'
 import eventsTeen from '../../data/events/events-teen.json'
 import eventsAdult from '../../data/events/events-adult.json'
@@ -42,6 +58,14 @@ export const SINS = sinsData as SinFate[]
 export const IDENTITIES = identitiesData as Identity[]
 export const ACHIEVEMENTS = achievementsData as Achievement[]
 export const DEATH_TYPES = deathsData as DeathType[]
+export const TRAVERSE_TALENTS = traverseTalentsData as TraverseTalent[]
+export const LOCATIONS = locationsData as LocationDef[]
+export const ACTIONS = actionsData as GameAction[]
+export const NPCS = npcsData as NpcDef[]
+export const STORYLINES = storylinesData as StorylineDef[]
+export const ASSOCIATIONS = associationsData as AssociationDef[]
+export const COMMISSIONS = commissionsData as CommissionDef[]
+export const PROFESSIONS = professionsData as ProfessionDef[]
 
 const EVENT_MODULES: GameEvent[][] = [
   eventsChild,
@@ -106,6 +130,42 @@ export function findEgo(id: string): EgoTemplate | undefined {
 
 export function findAchievement(id: string): Achievement | undefined {
   return ACHIEVEMENTS.find((a) => a.id === id)
+}
+
+export function findLocation(id: string): LocationDef | undefined {
+  return LOCATIONS.find((l) => l.id === id)
+}
+
+export function findAction(id: string): GameAction | undefined {
+  return ACTIONS.find((a) => a.id === id)
+}
+
+export function findNpc(id: string): NpcDef | undefined {
+  return NPCS.find((n) => n.id === id)
+}
+
+export function findStoryline(id: string): StorylineDef | undefined {
+  return STORYLINES.find((s) => s.id === id)
+}
+
+export function findAssociation(id: string): AssociationDef | undefined {
+  return ASSOCIATIONS.find((a) => a.id === id)
+}
+
+export function findCommission(id: string): CommissionDef | undefined {
+  return COMMISSIONS.find((c) => c.id === id)
+}
+
+export function findProfession(id: string): ProfessionDef | undefined {
+  return PROFESSIONS.find((p) => p.id === id)
+}
+
+export function findTraverseTalent(id: string): TraverseTalent | undefined {
+  return TRAVERSE_TALENTS.find((t) => t.id === id)
+}
+
+export function actionsAtLocation(locationId: string): GameAction[] {
+  return ACTIONS.filter((a) => a.locationId === locationId)
 }
 
 /** 收尾人晋升阶梯（用于 setIdentity: 'fixer-next'） */

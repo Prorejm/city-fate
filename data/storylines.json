@@ -1,0 +1,490 @@
+[
+  {
+    "id": "traverse-mystery",
+    "name": "穿越之谜",
+    "description": "我为什么会在这里？那个带我来到这个世界的声音，究竟是谁？",
+    "stages": [
+      {
+        "id": "tm-1",
+        "title": "初醒",
+        "text": "你在后巷的垃圾堆里醒来，脑中残留着一句话：'找到光的源头。'这座城市的一切都那么陌生——但你隐约觉得，这场穿越不是偶然。",
+        "trigger": { "type": "round", "round": 1 },
+        "next": "tm-2"
+      },
+      {
+        "id": "tm-2",
+        "title": "线索",
+        "text": "阿梨把一枚旧徽章推到你面前：'有人出钱收这个——脑叶公司的旧东西。你感兴趣？'徽章上的纹路，和你在梦中见过的光一模一样。",
+        "trigger": { "type": "npcAffinity", "npcId": "ali", "affinity": 40 },
+        "next": "tm-3",
+        "reward": { "gold": 100 }
+      },
+      {
+        "id": "tm-3",
+        "title": "光之种的回响",
+        "text": "顾博士看着你带来的徽章，沉默了很久：'这不是普通的遗物。它共鸣过光之种——那种力量，现在也留在你体内。'你终于明白：穿越你的力量，与脑叶公司的遗产有关。",
+        "trigger": { "type": "npcAffinity", "npcId": "gu-doctor", "affinity": 50 },
+        "next": "tm-4",
+        "effects": { "synergy": 2, "will": 1 }
+      },
+      {
+        "id": "tm-4",
+        "title": "内心之声",
+        "text": "深夜，那个甜美的声音再次响起：'你终于开始寻找我了。'你意识到——也许，'穿越'本身就是一场更大的'叩问自我'。",
+        "trigger": { "type": "storyline", "storylineId": "spirit-line" },
+        "effects": { "pressure": 10 }
+      }
+    ]
+  },
+  {
+    "id": "stand-on-feet",
+    "name": "立足线",
+    "description": "从桥洞到有产者——在都市站稳脚跟的成长之路。",
+    "stages": [
+      {
+        "id": "sof-1",
+        "title": "第一个住处",
+        "text": "你在桥洞睡了半个月，终于攒够钱，租下了一间后巷的廉价房。墙壁漏风，但有一扇能关上的门。这是你在都市的第一个'家'。",
+        "trigger": { "type": "action", "actionId": "market-buy" },
+        "next": "sof-2",
+        "effects": { "stamina": 5 }
+      },
+      {
+        "id": "sof-2",
+        "title": "稳定的收入",
+        "text": "你终于有了稳定的收入来源。巷口的人开始认得你的脸——'那个新来的，干活挺利索。'",
+        "trigger": { "type": "action", "actionId": "fixer-board" },
+        "next": "sof-3",
+        "effects": { "reputation": 5 }
+      },
+      {
+        "id": "sof-3",
+        "title": "白岚的橄榄枝",
+        "text": "白岚在人群中叫住了你：'你的资料我看过了。巢内缺人手——有兴趣吗？'这是通往巢的阶梯。",
+        "trigger": { "type": "action", "actionId": "wing-exam" },
+        "next": "sof-4"
+      },
+      {
+        "id": "sof-4",
+        "title": "巢内人",
+        "text": "你穿上了翼公司的制服。从今天起，你是'巢内人'了——尽管后巷的旧友们再见到你时，眼神已经不一样了。",
+        "trigger": { "type": "round", "round": 30 },
+        "effects": { "reputation": 10, "will": 1 }
+      }
+    ]
+  },
+  {
+    "id": "fixer-road",
+    "name": "收尾人之路",
+    "description": "从九阶到色彩——老周说，这条路是用命铺的。",
+    "stages": [
+      {
+        "id": "fr-1",
+        "title": "入行",
+        "text": "老周把一枚九阶的徽章递给你：'拿着。从今天起，你是个收尾人了。记住——活着回来，比完成委托重要。'",
+        "trigger": { "type": "npcAffinity", "npcId": "old-zhou", "affinity": 50 },
+        "next": "fr-2",
+        "effects": { "reputation": 8 }
+      },
+      {
+        "id": "fr-2",
+        "title": "第一单硬仗",
+        "text": "你接下一单危险的委托，对手是个恶疾级的威胁。巷口的老周站在远处——他没出手，但你知道，他随时准备替你挡一刀。",
+        "trigger": { "type": "action", "actionId": "guild-bounty" },
+        "next": "fr-3",
+        "effects": { "reputation": 10 }
+      },
+      {
+        "id": "fr-3",
+        "title": "声名鹊起",
+        "text": "你的名字开始在后巷流传。委托人们指名要'那个新来的'——因为你办事牢靠，从不失手。",
+        "trigger": { "type": "action", "actionId": "fixer-board" },
+        "next": "fr-4"
+      },
+      {
+        "id": "fr-4",
+        "title": "色彩之影",
+        "text": "你远远望见过一次色彩级收尾人执行委托。老周说：'那条路，我走了一半。你，或许能走完全程。'",
+        "trigger": { "type": "round", "round": 40 },
+        "effects": { "will": 2, "reputation": 5 }
+      }
+    ]
+  },
+  {
+    "id": "spirit-line",
+    "name": "精神线",
+    "description": "内心之声的对抗与和解——EGO、扭曲、大罪，都是你的一部分。",
+    "stages": [
+      {
+        "id": "sl-1",
+        "title": "第一声低语",
+        "text": "深夜，你听见了一个声音。它甜美、温柔，仿佛来自你的内心深处：'终于……找到你了。'",
+        "trigger": { "type": "round", "round": 10 },
+        "next": "sl-2",
+        "effects": { "pressure": 8 }
+      },
+      {
+        "id": "sl-2",
+        "title": "零的告诫",
+        "text": "零看着你，眼神忽然变得认真：'你心里的那个声音，我听见了。别怕它——但也不要无视它。它就是你。'",
+        "trigger": { "type": "npcAffinity", "npcId": "ling-zero", "affinity": 50 },
+        "next": "sl-3"
+      },
+      {
+        "id": "sl-3",
+        "title": "叩问自我",
+        "text": "那个声音终于清晰起来：'你愿意，看见真正的自己吗？'你站在了命运的岔路口。",
+        "trigger": { "type": "action", "actionId": "abno-explore" },
+        "effects": { "pressure": 20 }
+      }
+    ]
+  },
+  {
+    "id": "alley-power",
+    "name": "后巷势力",
+    "description": "屠夫凯的橄榄枝，与后巷的黑暗法则。",
+    "stages": [
+      {
+        "id": "ap-1",
+        "title": "第一次接触",
+        "text": "屠夫凯拦住你，递来一根烟：'新来的？这条街归我管。交保护费，或者——来帮我做事。'",
+        "trigger": { "type": "npcAffinity", "npcId": "butcher-kai", "affinity": 20 },
+        "next": "ap-2"
+      },
+      {
+        "id": "ap-2",
+        "title": "选择",
+        "text": "凯的手下和你发生冲突。你站在巷口，身后是协会的徽章，身前是凯的刀。你选择了你的路。",
+        "trigger": { "type": "action", "actionId": "join-finger" },
+        "next": "ap-3",
+        "effects": { "reputation": 10 }
+      },
+      {
+        "id": "ap-3",
+        "title": "地盘的法则",
+        "text": "你学会了后巷的法则：钱、命、信义，三样东西只能保住两样。你在刀尖上走出了自己的名字。",
+        "trigger": { "type": "action", "actionId": "finger-job" },
+        "effects": { "reputation": 8, "physique": 1 }
+      }
+    ]
+  },
+  {
+    "id": "bloodline",
+    "name": "血脉",
+    "description": "血魔眷属的血脉之谜，与血娘的古老计划。",
+    "stages": [
+      {
+        "id": "bl-1",
+        "title": "血亲",
+        "text": "血娘凝视着你，忽然笑了：'你身上有我们的血。看来，命运把你送回了我身边。'",
+        "trigger": { "type": "npcAffinity", "npcId": "blood-mother", "affinity": 50 },
+        "next": "bl-2"
+      },
+      {
+        "id": "bl-2",
+        "title": "仪式",
+        "text": "血娘邀请你参加血之仪式：'饮下它，你将真正成为我们的一员。代价是——你再也回不到人类的世界。'",
+        "trigger": { "type": "action", "actionId": "blood-rite" },
+        "effects": { "synergy": 2, "pressure": 15 }
+      }
+    ]
+  },
+  {
+    "id": "city-secrets",
+    "name": "都市秘辛",
+    "description": "白夜黑昼的真相，与都市最深处的秘密。",
+    "stages": [
+      {
+        "id": "cs-1",
+        "title": "老乞丐的预言",
+        "text": "老乞丐盯着你看了很久，忽然说：'光之种……你身上有它的味道。白夜再临之时，你会站在选择的路口。'",
+        "trigger": { "type": "npcAffinity", "npcId": "old-beggar", "affinity": 50 },
+        "next": "cs-2"
+      },
+      {
+        "id": "cs-2",
+        "title": "顾博士的档案",
+        "text": "顾博士带你看了他藏起来的档案：'这就是白夜黑昼的真相。脑叶公司想给都市的每个人都种下光之种——包括你，穿越者。'",
+        "trigger": { "type": "npcAffinity", "npcId": "gu-doctor", "affinity": 60 },
+        "next": "cs-3",
+        "effects": { "synergy": 1, "will": 1 }
+      },
+      {
+        "id": "cs-3",
+        "title": "图书馆的低语",
+        "text": "你在图书馆遗址深处，听见了书页翻动的声音。那声音与你内心的低语共鸣：'书是终局，也是新生。'",
+        "trigger": { "type": "action", "actionId": "library-explore" },
+        "effects": { "synergy": 2, "pressure": 15 }
+      }
+    ]
+  },
+  {
+    "id": "love-line",
+    "name": "夜莺的低语",
+    "description": "与夜莺之间的危险关系。爱情在都市，是奢侈品。",
+    "stages": [
+      {
+        "id": "ll-1",
+        "title": "第一次合唱",
+        "text": "夜莺在台上唱完，忽然朝你招了招手：'会唱吗？'你随口哼了几句，她笑了——那是她第一次对顾客露出真实的笑容。",
+        "trigger": { "type": "npcAffinity", "npcId": "ya-night", "affinity": 50 },
+        "next": "ll-2"
+      },
+      {
+        "id": "ll-2",
+        "title": "刀与玫瑰",
+        "text": "夜莺在打烊后等你：'有人要杀我。你会保护我吗？'她手里握着一把匕首，眼神却柔软得不像话。",
+        "trigger": { "type": "npcAffinity", "npcId": "ya-night", "affinity": 70 },
+        "effects": { "synergy": 2, "pressure": 5 }
+      }
+    ]
+  },
+  {
+    "id": "equal-heart",
+    "name": "平等之心",
+    "description": "在都市，爱是奢侈品；平等，是禁忌。",
+    "stages": [
+      {
+        "id": "eh-1",
+        "title": "孤儿院往事",
+        "text": "简小姐替你整理评级文件时，忽然说起孤儿院：'那里的老师教我们——'你们生来就是累赘'。我花了十年才明白，那是他们怕我们长出自己的骨头。'她合上文件夹，声音平稳如常。",
+        "trigger": { "type": "npcAffinity", "npcId": "jane-eyre", "affinity": 40 },
+        "next": "eh-2",
+        "reward": { "gold": 80 }
+      },
+      {
+        "id": "eh-2",
+        "title": "阁楼的告白",
+        "text": "闭馆后的 Hana 分部，简小姐把你叫到阁楼。她看着窗外的后巷灯火：'有人问我，为什么不攀上协会高层的枝头。因为——'她转过脸，'我宁愿独自站着，也不要跪着被人牵着。'",
+        "trigger": { "type": "npcAffinity", "npcId": "jane-eyre", "affinity": 70 },
+        "next": "eh-3",
+        "effects": { "synergy": 1, "will": 1 }
+      },
+      {
+        "id": "eh-3",
+        "title": "我与你平等",
+        "text": "简小姐把一枚九阶的徽章推到你面前：'这是你的评级。'你正要道谢，她打断你：'不用谢。我评定的是事实，不是恩情。'她顿了顿，罕见地露出微笑：'记住——在人格上，你与任何色彩级收尾人平等。'",
+        "trigger": { "type": "npcAffinity", "npcId": "jane-eyre", "affinity": 90 },
+        "effects": { "will": 2 },
+        "reward": { "trait": "independent-soul" }
+      }
+    ]
+  },
+  {
+    "id": "eye-of-truth",
+    "name": "真相之眼",
+    "description": "当整个都市都在遗忘，记录本身就成了罪。",
+    "stages": [
+      {
+        "id": "et-1",
+        "title": "空白页",
+        "text": "温斯顿把你拉到印刷局的废纸堆后，翻开一本旧笔记本。大多数页面被墨水涂得漆黑，只有几行字迹清晰：'今天，档案馆里少了一天的记录。没有人记得那天发生了什么。'他的手指在发抖。",
+        "trigger": { "type": "npcAffinity", "npcId": "winston", "affinity": 40 },
+        "next": "et-2",
+        "reward": { "gold": 60 }
+      },
+      {
+        "id": "et-2",
+        "title": "思想的自由",
+        "text": "'你知道吗，'温斯顿压低声音，'在翼的档案里，'2+2=4'只是旧历的说法。他们说——只要首脑愿意，2+2 可以等于 5。'他盯着你：'你会记得今天发生的事吗？'",
+        "trigger": { "type": "npcAffinity", "npcId": "winston", "affinity": 70 },
+        "next": "et-3",
+        "effects": { "intelligence": 1, "will": 1 }
+      },
+      {
+        "id": "et-3",
+        "title": "首脑之眼",
+        "text": "你替温斯顿把最后一页日记藏进了后巷的墙缝。他忽然笑了：'我可能活不了多久了。'他指了指天上：'但至少，有一个人记得真相——那就是你。'远处，翼的探照灯扫过后巷。",
+        "trigger": { "type": "npcAffinity", "npcId": "winston", "affinity": 90 },
+        "effects": { "will": 2, "pressure": 10 },
+        "reward": { "trait": "truth-keeper" }
+      }
+    ]
+  },
+  {
+    "id": "loyalty-truth",
+    "name": "忠诚之问",
+    "description": "奥勃良的每个问题都像一把钥匙——打开的门，未必是你想进的。",
+    "stages": [
+      {
+        "id": "lt-1",
+        "title": "温和的试探",
+        "text": "奥勃良请你喝了一杯昂贵的巢内咖啡。'我知道你和温斯顿走得近。'他微笑着搅动杯中的液体：'我只是好奇——你觉得，一个人应该忠于事实，还是忠于翼？'",
+        "trigger": { "type": "npcAffinity", "npcId": "obrien", "affinity": 40 },
+        "next": "lt-2",
+        "reward": { "gold": 100 }
+      },
+      {
+        "id": "lt-2",
+        "title": "忠诚的代价",
+        "text": "奥勃良摊开一份档案，上面是你的名字。'这里记录了你的一切，从你穿越的那天起。'他合上档案：'我可以让这份档案'消失'——只要你回答我一个问题：你愿意为翼做什么？'",
+        "trigger": { "type": "npcAffinity", "npcId": "obrien", "affinity": 70 },
+        "next": "lt-3",
+        "effects": { "pressure": 10 }
+      },
+      {
+        "id": "lt-3",
+        "title": "回答",
+        "text": "奥勃良听完你的回答，沉默了很久。最后他说：'有趣。'他站起身，把那份档案丢进碎纸机：'无论你选什么，我都会看着你。'他走过你身边，轻声说：'这就是我的忠诚——对'可能性'的忠诚。'",
+        "trigger": { "type": "npcAffinity", "npcId": "obrien", "affinity": 90 },
+        "effects": { "intelligence": 1, "will": 1 },
+        "reward": { "trait": "surveyed" }
+      }
+    ]
+  },
+  {
+    "id": "redemption-24601",
+    "name": "救赎之路",
+    "description": "一个被编号的人，能否在都市里重新成为一个人？",
+    "stages": [
+      {
+        "id": "rd-1",
+        "title": "墙上的编号",
+        "text": "冉·阿让替你包扎伤口时，你瞥见他锁骨下方刺着一个编号：24601。他注意到你的目光，沉默半晌：'那是旧时代的印记。'他系好绷带：'他们给我编号，是想让我忘记自己叫什么。'",
+        "trigger": { "type": "npcAffinity", "npcId": "valjean", "affinity": 40 },
+        "next": "rd-2",
+        "reward": { "gold": 50 }
+      },
+      {
+        "id": "rd-2",
+        "title": "沙威的影子",
+        "text": "一个穿协会制服的老人最近总在收容所附近徘徊。冉·阿让苦笑着告诉你：'那是沙威——准确说，是像沙威一样的人。他们这种人，只认编号，不认人。'他看向熟睡的孩子：'但我不会回去了。这些孩子需要我。'",
+        "trigger": { "type": "npcAffinity", "npcId": "valjean", "affinity": 70 },
+        "next": "rd-3",
+        "effects": { "will": 1, "pressure": -5 }
+      },
+      {
+        "id": "rd-3",
+        "title": "一个人",
+        "text": "深夜，沙威式的调查员终于堵住了冉·阿让。你挡在他面前。冉·阿让却把你拉开，平静地对调查员说：'我不再是 24601。'他指了指身后熟睡的孩子：'我是他们的父亲。'调查员看了他很久，转身离开了。",
+        "trigger": { "type": "npcAffinity", "npcId": "valjean", "affinity": 90 },
+        "effects": { "will": 2, "synergy": 1 },
+        "reward": { "trait": "redeemed" }
+      }
+    ]
+  },
+  {
+    "id": "monster-within",
+    "name": "体内的怪物",
+    "description": "杰基尔博士想证明：每个人都有另一面。他没想到，另一面也有另一面。",
+    "stages": [
+      {
+        "id": "mw-1",
+        "title": "两份档案",
+        "text": "杰基尔博士的办公桌上摆着两份一模一样的异想体档案，批注却针锋相对：一份写着'无害，建议收容'，另一份写着'危险，必须隔离'。他疲惫地笑笑：'都是我写的。我有时候，不太记得自己写过什么。'",
+        "trigger": { "type": "npcAffinity", "npcId": "dr-jekyll", "affinity": 40 },
+        "next": "mw-2",
+        "reward": { "gold": 80 }
+      },
+      {
+        "id": "mw-2",
+        "title": "海德的低语",
+        "text": "深夜的收容所，博士的房间里传来不属于他的笑声。你推开门，只见他站在镜子前，右手死死按住自己的左手：'回去……回去……'他回头看你，瞳孔深处有什么东西在收缩：'别靠近我。它想出来。'",
+        "trigger": { "type": "npcAffinity", "npcId": "dr-jekyll", "affinity": 70 },
+        "next": "mw-3",
+        "effects": { "pressure": 15, "synergy": 1 }
+      },
+      {
+        "id": "mw-3",
+        "title": "合一",
+        "text": "杰基尔博士交给你一瓶淡绿色的药剂：'这是我自己。喝下它，你也会看见自己的另一面。'他认真地盯着你：'都市里每个人都戴着面具——我只是想知道，面具底下到底是什么。'你握住药剂，感觉体内的声音也躁动起来。",
+        "trigger": { "type": "npcAffinity", "npcId": "dr-jekyll", "affinity": 90 },
+        "effects": { "synergy": 2, "distortion": 10 },
+        "reward": { "trait": "dual-natured" }
+      }
+    ]
+  },
+  {
+    "id": "deduction-line",
+    "name": "演绎之道",
+    "description": "夏洛克从不解释推理过程——除非，你值得他开口。",
+    "stages": [
+      {
+        "id": "dc-1",
+        "title": "三句话",
+        "text": "夏洛克扫了你一眼，说出三句话：'你右手虎口的茧——握过刀，但最近三个月没握。你鞋底有桥洞的苔藓，昨晚睡在那里。你左臂的绷带是冉·阿让的手法。'他顿了顿：'你想当收尾人，却还没下定决心。'",
+        "trigger": { "type": "npcAffinity", "npcId": "holmes", "affinity": 40 },
+        "next": "dc-2",
+        "reward": { "gold": 60 }
+      },
+      {
+        "id": "dc-2",
+        "title": "第一桩委托",
+        "text": "夏洛克破例让你旁观他的委托：一个后巷商人的失踪案。三小时后，他指着墙上的涂鸦：'涂改三次的字母，藏着被抹去的地址。'你豁然开朗。他难得点头：'你的眼睛，还不错。'",
+        "trigger": { "type": "npcAffinity", "npcId": "holmes", "affinity": 70 },
+        "next": "dc-3",
+        "effects": { "intelligence": 1, "instinct": 1 }
+      },
+      {
+        "id": "dc-3",
+        "title": "Seven的橄榄枝",
+        "text": "夏洛克把一枚 Seven 协会的联络铭牌抛给你：'拿去。'他穿上外套：'有人托我带话——Seven 南部三科缺一个懂'观察'的新人。'他走到门口，回头看你：'当然，你也可以留在这条巷子里。选择权在你。'",
+        "trigger": { "type": "npcAffinity", "npcId": "holmes", "affinity": 90 },
+        "effects": { "synergy": 1, "reputation": 8 },
+        "reward": { "trait": "sharp-eyed" }
+      }
+    ]
+  },
+  {
+    "id": "vengeance-grace",
+    "name": "复仇与宽恕",
+    "description": "埃德蒙等了十年，只为把名单上的名字一个个划掉。直到你问他：划完以后呢？",
+    "stages": [
+      {
+        "id": "vg-1",
+        "title": "名单",
+        "text": "埃德蒙请你喝酒，醉意中掏出一张泛黄的纸：'这是名单。'上面是五个名字，前两个已被红笔划掉。他的眼神在烛火下忽明忽暗：'他们把我送进废墟的时候，可没想过我会活着回来。'",
+        "trigger": { "type": "npcAffinity", "npcId": "monte-cristo", "affinity": 40 },
+        "next": "vg-2",
+        "reward": { "gold": 150 }
+      },
+      {
+        "id": "vg-2",
+        "title": "复仇的代价",
+        "text": "埃德蒙划掉了第三个名字——那人的家族一夜之间从后巷消失。他坐在空荡的房间里，看着自己的手：'奇怪。我以为划掉第三个名字时，我会痛快。'他抬起头：'但我只感觉……更空了。'",
+        "trigger": { "type": "npcAffinity", "npcId": "monte-cristo", "affinity": 70 },
+        "next": "vg-3",
+        "effects": { "pressure": 12 }
+      },
+      {
+        "id": "vg-3",
+        "title": "最后一个名字",
+        "text": "埃德蒙把名单推到你面前，最后一个名字上是他自己的笔迹：'这个人已经死了。'他指的是十年前那个一心复仇的自己。'剩下的名字，我不划了。'他第一次露出松弛的笑容：'活着回来，已经是我最大的复仇。'",
+        "trigger": { "type": "npcAffinity", "npcId": "monte-cristo", "affinity": 90 },
+        "effects": { "will": 2, "pressure": -10 },
+        "reward": { "trait": "forgiven" }
+      }
+    ]
+  },
+  {
+    "id": "indomitable-sea",
+    "name": "不屈之海",
+    "description": "圣地亚哥说，人可以被杀死，但不能被打败。",
+    "stages": [
+      {
+        "id": "is-1",
+        "title": "再出海",
+        "text": "圣地亚哥望着出城的方向，忽然开口：'你知道吗，大湖上有一条鱼，比协会的楼还大。'他笑了，露出缺了牙的嘴：'他们都叫我别去了。但那条鱼——它还在等我。'",
+        "trigger": { "type": "npcAffinity", "npcId": "santiago", "affinity": 40 },
+        "next": "is-2",
+        "reward": { "gold": 40 }
+      },
+      {
+        "id": "is-2",
+        "title": "五灾的传说",
+        "text": "篝火旁，圣地亚哥讲起大湖五灾：'马林鲸，白鲸……它们的皮，能卖进翼的工坊。'他的眼里燃着火：'我年轻时追过马林鲸八十七天。第八十七天，我割断了钓线。'他沉默很久：'那是唯一一次，我认输。'",
+        "trigger": { "type": "npcAffinity", "npcId": "santiago", "affinity": 70 },
+        "next": "is-3",
+        "effects": { "will": 1, "physique": 1 }
+      },
+      {
+        "id": "is-3",
+        "title": "人可以被杀死",
+        "text": "圣地亚哥把一枚鲸骨做的护身符塞进你手里：'收着。'他咧嘴一笑：'记住，人可以被杀死——但绝不能被打败。'他站起身，拍了拍裤子上的灰：'等我攒够路费，就回大湖去。到时候，你来看我钓那条鱼。'",
+        "trigger": { "type": "npcAffinity", "npcId": "santiago", "affinity": 90 },
+        "effects": { "will": 2, "stamina": 5 },
+        "reward": { "trait": "indomitable" }
+      }
+    ]
+  }
+]

@@ -40,6 +40,10 @@ export function applyEffects(
       data.ego.distortionProgress = clamp(data.ego.distortionProgress + Math.round(v), 0, 100)
     } else if (k === 'reputation') {
       run.reputation = Math.max(0, run.reputation + Math.round(v))
+    } else if (k === 'foodLevel') {
+      run.foodLevel = clamp(run.foodLevel + Math.round(v), 0, 5)
+    } else if (k === 'karma') {
+      run.karma = Math.max(-100, Math.min(100, run.karma + Math.round(v)))
     }
   }
   return { bankrupt }

@@ -1,0 +1,101 @@
+[
+  {
+    "id": "backalley-7",
+    "name": "第七区·无名巷",
+    "description": "你穿越而来的地方。污浊的后巷，雨水从遮雨布的破洞滴落。帮派在巷口划分地盘，乞丐与流民挤在屋檐下。这里是都市最底层的生活。",
+    "stage": "SURVIVAL",
+    "unlock": {},
+    "staminaCost": 0,
+    "actions": ["odd-job", "scavenge", "beg", "ask-rumors", "rest-street", "talk-valjean"]
+  },
+  {
+    "id": "bridge-cave",
+    "name": "桥洞",
+    "description": "废弃水道桥下的免费落脚点。潮湿、寒冷、挤满了同样无处可去的人。至少，这里暂时安全。",
+    "stage": "SURVIVAL",
+    "unlock": {},
+    "staminaCost": 0,
+    "actions": ["rest-shelter", "listen-bridge", "scavenge", "talk-santiago"]
+  },
+  {
+    "id": "fixer-guild",
+    "name": "收尾人协会·第七区分部",
+    "description": "收尾人的官方机构。委托板上贴满了悬赏与委托，从跑腿送信到雇凶杀人，只要付得起钱就有人接。",
+    "stage": "SURVIVAL",
+    "unlock": { "actionId": "ask-rumors" },
+    "staminaCost": 1,
+    "actions": ["fixer-board", "train-combat", "ask-rumors", "guild-bounty", "assoc-board", "talk-jane", "talk-holmes", "detect-distortion"]
+  },
+  {
+    "id": "alley-market",
+    "name": "后巷集市",
+    "description": "第七区最热闹的集市。工坊的劣质武器、黑市的禁药、来路不明的义体零件——只要出得起价，这里什么都有。",
+    "stage": "SURVIVAL",
+    "unlock": { "actionId": "odd-job" },
+    "staminaCost": 1,
+    "actions": ["market-buy", "market-sell", "gamble-street", "ask-rumors"]
+  },
+  {
+    "id": "bar-night",
+    "name": "夜莺酒吧",
+    "description": "后巷最安全的社交场。一杯劣质酒，一个消息，一次邂逅。老板夜莺知道这条街上所有人的秘密。",
+    "stage": "SETTLED",
+    "unlock": { "reputation": 5 },
+    "staminaCost": 1,
+    "actions": ["drink", "socialize", "info-buy", "flirt", "talk-montecristo"]
+  },
+  {
+    "id": "workshop-du",
+    "name": "哑巴修的工坊",
+    "description": "工坊主哑巴修话不多，手艺却是一绝。他打造的武器，连协会都点头。想学手艺？先给他打三个月下手。",
+    "stage": "SETTLED",
+    "unlock": { "reputation": 8 },
+    "staminaCost": 1,
+    "actions": ["apprentice-forge", "commission-weapon", "repair-gear", "master-forge", "signature-weapon"]
+  },
+  {
+    "id": "wing-plaza",
+    "name": "翼公司广场",
+    "description": "二十六座巢的入口之一。高墙内是秩序与繁荣，墙外是无数渴望进入的流民。翼公司的招聘处排着长队——考试，是普通人唯一的通路。",
+    "stage": "SETTLED",
+    "unlock": { "reputation": 15, "stat": { "attr": "intelligence", "value": 6 } },
+    "staminaCost": 2,
+    "actions": ["wing-exam", "wing-apply", "study-city", "talk-winston", "talk-obrien", "wing-meeting", "wing-project", "taboo-hunt", "taboo-trace", "serve-noble", "manage-estate"]
+  },
+  {
+    "id": "finger-den",
+    "name": "手指据点",
+    "description": "五指帮派的聚集地。这里没有法律，只有规矩——拇指的礼、食指的信、中指的义。加入，或成为他们的猎物。",
+    "stage": "ADVENTURE",
+    "unlock": { "reputation": 25 },
+    "staminaCost": 2,
+    "actions": ["join-finger", "finger-job", "learn-finger"]
+  },
+  {
+    "id": "abno-facility",
+    "name": "异想体收容所",
+    "description": "前脑叶公司的废弃设施，如今被各类势力瓜分。传闻这里囚禁着还未被收容的异想体，也埋藏着脑啡肽的遗产。",
+    "stage": "ADVENTURE",
+    "unlock": { "reputation": 30, "stat": { "attr": "synergy", "value": 5 } },
+    "staminaCost": 2,
+    "actions": ["abno-explore", "study-abno", "collect-relic", "talk-jekyll", "investigate-distortion"]
+  },
+  {
+    "id": "blood-den",
+    "name": "旧血魔聚居地",
+    "description": "十九区深处被遗忘的街区。血魔们蛰伏在阴影中，以暗巷为家。这里的规矩：血债血偿，禁忌之地不容窥探。",
+    "stage": "ADVENTURE",
+    "unlock": { "trait": "bloodkin" },
+    "staminaCost": 2,
+    "actions": ["hunt-blood", "blood-rite", "ask-rumors", "track-blood"]
+  },
+  {
+    "id": "library-ruin",
+    "name": "图书馆遗址",
+    "description": "那座扭曲的图书馆曾在此矗立，如今只剩下灰烬与残留的'书页'。仍有冒险者前来搜寻遗落的古籍与力量。",
+    "stage": "ADVENTURE",
+    "unlock": { "reputation": 45 },
+    "staminaCost": 2,
+    "actions": ["library-explore", "study-city", "collect-relic"]
+  }
+]
