@@ -59,22 +59,21 @@ export function equipItem(data: CityFateData, index: number): boolean {
   if (!entry) return false
   const def = findItem(entry.id)
   if (!def || !def.slot) return false
-  // 卸下当前槽位的物品（放回背包）
+  // 卸下当前槽位的物品（放回背包，保留其耐久）
   const current = data.equipped[def.slot]
   if (current) {
-    data.inventory.push({ id: current, durability: def.durability })
+    data.inventory.push({ id: current.id, durability: current.durability })
   }
-  data.equipped[def.slot] = entry.id
+  data.equipped[def.slot] = { id: entry.id, durability: entry.durability }
   data.inventory.splice(index, 1)
   return true
 }
 
 /** 卸下装备（放回背包） */
 export function unequipItem(data: CityFateData, slot: EquipmentSlot): boolean {
-  const itemId = data.equipped[slot]
-  if (!itemId) return false
-  const def = findItem(itemId)
-  data.inventory.push({ id: itemId, durability: def?.durability ?? 0 })
+  const cur = data.equipped[slot]
+  if (!cur) return false
+  data.inventory.push({ id: cur.id, durability: cur.durability })
   delete data.equipped[slot]
   return true
 }
@@ -108,9 +107,9 @@ export function equipmentBonuses(data: CityFateData): {
   let chanceMod = 0
   const passives: string[] = []
   for (const slot of Object.keys(data.equipped) as EquipmentSlot[]) {
-    const id = data.equipped[slot]
-    if (!id) continue
-    const def = findItem(id)
+    const cur = data.equipped[slot]
+    if (!cur) continue
+    const def = findItem(cur.id)
     if (!def) continue
     if (def.effects) {
       for (const [k, v] of Object.entries(def.effects)) {
@@ -132,9 +131,37 @@ export function equipmentChanceMod(data: CityFateData): number {
   return equipmentBonuses(data).chanceMod
 }
 
-/** 消耗耐久（战斗/行动后），耐久归零的物品损坏移除（简化：装备耐久通过 useConsumable 等处理） */
-export function wearEquipment(_data: CityFateData, _amount = 1): string[] {
-  return []
+/** 维修装备：恢复全部已装备武器的耐久，返回修复件数 */
+export function repairEquipment(data: CityFateData): number {
+  let repaired = 0
+  for (const slot of Object.keys(data.equipped) as EquipmentSlot[]) {
+    const cur = data.equipped[slot]
+    if (!cur) continue
+    const def = findItem(cur.id)
+    if (!def || def.durability <= 0) continue // 遗物不可修
+    if (cur.durability < def.durability) {
+      cur.durability = def.durability
+      repaired += 1
+    }
+  }
+  return repaired
+}
+
+/** 消耗耐久（战斗/行动后），耐久归零的物品损坏移除；返回损坏物品名 */
+export function wearEquipment(data: CityFateData, amount = 1): string[] {
+  const broken: string[] = []
+  for (const slot of Object.keys(data.equipped) as EquipmentSlot[]) {
+    const cur = data.equipped[slot]
+    if (!cur) continue
+    const def = findItem(cur.id)
+    if (!def || def.durability <= 0) continue // 遗物不磨损
+    cur.durability -= amount
+    if (cur.durability <= 0) {
+      broken.push(def.name)
+      delete data.equipped[slot]
+    }
+  }
+  return broken
 }
 
 /** 背包物品数量 */

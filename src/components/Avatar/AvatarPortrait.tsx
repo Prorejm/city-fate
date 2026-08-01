@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
 import type { CityFateData, RunState } from '@/types'
+import { findItem } from '@/core/data'
 import { AvatarFallback } from './AvatarFallback'
 import { loadAvatarLib, renderAvatar, avatarLibReady, resetAvatar } from '@/lib/avatarAdapter'
 
@@ -13,6 +14,8 @@ export function buildAvatarState(data: CityFateData, run: RunState, expression: 
   affiliation: string
   sinType?: string
   egoName?: string
+  armed?: boolean
+  injured?: boolean
 } {
   const mind = run.sinType
     ? 'SINNED'
@@ -31,6 +34,8 @@ export function buildAvatarState(data: CityFateData, run: RunState, expression: 
     affiliation: data.affiliation,
     sinType: run.sinType,
     egoName: data.ego.egoName || undefined,
+    armed: !!data.equipped['main-hand'],
+    injured: run.health <= 30,
   }
 }
 
@@ -87,6 +92,8 @@ export function AvatarPortrait({ data, run, expression = 'normal', size = 220 }:
   }
 
   const isChild = data.age < 13
+  const armed = !!data.equipped['main-hand']
+  const injured = run.health <= 30
   return (
     <div className="relative" style={{ width: size, height: size * 1.6 }}>
       {ready ? (
@@ -96,7 +103,7 @@ export function AvatarPortrait({ data, run, expression = 'normal', size = 220 }:
           style={{
             transform: `translateX(-50%) ${isChild ? 'scale(0.62)' : 'scale(0.92)'}`,
             transformOrigin: 'center bottom',
-            filter: run.distortionFormId ? 'hue-rotate(-20deg) saturate(1.4)' : undefined,
+            filter: run.distortionFormId ? 'hue-rotate(-20deg) saturate(1.4)' : injured ? 'grayscale(0.5) brightness(0.8)' : undefined,
           }}
         />
       ) : (
@@ -104,6 +111,16 @@ export function AvatarPortrait({ data, run, expression = 'normal', size = 220 }:
       )}
       {data.ego.isAwakened && (
         <div className="pointer-events-none absolute inset-0 rounded-full bg-gold-400/10 blur-2xl" />
+      )}
+      {injured && (
+        <div className="pointer-events-none absolute inset-0 flex items-start justify-center">
+          <div className="mt-2 rounded bg-blood-600/60 px-2 py-0.5 font-mono text-[9px] text-blood-200">重伤</div>
+        </div>
+      )}
+      {armed && !run.distortionFormId && (
+        <div className="pointer-events-none absolute bottom-2 left-1/2 -translate-x-1/2 rounded border border-ash-500/40 bg-void-950/70 px-2 py-0.5 font-mono text-[9px] text-ash-300">
+          ⚔ {findItem(data.equipped['main-hand']!.id)?.name ?? '武装'}
+        </div>
       )}
     </div>
   )

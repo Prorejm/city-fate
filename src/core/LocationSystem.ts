@@ -63,6 +63,9 @@ export function actionAvailable(data: CityFateData, run: RunState, actionId: str
   // 路线互斥：成为协会收尾人后帮派任务关闭
   if (run.fixerGrade >= 1 && (actionId === 'join-finger' || actionId === 'finger-job' || actionId === 'learn-finger')) return false
 
+  // 深宵行动仅在深宵窗口可见
+  if ((actionId === 'deep-night-walk' || actionId === 'deep-night-risk') && !run.deepNightWindow) return false
+
   const ctx = snapshotContext(data, run)
   if (!evalConditions(action.conditions, ctx)) return false
   if (run.actionPoints < action.apCost) return false

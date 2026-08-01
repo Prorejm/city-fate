@@ -1,5 +1,6 @@
 import type {
   CityFateData,
+  GameEvent,
   Gender,
   GlobalMeta,
   RunState,
@@ -17,6 +18,7 @@ import { initNpcStates, meetNpcsAtLocation } from './NpcSystem'
 import { currentStage, refreshUnlockedLocations } from './LocationSystem'
 import { checkStorylines, applyStorylineEffects } from './StorylineSystem'
 import { generateCommissionPool } from './CommissionSystem'
+import { pickEvent, markCooldown } from './EventSystem'
 
 export interface RunBundle {
   data: CityFateData
@@ -94,6 +96,8 @@ export function createTraverseRun(
     professionLevels: {},
     professionXp: {},
     subclassChoice: {},
+    deepNightWindow: false,
+    eyeWatchLevel: 0,
   }
   // 初始化 NPC 状态（依赖 run 完成后再处理）
   run.npcStates = initNpcStates(run)
@@ -129,6 +133,7 @@ export interface RoundResult {
   death?: DeathResult
   storylines: string[]
   newNpcs: string[]
+  event?: GameEvent
 }
 
 /** 开始新回合：重置行动点、消耗食物、饥饿判定、阶段刷新 */
@@ -138,6 +143,12 @@ export function beginRound(data: CityFateData, run: RunState, meta: GlobalMeta):
   run.actionPoints = stage === 'SURVIVAL' ? 3 : 4
   run.roundCount += 1
   run.daysInCity += 1
+
+  // 年龄增长：7 天 = 1 岁
+  if (run.daysInCity % 7 === 0) {
+    data.age += 1
+    data.lifeLog = [...data.lifeLog.slice(-300), `第${run.daysInCity}天｜你 ${data.age} 岁了。`]
+  }
 
   const logParts: string[] = []
   const storylines: string[] = []
@@ -181,6 +192,19 @@ export function beginRound(data: CityFateData, run: RunState, meta: GlobalMeta):
     run.commissionPool = generateCommissionPool(run, 4)
   }
 
+  // 深宵窗口：每 7 天（约每周）有一次 3:13-4:34 的深宵
+  run.deepNightWindow = run.daysInCity % 7 === 3
+  if (run.deepNightWindow) {
+    logParts.push('今夜凌晨三点十三分——深宵将至。')
+  }
+
+  // 首脑之眼监视：声望越高越被注视，高调行为积累监视值
+  run.eyeWatchLevel = Math.min(100, run.eyeWatchLevel + (run.reputation >= 50 ? 2 : run.reputation >= 20 ? 1 : 0))
+  if (run.eyeWatchLevel >= 80 && run.daysInCity % 5 === 0) {
+    logParts.push('你感到一道视线——某种存在正注视着你的一举一动。')
+    run.pressure = Math.min(100, run.pressure + 3)
+  }
+
   // 老年衰减（穿越者 20 岁起，60 岁后生效，150 岁封顶）
   if (data.age >= 60) {
     const decay = ageHealthDecay(data.age)
@@ -189,6 +213,13 @@ export function beginRound(data: CityFateData, run: RunState, meta: GlobalMeta):
   if (run.distortionFormId) {
     applyDistortionSideEffects(data, run)
     data.ego.distortionProgress = Math.min(100, data.ego.distortionProgress + 1)
+  }
+
+  // 每日事件（年龄 ≥ 3 后有概率遭遇）
+  let dailyEvent: GameEvent | undefined
+  if (data.age >= 3 && Math.random() < 0.45) {
+    dailyEvent = pickEvent(data, run)
+    if (dailyEvent) markCooldown(run, dailyEvent, data.age)
   }
 
   const death: DeathResult | undefined = checkDeath(data, run) ?? undefined
@@ -203,7 +234,7 @@ export function beginRound(data: CityFateData, run: RunState, meta: GlobalMeta):
   }
 
   const log = logParts.length > 0 ? logParts.join(' ') : `第 ${run.daysInCity} 天，新的一天开始了。`
-  return { log, death, storylines, newNpcs: [] }
+  return { log, death, storylines, newNpcs: [], event: dailyEvent }
 }
 
 export { checkDeath, deathFromChain }

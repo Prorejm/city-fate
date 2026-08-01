@@ -37,6 +37,8 @@ function makeRun(overrides: Partial<RunState> = {}): RunState {
     professionLevels: {},
     professionXp: {},
     subclassChoice: {},
+    deepNightWindow: false,
+    eyeWatchLevel: 0,
     ...overrides,
   }
 }

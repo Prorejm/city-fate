@@ -421,7 +421,8 @@
     "statBias": { "attr": "intelligence", "weight": 0.4 },
     "success": {
       "text": ["你细心保养了装备，它在关键时不会掉链子。", "哑巴修借给你工具，你自己修好了磨损的部位。"],
-      "effects": { "intelligence": 1 }
+      "effects": { "intelligence": 1 },
+      "repair": true
     },
     "fail": {
       "text": ["工具太破旧，反而弄坏了零件。"],
@@ -1168,5 +1169,350 @@
     },
     "encounterChance": 0.05,
     "xp": { "profession": "butler", "amount": 40 }
+  },
+  {
+    "id": "suburb-expedition",
+    "name": "郊区远征",
+    "description": "穿越高墙的检查站，深入郊外的荒野。非人的怪物在远处游荡——这里没有都市的规则，只有原始的生存。",
+    "locationId": "outskirts",
+    "stage": "ADVENTURE",
+    "apCost": 2,
+    "staminaCost": 3,
+    "baseChance": 0.55,
+    "statBias": { "attr": "instinct", "weight": 0.5 },
+    "conditions": { "attribute": "reputation", "operator": ">=", "value": 40 },
+    "success": {
+      "text": ["你穿过高墙，在郊外的荒野里找到一片安全的营地。", "远征归来，你带回了郊区独有的情报与见闻。"],
+      "gold": 500,
+      "effects": { "reputation": 10, "instinct": 2, "pressure": 10 },
+      "itemDrops": ["r-star-map", "w-crossbow", "a-leather-jacket"]
+    },
+    "fail": {
+      "text": ["你在荒野遭遇了非人的怪物，差点没能回来。", "郊区的危险远超想象——你负伤撤退。"],
+      "gold": 150,
+      "effects": { "health": -15, "pressure": 12 }
+    },
+    "encounterChance": 0.25,
+    "xp": { "profession": "fixer", "amount": 45 }
+  },
+  {
+    "id": "suburb-hunt",
+    "name": "郊区猎杀",
+    "description": "受'猎人'营地之托，猎杀郊外游荡的怪物。怪物猎人守护着人下人的最后防线。",
+    "locationId": "outskirts",
+    "stage": "ADVENTURE",
+    "apCost": 2,
+    "staminaCost": 3,
+    "baseChance": 0.5,
+    "statBias": { "attr": "physique", "weight": 0.5 },
+    "conditions": { "attribute": "reputation", "operator": ">=", "value": 45 },
+    "success": {
+      "text": ["你终结了一只游荡的怪物，猎人营地的人对你千恩万谢。", "猎杀成功——郊区的人下人记住了你的名字。"],
+      "gold": 700,
+      "effects": { "reputation": 12, "physique": 2, "pressure": 10 },
+      "itemDrops": ["w-machete", "w-zwei-greatsword", "a-anti-ballistic"]
+    },
+    "fail": {
+      "text": ["那只怪物比你想象的强得多——你被撕开了防线。", "猎杀失败，你侥幸从怪物的利爪下逃生。"],
+      "gold": 200,
+      "effects": { "health": -20, "pressure": 12 }
+    },
+    "encounterChance": 0.25,
+    "xp": { "profession": "blood-hunter", "amount": 40 }
+  },
+  {
+    "id": "suburb-rail",
+    "name": "铁路巡游",
+    "description": "登上环绕郊区的铁道列车。火车的来历不明、去向不明，但郊区居民能从铁道上获得罕见的物品。",
+    "locationId": "outskirts",
+    "stage": "ADVENTURE",
+    "apCost": 2,
+    "staminaCost": 2,
+    "baseChance": 0.5,
+    "statBias": { "attr": "fortune", "weight": 0.5 },
+    "conditions": { "attribute": "reputation", "operator": ">=", "value": 50 },
+    "success": {
+      "text": ["你搭上了一趟铁道列车，在轰鸣中穿行于郊区。", "列车停靠的瞬间，你从废弃车厢里捡到了好东西。"],
+      "gold": 600,
+      "effects": { "fortune": 2, "pressure": 8 },
+      "itemDrops": ["r-gungnir-shard", "c-btrain-ticket", "w-finger-katana"]
+    },
+    "fail": {
+      "text": ["列车的目的地远比你想象的危险——你跳车逃生。", "铁路上的东西不全是礼物，也有陷阱。"],
+      "gold": 200,
+      "effects": { "health": -10, "pressure": 12 }
+    },
+    "encounterChance": 0.2,
+    "xp": { "profession": "fixer", "amount": 45 }
+  },
+  {
+    "id": "suburb-scavenge",
+    "name": "郊区搜刮",
+    "description": "在郊区废弃的防御设施与旧营地中搜寻物资。人下人的遗物，都市人的财宝。",
+    "locationId": "outskirts",
+    "stage": "ADVENTURE",
+    "apCost": 1,
+    "staminaCost": 2,
+    "baseChance": 0.65,
+    "statBias": { "attr": "instinct", "weight": 0.5 },
+    "success": {
+      "text": ["你在废弃营地翻出了有用的物资。", "郊区的地里埋着不少好东西——你挖到了。"],
+      "gold": 300,
+      "effects": { "instinct": 1 },
+      "itemDrops": ["c-medkit", "c-noodle", "w-dagger"]
+    },
+    "fail": {
+      "text": ["你翻到的只有尸骨和烂布。"],
+      "gold": 80,
+      "effects": { "pressure": 4 }
+    },
+    "encounterChance": 0.15,
+    "xp": { "profession": "fixer", "amount": 25 }
+  },
+  {
+    "id": "lake-whaling",
+    "name": "大湖捕鲸",
+    "description": "随捕鲸船出海，猎杀大湖的巨鲸。这是第二十一区的产业——鲸尸加工为商品流入市场。但记住：鲸可将万物变为'所有物'。",
+    "locationId": "great-lake",
+    "stage": "ADVENTURE",
+    "apCost": 2,
+    "staminaCost": 3,
+    "baseChance": 0.5,
+    "statBias": { "attr": "physique", "weight": 0.5 },
+    "conditions": { "attribute": "reputation", "operator": ">=", "value": 55 },
+    "success": {
+      "text": ["你们猎杀了一头巨鲸，鲸尸被拖回码头分解。", "捕鲸成功——大湖的'人鱼'低语在你耳边回荡。"],
+      "gold": 1500,
+      "effects": { "reputation": 15, "physique": 2, "pressure": 15 },
+      "itemDrops": ["r-whale-bone", "a-blood-cloak", "w-plasma-blade"]
+    },
+    "fail": {
+      "text": ["那头鲸将你的同伴变成了'所有物'——你逃回了码头。", "巨鲸的领域规则吞噬了你们的方向感，你侥幸脱身。"],
+      "gold": 300,
+      "effects": { "health": -20, "pressure": 18 }
+    },
+    "encounterChance": 0.3,
+    "xp": { "profession": "fixer", "amount": 60 }
+  },
+  {
+    "id": "lake-sail",
+    "name": "湖域航行",
+    "description": "在各湖域之间航行。巢近岸是度假海滩，血红湖域藏有触手，穴掌鲸湖域深不可测——每个湖域的规则都不同。",
+    "locationId": "great-lake",
+    "stage": "ADVENTURE",
+    "apCost": 2,
+    "staminaCost": 2,
+    "baseChance": 0.55,
+    "statBias": { "attr": "instinct", "weight": 0.5 },
+    "conditions": { "attribute": "reputation", "operator": ">=", "value": 60 },
+    "success": {
+      "text": ["你驾驭小船穿行于湖域之间，规则在你脚下流转。", "航行中你瞥见了传说中的'人鱼'——以及它们眼中的空洞。"],
+      "gold": 800,
+      "effects": { "instinct": 2, "synergy": 1, "pressure": 12 },
+      "itemDrops": ["r-whale-bone", "c-btrain-ticket", "a-moonstone-robe"]
+    },
+    "fail": {
+      "text": ["你在血红湖域迷失了方向，触手差点缠住船身。", "湖域的规则反噬了你——你被浪潮冲回码头。"],
+      "gold": 250,
+      "effects": { "health": -12, "pressure": 15 }
+    },
+    "encounterChance": 0.2,
+    "xp": { "profession": "fixer", "amount": 50 }
+  },
+  {
+    "id": "lake-dive",
+    "name": "湖底探秘",
+    "description": "潜入库湖底，搜寻沉没的宝物。传说打败所有'人鱼'可开启通往白鲸之路——但没人知道那意味着什么。",
+    "locationId": "great-lake",
+    "stage": "ADVENTURE",
+    "apCost": 2,
+    "staminaCost": 3,
+    "baseChance": 0.45,
+    "statBias": { "attr": "will", "weight": 0.5 },
+    "conditions": { "attribute": "reputation", "operator": ">=", "value": 65 },
+    "success": {
+      "text": ["你在湖底发现了一艘沉船的残骸，里面是完好的货物。", "湖底的宝物在向你低语——你带着它们浮出水面。"],
+      "gold": 1200,
+      "effects": { "will": 2, "pressure": 15 },
+      "itemDrops": ["r-gungnir-shard", "w-color-relic", "c-revival-token"]
+    },
+    "fail": {
+      "text": ["湖底的人鱼抓住了你——你拼命挣脱，浮上水面。", "你差一点成为'美人鲸'的一员。"],
+      "gold": 300,
+      "effects": { "health": -18, "pressure": 18, "distortion": 5 }
+    },
+    "encounterChance": 0.25,
+    "xp": { "profession": "fixer", "amount": 55 }
+  },
+  {
+    "id": "lake-trade",
+    "name": "码头交易",
+    "description": "在第二十一区的码头与捕鲸商交易。鲸骨、鲸油、人鱼的眼泪——这里什么都卖。",
+    "locationId": "great-lake",
+    "stage": "ADVENTURE",
+    "apCost": 1,
+    "staminaCost": 1,
+    "baseChance": 0.75,
+    "statBias": { "attr": "fortune", "weight": 0.5 },
+    "conditions": { "attribute": "reputation", "operator": ">=", "value": 55 },
+    "success": {
+      "text": ["你用敏锐的眼光完成了一笔好交易。", "码头商人对你刮目相看，给出了优惠价。"],
+      "gold": 500,
+      "effects": { "fortune": 1, "reputation": 4 }
+    },
+    "fail": {
+      "text": ["你被码头的老狐狸坑了一笔。"],
+      "gold": -200,
+      "effects": { "pressure": 6 }
+    },
+    "encounterChance": 0.05,
+    "xp": { "profession": "fixer", "amount": 20 }
+  },
+  {
+    "id": "ruin-delve",
+    "name": "废墟深层探索",
+    "description": "深入都市地下的废墟。这里可能埋着废弃的巢、都市建立前的人类建筑、组织的绝密设施——'等待人们的发掘或喂养'。",
+    "locationId": "ruin-deep",
+    "stage": "ADVENTURE",
+    "apCost": 2,
+    "staminaCost": 3,
+    "baseChance": 0.5,
+    "statBias": { "attr": "intelligence", "weight": 0.5 },
+    "conditions": { "attribute": "reputation", "operator": ">=", "value": 70 },
+    "success": {
+      "text": ["你在废墟深处找到一处完好的人类建筑，里面有可用的物资。", "废墟向你展示了它的一角秘密。"],
+      "gold": 1000,
+      "effects": { "reputation": 12, "intelligence": 2, "pressure": 12 },
+      "itemDrops": ["r-gungnir-shard", "w-singularity-gun", "a-anti-ballistic"]
+    },
+    "fail": {
+      "text": ["废墟里的'东西'苏醒了——你仓皇撤退。", "你触动了废墟中的禁忌机关，负伤逃离。"],
+      "gold": 300,
+      "effects": { "health": -18, "pressure": 15 }
+    },
+    "encounterChance": 0.25,
+    "xp": { "profession": "fixer", "amount": 60 }
+  },
+  {
+    "id": "ruin-relic",
+    "name": "遗物发掘",
+    "description": "在废墟深层挖掘珍贵的遗物。冈格尼尔、天杀星刀、奥丁之眼——每一件遗物都有它的代价。",
+    "locationId": "ruin-deep",
+    "stage": "ADVENTURE",
+    "apCost": 2,
+    "staminaCost": 3,
+    "baseChance": 0.45,
+    "statBias": { "attr": "fortune", "weight": 0.6 },
+    "conditions": { "attribute": "reputation", "operator": ">=", "value": 75 },
+    "success": {
+      "text": ["你从废墟的泥土中掘出一件闪亮的遗物。", "遗物在你手中微微颤动——它认得你。"],
+      "gold": 1500,
+      "effects": { "fortune": 2, "pressure": 15 },
+      "itemDrops": ["r-mambrino", "r-gungnir-shard", "r-clock-hand"]
+    },
+    "fail": {
+      "text": ["你挖出的不是宝物，而是废墟的诅咒。", "遗物拒绝了你的触碰——它灼伤了你的手掌。"],
+      "gold": 400,
+      "effects": { "health": -15, "pressure": 15, "distortion": 8 }
+    },
+    "encounterChance": 0.2,
+    "xp": { "profession": "fixer", "amount": 55 }
+  },
+  {
+    "id": "ruin-dieci",
+    "name": "Dieci 专家的指引",
+    "description": "Dieci 协会是都市公认的废墟专家。在他们的指引下，你能避开废墟中最危险的陷阱。",
+    "locationId": "ruin-deep",
+    "stage": "ADVENTURE",
+    "apCost": 1,
+    "staminaCost": 1,
+    "baseChance": 0.8,
+    "statBias": { "attr": "intelligence", "weight": 0.5 },
+    "conditions": { "attribute": "reputation", "operator": ">=", "value": 70 },
+    "success": {
+      "text": ["Dieci 的学者为你标注了废墟的安全路线。", "专家的知识让你在废墟中游刃有余。"],
+      "gold": 400,
+      "effects": { "intelligence": 1, "reputation": 6 }
+    },
+    "fail": {
+      "text": ["Dieci 的指引含糊不清——你差点走错路。"],
+      "gold": 150,
+      "effects": { "pressure": 5 }
+    },
+    "encounterChance": 0.05,
+    "xp": { "profession": "fixer", "amount": 25 }
+  },
+  {
+    "id": "deep-night-walk",
+    "name": "深宵独行",
+    "description": "凌晨三点十三分的后巷。清道夫们从一巢扫荡至另一端——这 80 分钟里，一切恐怖行为合法。深宵之子或许能活下来，普通人只能祈祷。",
+    "locationId": "backalley-7",
+    "stage": "SURVIVAL",
+    "apCost": 2,
+    "staminaCost": 2,
+    "baseChance": 0.35,
+    "statBias": { "attr": "instinct", "weight": 0.6 },
+    "conditions": { "trait": "deep-night-eyes" },
+    "success": {
+      "text": ["你在深宵的后巷独行。清道夫们为你让路——它们认出了你的脚步声。", "凌晨四点三十四分，深宵结束。你还活着，还带回了战利品。"],
+      "gold": 900,
+      "effects": { "reputation": 12, "instinct": 2, "pressure": 15 },
+      "itemDrops": ["r-clock-hand", "a-blood-cloak", "c-neurorelax"]
+    },
+    "fail": {
+      "text": ["清道夫今夜没有为你让路。液体般的躯体围拢过来——你拼死逃出了深宵。", "深宵的恐怖合法化了——你成了被追猎的一方。"],
+      "gold": 200,
+      "effects": { "health": -25, "pressure": 20 }
+    },
+    "encounterChance": 0.35,
+    "xp": { "profession": "fixer", "amount": 50 }
+  },
+  {
+    "id": "deep-night-risk",
+    "name": "深宵冒险",
+    "description": "深夜的后巷危机四伏——但危险也意味着机遇。普通人在这个时段出门，等于把命押上赌桌。",
+    "locationId": "backalley-7",
+    "stage": "SURVIVAL",
+    "apCost": 2,
+    "staminaCost": 2,
+    "baseChance": 0.25,
+    "statBias": { "attr": "fortune", "weight": 0.6 },
+    "success": {
+      "text": ["你赌赢了。深宵的后巷里，你捡到了一份足以改变命运的财富。", "你在深宵的阴影中活了下来，还带回了意外的收获。"],
+      "gold": 700,
+      "effects": { "reputation": 8, "fortune": 1, "pressure": 12 },
+      "itemDrops": ["r-star-map", "w-plasma-blade", "c-medkit"]
+    },
+    "fail": {
+      "text": ["清道夫的液体躯体缠住了你的腿——你几乎是爬着逃出深宵的。", "你成了深宵的'收获'之一，侥幸挣脱。"],
+      "gold": 150,
+      "effects": { "health": -20, "pressure": 15 }
+    },
+    "encounterChance": 0.3,
+    "xp": { "profession": "fixer", "amount": 40 }
+  },
+  {
+    "id": "ruin-blackstele",
+    "name": "黑石碑",
+    "description": "废墟深处矗立着一座黑石碑。它散发着扭曲的低语——触碰它，能获得力量，也会加速扭曲倾向。",
+    "locationId": "ruin-deep",
+    "stage": "ADVENTURE",
+    "apCost": 2,
+    "staminaCost": 2,
+    "baseChance": 0.7,
+    "statBias": { "attr": "will", "weight": 0.6 },
+    "conditions": { "attribute": "reputation", "operator": ">=", "value": 80 },
+    "success": {
+      "text": ["你凝视黑石碑，获得了古老的知识。代价是——你听见了低语。", "黑石碑回应了你：力量，与深渊。"],
+      "gold": 800,
+      "effects": { "will": 2, "synergy": 2, "pressure": 15, "distortion": 10 }
+    },
+    "fail": {
+      "text": ["黑石碑的低语击穿了你的意志——你险些扭曲。", "你被黑石碑的力量弹开，精神受创。"],
+      "gold": 200,
+      "effects": { "health": -10, "pressure": 20, "distortion": 15 }
+    },
+    "encounterChance": 0.15,
+    "xp": { "profession": "distortion-detective", "amount": 45 }
   }
 ]

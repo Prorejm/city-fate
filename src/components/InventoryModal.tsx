@@ -74,8 +74,8 @@ export function InventoryModal() {
         {/* 装备槽 */}
         <div className="mb-4 grid grid-cols-2 gap-2 md:grid-cols-4">
           {(['main-hand', 'off-hand', 'armor', 'accessory'] as EquipmentSlot[]).map((slot) => {
-            const id = data.equipped[slot]
-            const def = id ? findItem(id) : undefined
+            const cur = data.equipped[slot]
+            const def = cur ? findItem(cur.id) : undefined
             return (
               <div key={slot} className="border border-void-700 p-2">
                 <div className="mb-1 font-mono text-[9px] text-ash-600">{SLOT_LABELS[slot]}</div>
@@ -83,6 +83,9 @@ export function InventoryModal() {
                   <div>
                     <div className="text-xs" style={{ color: QUALITY_COLORS[def.quality] }}>
                       {def.name}
+                    </div>
+                    <div className="mt-0.5 font-mono text-[9px] text-ash-600">
+                      {def.durability > 0 ? `耐久 ${cur!.durability}/${def.durability}` : '遗物'}
                     </div>
                     <button
                       onClick={() => unequipItem(slot)}

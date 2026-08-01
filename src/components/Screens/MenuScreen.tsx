@@ -42,10 +42,10 @@ export function MenuScreen() {
           生存说明
         </button>
         <button
-          onClick={() => pushToast('都市图鉴即将开放：收录你遇见过的 NPC、协会与遗物。', 'info')}
+          onClick={() => pushToast('都市图鉴收录你遇见过的 NPC、协会与遗物——开始穿越后，点击界面右上角「图鉴」查看。', 'info')}
           className="font-mono text-xs text-ash-500 underline-offset-4 hover:text-ash-300 hover:underline"
         >
-          都市图鉴（开发中）
+          都市图鉴
         </button>
       </div>
 

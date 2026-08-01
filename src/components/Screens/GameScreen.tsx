@@ -5,6 +5,7 @@ import { AvatarPortrait } from '../Avatar/AvatarPortrait'
 import { StatBar } from '../Effects'
 import { InventoryModal } from '../InventoryModal'
 import { ShopModal } from '../ShopModal'
+import { CompendiumModal } from '../CompendiumModal'
 import { findLocation, findAction, findNpc, findAssociation, findIdentity, PROFESSIONS } from '@/core/data'
 import { actionChance } from '@/core/ActionSystem'
 import { actionAvailable } from '@/core/LocationSystem'
@@ -33,6 +34,16 @@ function StatPanel() {
         <span className="font-mono text-[10px] tracking-widest text-ash-500">身体状态</span>
         <span className="rounded bg-blood-500/20 px-2 py-0.5 font-mono text-[10px] text-blood-300">{stageLabel}</span>
       </div>
+      {run.deepNightWindow && (
+        <div className="mb-2 rounded border border-blood-500/50 bg-blood-600/10 px-2 py-1 font-mono text-[10px] text-blood-300">
+          ☾ 深宵将至 · 3:13
+        </div>
+      )}
+      {run.eyeWatchLevel >= 50 && (
+        <div className="mb-2 rounded border border-ash-500/40 bg-void-900/40 px-2 py-1 font-mono text-[10px] text-ash-400">
+          首脑之眼 · 注视
+        </div>
+      )}
       <StatBar value={run.health} color="bg-blood-400" label="健康" />
       <div className="h-2" />
       <StatBar value={run.stamina} color="bg-gold-400" label="体力" />
@@ -54,6 +65,8 @@ function StatPanel() {
       <div className="grid grid-cols-2 gap-1.5 text-xs">
         <div className="flex justify-between"><span className="text-ash-500">行动点</span><span className="text-ash-300">{run.actionPoints}</span></div>
         <div className="flex justify-between"><span className="text-ash-500">声望</span><span className="text-ash-300">{run.reputation}</span></div>
+        <div className="flex justify-between"><span className="text-ash-500">财富</span><span className="font-mono text-ash-300">{formatWealth(data.wealth)} 眼</span></div>
+        <div className="flex justify-between"><span className="text-ash-500">年龄</span><span className="text-ash-300">{data.age} 岁</span></div>
         <div className="flex justify-between"><span className="text-ash-500">伙食</span><span className="text-ash-300">{run.foodLevel > 0 ? '已进食' : '饥饿'}</span></div>
         <div className="flex justify-between"><span className="text-ash-500">住处</span><span className="text-ash-300">{['桥洞', '廉价房', '公寓', '巢内'][run.shelterLevel]}</span></div>
       </div>
@@ -122,11 +135,13 @@ function LocationPanel() {
   const { data, run, travelTo } = useGameStore()
   if (!data || !run) return null
   const unlocked = run.unlockedLocations.map(findLocation).filter(Boolean)
+  const here = findLocation(run.locationId)
   return (
     <div className="paper-panel p-4">
       <div className="mb-2 font-mono text-[10px] tracking-widest text-ash-500">地点</div>
-      <div className="mb-2 rounded border border-blood-500/30 bg-blood-500/10 px-2 py-1.5 text-xs text-ash-300">
-        {findLocation(run.locationId)?.name}
+      <div className="mb-2 border-l-2 border-gold-400/50 bg-void-900/40 px-2 py-2">
+        <div className="text-xs text-ash-300">{here?.name}</div>
+        {here?.description && <div className="mt-0.5 text-[10px] leading-relaxed text-ash-600">{here.description}</div>}
       </div>
       <div className="flex flex-col gap-1.5">
         {unlocked
@@ -164,30 +179,41 @@ function ActionPanel() {
         <span className="font-mono text-[10px] tracking-widest text-ash-500">行动</span>
         <span className="font-mono text-[10px] text-ash-600">{available.length} 项可用</span>
       </div>
-      <div className="flex flex-col gap-1.5">
+      <div className="flex flex-col gap-2">
         {available.map((a) => {
           const chance = Math.round(actionChance(data, a!) * 100)
+          const chanceColor = chance >= 70 ? 'text-gold-400' : chance >= 40 ? 'text-ash-300' : 'text-blood-300'
           return (
             <button
               key={a!.id}
               onClick={() => performAction(a!.id)}
-              className="group border border-void-600 px-3 py-2 text-left transition-all hover:border-blood-400 hover:bg-blood-500/10"
+              className="group border border-void-600 bg-void-900/40 px-3 py-2 text-left transition-all hover:border-blood-400 hover:bg-blood-500/10"
             >
-              <div className="flex items-center justify-between">
+              <div className="flex items-center justify-between gap-2">
                 <span className="text-sm text-ash-300">{a!.name}</span>
-                <span className="font-mono text-[10px] text-ash-500">{chance}%</span>
+                <span className={`font-mono text-[11px] ${chanceColor}`}>{chance}%</span>
               </div>
-              <div className="text-[10px] text-ash-500">
-                {a!.apCost} AP · {a!.staminaCost} 体力
+              <div className="mt-1 flex items-center justify-between">
+                <span className="font-mono text-[9px] text-ash-600">{a!.apCost} AP · {a!.staminaCost} 体力</span>
+              </div>
+              <div className="mt-1.5 h-1 w-full bg-void-700">
+                <div className={`h-1 ${chance >= 70 ? 'bg-gold-400/70' : chance >= 40 ? 'bg-ash-400/60' : 'bg-blood-500/70'}`} style={{ width: `${chance}%` }} />
               </div>
             </button>
           )
         })}
-        {locked.map((a) => (
-          <div key={a!.id} className="border border-void-700 px-3 py-2 text-sm text-void-600 line-through">
-            {a!.name}
-          </div>
-        ))}
+        {locked.map((a) => {
+          const loc = findLocation(a!.locationId)
+          return (
+            <div key={a!.id} className="border border-void-800 px-3 py-2">
+              <div className="flex items-center justify-between">
+                <span className="text-sm text-void-600 line-through">{a!.name}</span>
+                <span className="font-mono text-[9px] text-void-600">{loc?.name}</span>
+              </div>
+              <div className="text-[9px] text-void-700">条件未满足或资源不足</div>
+            </div>
+          )
+        })}
         {available.length === 0 && locked.length === 0 && (
           <div className="px-2 py-3 text-center text-xs text-ash-600">此处暂无可用行动</div>
         )}
@@ -197,7 +223,7 @@ function ActionPanel() {
 }
 
 function ResultModal({ ev }: { ev: CurrentEvent }) {
-  const { run, nextEvent, startRound } = useGameStore()
+  const { run, nextEvent, showDaySummary } = useGameStore()
   const result = ev.result
   if (!result) return null
   const isLastAction = (run?.actionPoints ?? 0) <= 0
@@ -221,10 +247,10 @@ function ResultModal({ ev }: { ev: CurrentEvent }) {
         </div>
         {isLastAction ? (
           <button
-            onClick={startRound}
+            onClick={showDaySummary}
             className="w-full border border-gold-400 bg-gold-400/10 py-3 font-serifcn tracking-widest text-gold-400 transition-all hover:bg-gold-400/30"
           >
-            进入下一天
+            结算今日 · 进入下一天
           </button>
         ) : (
           <button
@@ -239,21 +265,98 @@ function ResultModal({ ev }: { ev: CurrentEvent }) {
   )
 }
 
-function NpcModal({ ev }: { ev: CurrentEvent }) {
-  const { nextEvent } = useGameStore()
-  void ev
+/** 当日结算摘要弹窗 */
+function DaySummaryModal() {
+  const { daySummary, confirmDaySummary } = useGameStore()
+  if (!daySummary) return null
   return (
     <div className="fixed inset-0 z-40 flex items-center justify-center bg-black/70 p-4">
-      <div className="paper-panel max-w-lg p-6">
-        <div className="mb-1 font-mono text-[10px] tracking-widest text-gold-400">◆ 偶遇 ◆</div>
-        <p className="mb-4 text-sm leading-relaxed text-ash-300">
-          你在街头遇到了一个陌生人。后巷的每个人都有自己的故事——和一个价码。
-        </p>
+      <div className="paper-panel w-full max-w-lg p-6">
+        <div className="mb-1 font-mono text-[10px] tracking-widest text-gold-400">◆ 日暮 · 当日结算 ◆</div>
+        <div className="title-serif mb-4 text-lg text-ash-300">第 {daySummary.day} 天结束</div>
+        <div className="mb-4 flex flex-col gap-3">
+          <div>
+            <div className="mb-1 font-mono text-[10px] text-ash-500">今日行动</div>
+            <div className="flex flex-wrap gap-1.5">
+              {daySummary.actionsTaken.length > 0 ? (
+                daySummary.actionsTaken.map((a, i) => (
+                  <span key={i} className="rounded border border-void-600 px-2 py-0.5 text-xs text-ash-300">{a}</span>
+                ))
+              ) : (
+                <span className="text-xs text-ash-600">无所事事的一天</span>
+              )}
+            </div>
+          </div>
+          {daySummary.npcsMet.length > 0 && (
+            <div>
+              <div className="mb-1 font-mono text-[10px] text-ash-500">结识的人</div>
+              <div className="flex flex-wrap gap-1.5">
+                {daySummary.npcsMet.map((n, i) => (
+                  <span key={i} className="rounded border border-gold-400/40 px-2 py-0.5 text-xs text-gold-400">{n}</span>
+                ))}
+              </div>
+            </div>
+          )}
+          {daySummary.itemsGained.length > 0 && (
+            <div>
+              <div className="mb-1 font-mono text-[10px] text-ash-500">获得的物品</div>
+              <div className="flex flex-wrap gap-1.5">
+                {daySummary.itemsGained.map((n, i) => (
+                  <span key={i} className="rounded border border-gold-400/40 px-2 py-0.5 text-xs text-gold-400">{n}</span>
+                ))}
+              </div>
+            </div>
+          )}
+          <div className="rounded border border-void-700 bg-void-900/40 px-3 py-2 font-mono text-[11px] leading-relaxed text-ash-500">
+            {daySummary.log || '这座城市又过去了一天。'}
+          </div>
+        </div>
         <button
-          onClick={nextEvent}
-          className="w-full border border-void-600 py-3 font-serifcn tracking-widest text-ash-400 transition-all hover:border-gold-400 hover:text-gold-400"
+          onClick={confirmDaySummary}
+          className="w-full border border-gold-400 bg-gold-400/10 py-3 font-serifcn tracking-widest text-gold-400 transition-all hover:bg-gold-400/30"
         >
-          继续
+          休憩 · 迎接新的一天
+        </button>
+      </div>
+    </div>
+  )
+}
+
+function NpcModal({ ev }: { ev: CurrentEvent }) {
+  const { nextEvent, resolveNpcEvent, run } = useGameStore()
+  const npc = ev.npcId ? findNpc(ev.npcId) : undefined
+  const state = ev.npcId ? run?.npcStates.find((s) => s.id === ev.npcId) : undefined
+  if (!npc) return null
+  return (
+    <div className="fixed inset-0 z-40 flex items-center justify-center bg-black/70 p-4">
+      <div className="paper-panel w-full max-w-lg p-6">
+        <div className="mb-3 flex items-center gap-3">
+          {npc.avatar && (
+            <img
+              src={`/city-fate/avatars/${npc.avatar}`}
+              alt={npc.name}
+              className="h-14 w-14 rounded border border-void-600 object-cover"
+            />
+          )}
+          <div>
+            <div className="title-serif text-lg text-ash-300">{npc.name}</div>
+            <div className="font-mono text-[10px] text-gold-400">{npc.title}</div>
+            {state && <div className="font-mono text-[10px] text-ash-500">好感 {state.affinity}</div>}
+          </div>
+        </div>
+        <p className="mb-1 font-mono text-[10px] tracking-widest text-ash-500">◆ 偶遇 · {npc.locationName ?? '后巷'} ◆</p>
+        <p className="mb-4 text-sm leading-relaxed text-ash-300">{npc.background ?? npc.description}</p>
+        <div className="mb-4 border border-void-700 bg-void-900/40 px-3 py-2 text-xs text-ash-400">
+          {npc.flavor ?? '他/她看着你，似乎在等待你的回应。'}
+        </div>
+        <button
+          onClick={() => {
+            resolveNpcEvent(ev.npcId!)
+            nextEvent()
+          }}
+          className="w-full border border-gold-400 py-3 font-serifcn tracking-widest text-gold-400 transition-all hover:bg-gold-400/15"
+        >
+          攀谈（好感 {state?.met ? '已结识' : '+10'}）
         </button>
       </div>
     </div>
@@ -439,9 +542,9 @@ function LifeLog() {
   const lifeLog = useGameStore((s) => s.data?.lifeLog)
   const entries = useMemo(() => (lifeLog ?? []).slice(-30), [lifeLog])
   return (
-    <div className="paper-panel flex h-full flex-col p-4">
+    <div className="paper-panel flex h-full max-h-[70vh] flex-col p-4 lg:max-h-none">
       <div className="mb-2 font-mono text-[10px] tracking-widest text-ash-500">人生档案</div>
-      <div className="scroll-thin min-h-0 flex-1 space-y-1 overflow-y-auto pr-1">
+      <div className="scroll-thin min-h-0 flex-1 space-y-1 overflow-y-auto pr-1 lg:max-h-[calc(100vh-12rem)]">
         {entries.map((e, i) => (
           <div key={i} className="border-l border-void-700 pl-3 text-xs leading-relaxed text-ash-400">
             {e}
@@ -453,7 +556,7 @@ function LifeLog() {
 }
 
 function HudHeader() {
-  const { data, run, goToMenu, openInventory } = useGameStore()
+  const { data, run, goToMenu, openInventory, openCompendium } = useGameStore()
   if (!data || !run) return null
   return (
     <div className="paper-panel flex items-center justify-between gap-4 px-5 py-3">
@@ -464,6 +567,10 @@ function HudHeader() {
         </div>
       </div>
       <div className="hidden items-center gap-6 md:flex">
+        <div className="text-center">
+          <div className="font-mono text-xl text-gold-400">{Math.floor(run.daysInCity / 7) + 20}</div>
+          <div className="font-mono text-[10px] text-ash-500">岁数</div>
+        </div>
         <div className="text-center">
           <div className="font-mono text-xl text-gold-400">{run.daysInCity}</div>
           <div className="font-mono text-[10px] text-ash-500">天数 / {MAX_AGE * 7}</div>
@@ -483,6 +590,9 @@ function HudHeader() {
           <button onClick={openInventory} className="font-mono text-[11px] text-ash-600 hover:text-gold-400">
             背包
           </button>
+          <button onClick={openCompendium} className="font-mono text-[11px] text-ash-600 hover:text-gold-400">
+            图鉴
+          </button>
           <button onClick={goToMenu} className="font-mono text-[11px] text-ash-600 hover:text-blood-300">
             逃离此世
           </button>
@@ -493,7 +603,7 @@ function HudHeader() {
 }
 
 export function GameScreen() {
-  const { data, run, currentEvent } = useGameStore()
+  const { data, run, currentEvent, daySummary } = useGameStore()
   if (!data || !run) return null
   const expression = currentEvent?.kind === 'event' ? 'fear' : 'normal'
   const egoAwakened = data.ego.isAwakened
@@ -503,10 +613,10 @@ export function GameScreen() {
   })
 
   return (
-    <div className="mx-auto flex min-h-screen max-w-6xl flex-col gap-4 px-4 py-4">
+    <div className="mx-auto flex min-h-screen max-w-7xl flex-col gap-4 px-4 py-4">
       <HudHeader />
 
-      <div className="grid flex-1 gap-4 lg:grid-cols-[260px_1fr_300px]">
+      <div className="grid flex-1 gap-4 lg:grid-cols-[300px_1fr_340px]">
         <div className="flex flex-col gap-4">
           <div className="paper-panel relative flex items-end justify-center overflow-hidden py-3">
             <AvatarPortrait data={data} run={run} expression={expression} size={180} />
@@ -571,6 +681,8 @@ export function GameScreen() {
       {currentEvent?.kind === 'commission-result' && <CommissionResultModal ev={currentEvent} />}
       {currentEvent?.kind === 'inventory' && <InventoryModal />}
       {currentEvent?.kind === 'shop' && <ShopModal />}
+      {currentEvent?.kind === 'compendium' && <CompendiumModal />}
+      {daySummary && <DaySummaryModal />}
       {currentEvent?.kind === 'event' && currentEvent.text === '叩问自我' && <VoiceCrisisModal />}
     </div>
   )

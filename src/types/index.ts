@@ -337,12 +337,12 @@ export interface InventoryEntry {
   durability: number
 }
 
-/** 装备槽 */
+/** 装备槽（记录物品与剩余耐久） */
 export interface EquippedSlots {
-  'main-hand'?: string
-  'off-hand'?: string
-  armor?: string
-  accessory?: string
+  'main-hand'?: { id: string; durability: number }
+  'off-hand'?: { id: string; durability: number }
+  armor?: { id: string; durability: number }
+  accessory?: { id: string; durability: number }
 }
 
 /** 物品品质色 */
@@ -408,6 +408,7 @@ export interface ActionResult {
   unlockAction?: string
   grantTrait?: string
   itemDrops?: string[]
+  repair?: boolean
   storyline?: string
   storylineProgress?: number
 }
@@ -444,6 +445,12 @@ export interface NpcDef {
   description: string
   avatar: string
   locationId: string
+  /** 所在位置名称（用于弹窗展示） */
+  locationName?: string
+  /** 背景故事（弹窗详细文案） */
+  background?: string
+  /** 互动花絮 */
+  flavor?: string
   /** 初始好感 */
   affinity: number
   /** 专属事件（好感达到触发） */
@@ -522,4 +529,7 @@ export interface RunState {
   professionLevels: Record<string, number> // professionId -> 等级
   professionXp: Record<string, number> // professionId -> 当前经验
   subclassChoice: Record<string, string> // professionId -> 子职 id
+  // ---- 扩展机制 ----
+  deepNightWindow: boolean // 当日是否处于深宵窗口（3:13-4:34）
+  eyeWatchLevel: number // 首脑之眼监视程度（0-100）
 }

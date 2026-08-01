@@ -8,7 +8,10 @@
     "locationId": "alley-market",
     "affinity": 20,
     "events": [],
-    "storylineId": "traverse-mystery"
+    "storylineId": "traverse-mystery",
+    "locationName": "第七区集市",
+    "background": "阿梨的当铺是第七区消息最灵通的地方。柜台后的她一边拨算盘，一边把你从头到脚打量了一遍——她看人很准，尤其擅长看穿来历不明的人。",
+    "flavor": "她压低声音：“你身上有种……不属于这个区的味道。要打听什么，先谈价钱。”"
   },
   {
     "id": "old-zhou",
@@ -19,7 +22,10 @@
     "locationId": "fixer-guild",
     "affinity": 20,
     "events": [],
-    "storylineId": "fixer-road"
+    "storylineId": "fixer-road",
+    "locationName": "收尾人协会·第七区分部",
+    "background": "老周曾是三阶收尾人，瘸了一条腿后在协会打杂。他抽着呛人的烟，眯眼打量你：“想入行？先学会在死人堆里捡钱。”",
+    "flavor": "他磕了磕烟灰：“这行当，命不值钱，规矩值钱。”"
   },
   {
     "id": "bai-lan",
@@ -30,7 +36,10 @@
     "locationId": "wing-plaza",
     "affinity": 10,
     "events": [],
-    "storylineId": "stand-on-feet"
+    "storylineId": "stand-on-feet",
+    "locationName": "翼公司·第七区分部",
+    "background": "白岚是翼公司的人事官，冷峻干练。她的微笑是职场礼仪，但她的提携真的能改变一个人的命运——如果你值得的话。",
+    "flavor": "她翻着档案头也不抬：“第七区的羽毛，一抓一大把。你能证明自己不同吗？”"
   },
   {
     "id": "ling-zero",
@@ -41,7 +50,10 @@
     "locationId": "abno-facility",
     "affinity": 20,
     "events": [],
-    "storylineId": "spirit-line"
+    "storylineId": "spirit-line",
+    "locationName": "桥洞",
+    "background": "零是桥洞下的流浪儿，脏兮兮的脸上有一双过于安静的眼睛。他从不说话，只是看着——仿佛在等待什么。",
+    "flavor": "你分给他半块面包，他接过时轻声说：“你身上有星星的味道。”"
   },
   {
     "id": "butcher-kai",
@@ -52,7 +64,10 @@
     "locationId": "backalley-7",
     "affinity": 0,
     "events": [],
-    "storylineId": "alley-power"
+    "storylineId": "alley-power",
+    "locationName": "后巷·屠夫铺",
+    "background": "屠夫凯是后巷的帮派头目，一身横肉，案板上永远放着砍刀。他信义气，更信拳头——后巷的规矩由他和他的刀说了算。",
+    "flavor": "他一边磨刀一边说：“加入我，你的仇就是全后巷的仇。”"
   },
   {
     "id": "blood-mother",
@@ -63,7 +78,10 @@
     "locationId": "blood-den",
     "affinity": 20,
     "events": [],
-    "storylineId": "bloodline"
+    "storylineId": "bloodline",
+    "locationName": "血魔聚居地",
+    "background": "血娘自称是血魔聚居地的守门人。她的皮肤苍白如纸，眼瞳泛红——在这片被血魔占据的地盘上，她是唯一愿意和人类说话的存在。",
+    "flavor": "她舔了舔唇：“别怕。我只在‘那时候’饿。”"
   },
   {
     "id": "gu-doctor",
@@ -74,7 +92,10 @@
     "locationId": "abno-facility",
     "affinity": 10,
     "events": [],
-    "storylineId": "city-secrets"
+    "storylineId": "city-secrets",
+    "locationName": "后巷·诊所",
+    "background": "顾医生是后巷唯一的正规医师。他用旧手术刀和过期的抗生素维持着这片区域的健康底线——他见过太多不该死的死法。",
+    "flavor": "他擦了擦眼镜：“后巷的病人，一半是穷病，一半是挨打。你是哪种？”"
   },
   {
     "id": "du-mute",
@@ -85,7 +106,10 @@
     "locationId": "workshop-du",
     "affinity": 10,
     "events": [],
-    "storylineId": null
+    "storylineId": null,
+    "locationName": "哑巴修工坊",
+    "background": "哑巴修是个不会说话的工坊主，但他的手艺会说话。他锻造的武器在第七区排得上号——工坊的每一次锤击都是他的语言。",
+    "flavor": "他在铁砧上敲了三下，指了指墙上的价目表，又指了指你空荡荡的手。"
   },
   {
     "id": "ya-night",
@@ -96,7 +120,10 @@
     "locationId": "bar-night",
     "affinity": 15,
     "events": [],
-    "storylineId": "love-line"
+    "storylineId": "love-line",
+    "locationName": "后巷·夜巷",
+    "background": "夜鸦是深宵时分的游荡者。她见过凌晨三点十三分的后巷——那 80 分钟里，规矩被改写，恐怖合法化。她是少数能活着讲述这一切的人。",
+    "flavor": "她压低声音：“凌晨三点十三分，别出门。除非——你想成为清道夫的一部分。”"
   },
   {
     "id": "old-beggar",
@@ -107,7 +134,10 @@
     "locationId": "bridge-cave",
     "affinity": 20,
     "events": [],
-    "storylineId": "city-secrets"
+    "storylineId": "city-secrets",
+    "locationName": "桥洞",
+    "background": "老乞丐在桥洞下住了几十年。没人知道他从哪里来，也没人知道他在等什么。他偶尔会说出一些不该知道的事。",
+    "flavor": "他浑浊的眼睛突然清明了一瞬：“你在找什么？答案可不在第七区。”"
   },
   {
     "id": "jane-eyre",
@@ -118,7 +148,10 @@
     "locationId": "fixer-guild",
     "affinity": 10,
     "events": [],
-    "storylineId": "equal-heart"
+    "storylineId": "equal-heart",
+    "locationName": "第七区·孤儿院",
+    "background": "简小姐是孤儿院的创办人。她以“人格平等”为信念，收留了后巷的孤儿们——在这个吃人的都市里，她是少数还相信光明的人。",
+    "flavor": "她递给你一杯热茶：“受苦之人，当被温柔以待。”"
   },
   {
     "id": "winston",
@@ -129,7 +162,10 @@
     "locationId": "wing-plaza",
     "affinity": 5,
     "events": [],
-    "storylineId": "eye-of-truth"
+    "storylineId": "eye-of-truth",
+    "locationName": "第七区·档案局",
+    "background": "温斯顿是档案局的文员，谨小慎微，害怕黑暗。但他知道太多秘密——那些关于首脑之眼、关于监视的真相。",
+    "flavor": "他环顾四周，压低声音：“你在看我的时候，谁在看你？”"
   },
   {
     "id": "obrien",
@@ -140,7 +176,10 @@
     "locationId": "wing-plaza",
     "affinity": 5,
     "events": [],
-    "storylineId": "loyalty-truth"
+    "storylineId": "loyalty-truth",
+    "locationName": "第七区·审讯室",
+    "background": "奥勃良是档案局的审讯官，温和而残忍。他的微笑让你后背发凉——因为他真心相信自己正在拯救你。",
+    "flavor": "他笑着递上茶：“别紧张。我只是想帮你——看清真相。”"
   },
   {
     "id": "valjean",
@@ -151,7 +190,10 @@
     "locationId": "backalley-7",
     "affinity": 15,
     "events": [],
-    "storylineId": "redemption-24601"
+    "storylineId": "redemption-24601",
+    "locationName": "第七区·教堂",
+    "background": "冉·阿让是教堂的执事，面容慈祥。但后巷的老人们记得：他年轻时曾是苦役犯，后来用一枚银烛台换来了新生。",
+    "flavor": "他低声说：“我偷过面包，也偷过人生。但我还清了——你也可以。”"
   },
   {
     "id": "dr-jekyll",
@@ -162,7 +204,10 @@
     "locationId": "abno-facility",
     "affinity": 5,
     "events": [],
-    "storylineId": "monster-within"
+    "storylineId": "monster-within",
+    "locationName": "异想体收容所",
+    "background": "杰基尔博士研究人的双重本性。他彬彬有礼，眼神却偶尔闪过一丝陌生的狂热——那是另一个“他”在窥视。",
+    "flavor": "他递给你一管药剂：“每个灵魂里都住着两个人。你想见见你的那个吗？”"
   },
   {
     "id": "holmes",
@@ -173,7 +218,10 @@
     "locationId": "fixer-guild",
     "affinity": 10,
     "events": [],
-    "storylineId": "deduction-line"
+    "storylineId": "deduction-line",
+    "locationName": "收尾人协会",
+    "background": "夏洛克是协会的传奇侦探。他抽烟斗，爱推理，厌恶无聊——第七区的谜案在他眼里不过是消遣。",
+    "flavor": "他打量你十秒：“后巷来的，右肩有旧伤，饿过三天。你想找我查什么？”"
   },
   {
     "id": "monte-cristo",
@@ -184,7 +232,10 @@
     "locationId": "bar-night",
     "affinity": 0,
     "events": [],
-    "storylineId": "vengeance-grace"
+    "storylineId": "vengeance-grace",
+    "locationName": "图书馆遗址",
+    "background": "埃德蒙是图书馆遗址的守夜人。他脸上有一道旧疤，眼里藏着二十年的恨——他正在策划一场复仇。",
+    "flavor": "他低声说：“我死过一回。现在的我，只为清算而生。”"
   },
   {
     "id": "santiago",
@@ -195,6 +246,9 @@
     "locationId": "bridge-cave",
     "affinity": 15,
     "events": [],
-    "storylineId": "indomitable-sea"
+    "storylineId": "indomitable-sea",
+    "locationName": "桥洞·湖畔",
+    "background": "圣地亚哥是退役的捕鲸人，如今在桥洞边钓鱼。他曾在大湖与风暴搏斗，与巨鲸周旋——人可以被杀死，但绝不能被打败。",
+    "flavor": "他把半条烤鱼递给你：“大湖养人，也吃人。你想听听它的故事吗？”"
   }
 ]

@@ -13,6 +13,9 @@ import type {
 import type { Phase } from '@/engine/StateManager'
 import { RunBundle, beginRound, createTraverseRun } from '@/core/GameEngine'
 import type { DeathResult } from '@/core/DeathSystem'
+import { deathFromChain } from '@/core/DeathSystem'
+import { applyEffects } from '@/core/PropertySystem'
+import { finalizeDeath } from '@/core/RebirthSystem'
 import type { DistortionApplyResult } from '@/core/DistortionSystem'
 import type { EgoAwakenResult } from '@/core/EgoSystem'
 import { ActionOutcome, executeAction, rollEncounter } from '@/core/ActionSystem'
@@ -53,7 +56,7 @@ export interface CharacterDraft {
 }
 
 export interface CurrentEvent {
-  kind: 'event' | 'npc' | 'storyline' | 'result' | 'action' | 'commission' | 'commission-result' | 'inventory' | 'shop'
+  kind: 'event' | 'npc' | 'storyline' | 'result' | 'action' | 'commission' | 'commission-result' | 'inventory' | 'shop' | 'compendium'
   event?: GameEvent
   npcId?: string
   storyId?: string
@@ -62,6 +65,15 @@ export interface CurrentEvent {
   result?: ActionOutcome
   commissionResult?: CommissionResult
   text?: string
+}
+
+/** 当日结算摘要 */
+export interface DaySummary {
+  day: number
+  actionsTaken: string[]
+  itemsGained: string[]
+  npcsMet: string[]
+  log: string
 }
 
 interface GameStore {
@@ -78,10 +90,13 @@ interface GameStore {
   newlyAchieved: Achievement[]
   roundLog: string[]
   storylineLog: string[]
+  daySummary: DaySummary | null
 
   startNewLife: (input: NewLifeInput) => void
   setDraft: (draft: CharacterDraft) => void
   startRound: () => void
+  showDaySummary: () => void
+  confirmDaySummary: () => void
   performAction: (actionId: string) => void
   performCommission: (commissionId: string) => void
   chooseSubclass: (professionId: string, subclassId: string) => void
@@ -90,8 +105,10 @@ interface GameStore {
   unequipItem: (slot: EquipmentSlot) => void
   openInventory: () => void
   openShop: () => void
+  openCompendium: () => void
   travelTo: (locationId: string) => void
   resolveNpcEvent: (npcId: string) => void
+  resolveEventBranch: (branchId: string) => void
   nextEvent: () => void
   confirmEgo: () => void
   confirmDistortion: () => void
@@ -132,6 +149,7 @@ export const useGameStore = create<GameStore>()(
       newlyAchieved: [],
       roundLog: [],
       storylineLog: [],
+      daySummary: null,
 
       startNewLife: (input) => {
         const { meta } = get()
@@ -177,16 +195,51 @@ export const useGameStore = create<GameStore>()(
           useUiStore.getState().pushToast('Hana 协会认定你为九阶收尾人', 'info')
         }
         const gained = collectAchievements(data, run, meta)
-        // 回合内触发的剧情线优先弹窗
+        // 回合内触发的剧情线优先弹窗；其次每日事件
         const storyEv = round.storylines.length > 0 ? storylineModalFor(round.storylines[0]) : null
+        let ev: CurrentEvent | null = storyEv
+        if (!ev && round.event) {
+          ev = { kind: 'event', event: round.event, title: round.event.title, text: round.event.description }
+        }
         set((s) => ({
-          currentEvent: storyEv,
+          currentEvent: ev,
+          daySummary: null,
           roundLog: [...s.roundLog.slice(-40), round.log],
           storylineLog: [...s.storylineLog, ...round.storylines],
           newlyAchieved: [...s.newlyAchieved, ...gained],
           death: round.death ?? s.death,
         }))
         if (round.death) set({ phase: 'DEATH', currentEvent: null })
+      },
+
+      showDaySummary: () => {
+        const { data, run } = get()
+        if (!data || !run) return
+        // 从生命日志提取当日记录
+        const todayLogs = data.lifeLog.filter((l) => l.startsWith(`第${run.daysInCity}天`))
+        const actionsTaken = todayLogs
+          .map((l) => l.split('｜')[1]?.split('：')[0])
+          .filter((x): x is string => !!x && !x.startsWith('事件') && !x.startsWith('你 '))
+        const itemsGained: string[] = []
+        const npcsMet = todayLogs
+          .filter((l) => l.includes('结识'))
+          .map((l) => l.split('结识')[1]?.replace(/[（(].*$/, '') ?? '')
+          .filter(Boolean)
+        set({
+          daySummary: {
+            day: run.daysInCity,
+            actionsTaken: [...new Set(actionsTaken)],
+            itemsGained,
+            npcsMet: [...new Set(npcsMet)],
+            log: todayLogs.join('\n'),
+          },
+          currentEvent: null,
+        })
+      },
+
+      confirmDaySummary: () => {
+        set({ daySummary: null, currentEvent: null })
+        get().startRound()
       },
 
       performAction: (actionId) => {
@@ -196,10 +249,7 @@ export const useGameStore = create<GameStore>()(
         if (!action) return
         if (!actionAvailable(data, run, actionId)) return
 
-        const outcome = executeAction(data, run, actionId)
-        if (!outcome) return
-
-        // 协会委托板：打开委托面板（不执行普通结果）
+        // 面板类行动：不消耗资源、不执行结算，直接打开面板
         if (actionId === 'assoc-board') {
           if (isFingerMember(data)) {
             useUiStore.getState().pushToast('你已加入手指，协会拒绝你的委托申请', 'danger')
@@ -214,12 +264,17 @@ export const useGameStore = create<GameStore>()(
           set({ currentEvent: { kind: 'commission' } })
           return
         }
-
-        // 集市购买：打开商店（不执行普通结果）
         if (actionId === 'market-buy') {
           set({ currentEvent: { kind: 'shop' } })
           return
         }
+        if (actionId === 'open-inventory') {
+          set({ currentEvent: { kind: 'inventory' } })
+          return
+        }
+
+        const outcome = executeAction(data, run, actionId)
+        if (!outcome) return
 
         // 剧情线检查
         const progressed = checkStorylines(data, run, actionId)
@@ -232,13 +287,12 @@ export const useGameStore = create<GameStore>()(
         const newNpcs = meetNpcsAtLocation(run, run.locationId)
         for (const npc of newNpcs) {
           useUiStore.getState().pushToast(`你结识了 ${npc.name}（${npc.title}）`, 'info')
+          const km = `npc-${npc.id}`
+          if (!data.keyMoments.includes(km)) data.keyMoments.push(km)
         }
 
-        // 刷新阶段/地点
+        // 刷新阶段（不再重置 AP——beginRound 统一管理）
         run.stage = currentStage(data, run)
-        if (run.stage !== 'SURVIVAL') {
-          run.actionPoints = 4
-        }
 
         // 成就检查
         const gained = collectAchievements(data, run, meta)
@@ -270,11 +324,11 @@ export const useGameStore = create<GameStore>()(
           }
         }
 
-        // 随机遭遇
+        // 随机遭遇（返回真实 NPC id）
         const encounter = rollEncounter(run, action)
         if (encounter !== undefined) {
           set({
-            currentEvent: { kind: 'npc', npcId: 'random' },
+            currentEvent: { kind: 'npc', npcId: encounter },
             newlyAchieved: [...get().newlyAchieved, ...gained],
             storylineLog: [...get().storylineLog, ...storylineLog],
           })
@@ -375,6 +429,10 @@ export const useGameStore = create<GameStore>()(
         set({ currentEvent: { kind: 'shop' } })
       },
 
+      openCompendium: () => {
+        set({ currentEvent: { kind: 'compendium' } })
+      },
+
       travelTo: (locationId) => {
         const { data, run } = get()
         if (!data || !run) return
@@ -391,8 +449,54 @@ export const useGameStore = create<GameStore>()(
       },
 
       resolveNpcEvent: (npcId) => {
-        void npcId
+        // NPC 互动：标记结识后继续
+        const { data, run } = get()
+        if (!run) return
+        const st = run.npcStates.find((s) => s.id === npcId)
+        if (st && !st.met) {
+          st.met = true
+          st.metLocation = run.locationId
+          const km = `npc-${npcId}`
+          if (data && !data.keyMoments.includes(km)) data.keyMoments.push(km)
+        }
         set({ currentEvent: null })
+      },
+
+      resolveEventBranch: (branchId) => {
+        const { data, run, meta, currentEvent } = get()
+        if (!data || !run || !currentEvent?.event) return
+        const ev = currentEvent.event
+        const branch = ev.branches?.find((b) => b.id === branchId)
+        if (!branch) {
+          set({ currentEvent: null })
+          return
+        }
+        // 分支效果
+        const branchEffects = { ...(branch.effects ?? {}), ...(ev.effects ?? {}) }
+        applyEffects(data, run, branchEffects)
+        if (branch.grantTrait && !data.traits.includes(branch.grantTrait)) data.traits.push(branch.grantTrait)
+        if (branch.loseTrait) data.traits = data.traits.filter((t) => t !== branch.loseTrait)
+        if (branch.setIdentity) data.identity = branch.setIdentity
+        if (branch.setAffiliation) data.affiliation = branch.setAffiliation
+        if (branch.keyMoment && !data.keyMoments.includes(branch.keyMoment)) data.keyMoments.push(branch.keyMoment)
+        if (branch.outcome === 'ego' || branch.outcome === 'distortion' || branch.outcome === 'sin') {
+          get().resolveVoiceBranch(branch.outcome)
+          return
+        }
+        if (branch.deathChainId) {
+          const d = deathFromChain(branch.deathChainId)
+          data.deathCause = d.cause
+          data.isAlive = false
+          finalizeDeath(data, meta, run)
+          set({ death: d, phase: 'DEATH', currentEvent: null })
+          return
+        }
+        const gained = collectAchievements(data, run, meta)
+        data.lifeLog = [...data.lifeLog.slice(-300), `第${run.daysInCity}天｜事件·${ev.title}：${branch.text}`]
+        set({
+          currentEvent: null,
+          newlyAchieved: [...get().newlyAchieved, ...gained],
+        })
       },
 
       nextEvent: () => {

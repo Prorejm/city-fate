@@ -2,7 +2,7 @@ import type { AttributeEffects, CityFateData, GameAction, RunState } from '@/typ
 import { chance, weightedRandom } from '@/engine/Random'
 import { applyEffects } from './PropertySystem'
 import { grantXp } from './ProfessionSystem'
-import { equipmentChanceMod, equipmentStatBonus } from './ItemSystem'
+import { equipmentChanceMod, equipmentStatBonus, wearEquipment, repairEquipment } from './ItemSystem'
 import { findAction, findNpc, findItem } from './data'
 import { modernKnowledgeBonus } from './TalentSystem'
 
@@ -102,6 +102,27 @@ export function executeAction(
     }
   }
 
+  // 维修装备
+  if (ok && outcome.repair) {
+    const n = repairEquipment(data)
+    if (n > 0) {
+      data.lifeLog = [...data.lifeLog.slice(-300), `你修复了 ${n} 件装备。`]
+    }
+  }
+
+  // 战斗/危险行动消耗装备耐久
+  const DURABILITY_ACTIONS = new Set([
+    'hunt-blood', 'track-blood', 'guild-bounty', 'taboo-hunt', 'taboo-trace',
+    'investigate-distortion', 'abno-explore', 'collect-relic', 'scavenge-ruins',
+    'suburb-expedition', 'lake-whaling',
+  ])
+  if (DURABILITY_ACTIONS.has(actionId)) {
+    const broken = wearEquipment(data, ok ? 2 : 1)
+    for (const name of broken) {
+      data.lifeLog = [...data.lifeLog.slice(-300), `你的 ${name} 在战斗中损坏了。`]
+    }
+  }
+
   // 文案选择
   const texts = Array.isArray(outcome.text) ? outcome.text : [outcome.text]
   const text = texts[Math.floor(rand() * texts.length)]
@@ -118,8 +139,12 @@ export function executeAction(
   }
 }
 
-/** 行动触发随机遭遇（eventId 池） */
-export function rollEncounter(run: RunState, action: GameAction, rand: () => number = Math.random): number | undefined {
+/** 行动触发随机遭遇：返回真实 NPC id 或 undefined */
+export function rollEncounter(
+  run: RunState,
+  action: GameAction,
+  rand: () => number = Math.random,
+): string | undefined {
   const chanceVal = action.encounterChance ?? 0
   if (!chanceVal || !chance(chanceVal, rand)) return undefined
   // 从行动所在地的 NPC 与事件中选取
@@ -129,7 +154,7 @@ export function rollEncounter(run: RunState, action: GameAction, rand: () => num
   })
   if (npcsHere.length > 0 && chance(0.5, rand)) {
     const picked = npcsHere[Math.floor(rand() * npcsHere.length)]
-    return 10000 + picked.id.length // 标记为 NPC 遭遇（由 UI 层处理）
+    return picked.id // 返回真实 NPC id，由 UI 渲染其立绘与背景
   }
   return undefined
 }

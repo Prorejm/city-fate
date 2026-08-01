@@ -6,7 +6,7 @@
     "stage": "SURVIVAL",
     "unlock": {},
     "staminaCost": 0,
-    "actions": ["odd-job", "scavenge", "beg", "ask-rumors", "rest-street", "talk-valjean"]
+    "actions": ["odd-job", "scavenge", "beg", "ask-rumors", "rest-street", "talk-valjean", "deep-night-walk", "deep-night-risk"]
   },
   {
     "id": "bridge-cave",
@@ -97,5 +97,32 @@
     "unlock": { "reputation": 45 },
     "staminaCost": 2,
     "actions": ["library-explore", "study-city", "collect-relic"]
+  },
+  {
+    "id": "outskirts",
+    "name": "郊区（Outskirts）",
+    "description": "高墙之外的世界。非人的怪物在荒野游荡，'人下人'在简陋的防御设施里苟活。环绕郊区的铁道上，有火车巡回运作——那是危险与机遇并存的分界线。",
+    "stage": "ADVENTURE",
+    "unlock": { "reputation": 40 },
+    "staminaCost": 3,
+    "actions": ["suburb-expedition", "suburb-hunt", "suburb-rail", "suburb-scavenge"]
+  },
+  {
+    "id": "great-lake",
+    "name": "大湖·第二十一区",
+    "description": "都市南部海域，被未知手段分割成泾渭分明的湖域。捕鲸是这里的产业——巨鲸可将万物变为'所有物'，被俘者化为美人鲸直至与鲸同死。U公司禁止以书面形式记录大湖规则。",
+    "stage": "ADVENTURE",
+    "unlock": { "reputation": 55 },
+    "staminaCost": 3,
+    "actions": ["lake-whaling", "lake-sail", "lake-dive", "lake-trade"]
+  },
+  {
+    "id": "ruin-deep",
+    "name": "废墟（Ruin）",
+    "description": "都市地下的未知领域。深埋着遗失的技术与遗物——冈格尼尔便出自废墟深层。R公司与强者级收尾人会前来牟利，Dieci协会是公认的废墟专家。黑石碑能加速扭曲倾向。",
+    "stage": "ADVENTURE",
+    "unlock": { "reputation": 70 },
+    "staminaCost": 3,
+    "actions": ["ruin-delve", "ruin-relic", "ruin-dieci", "ruin-blackstele"]
   }
 ]

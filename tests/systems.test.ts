@@ -331,7 +331,7 @@ describe('物品系统', () => {
     expect(addItem(data, 'w-dagger')).toBe(true)
     expect(data.inventory.length).toBe(1)
     expect(equipItem(data, 0)).toBe(true)
-    expect(data.equipped['main-hand']).toBe('w-dagger')
+    expect(data.equipped['main-hand']?.id).toBe('w-dagger')
     expect(data.inventory.length).toBe(0)
   })
 
