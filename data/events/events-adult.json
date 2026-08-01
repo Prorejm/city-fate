@@ -1,0 +1,245 @@
+[
+  {
+    "id": 201,
+    "title": "第一单委托",
+    "description": "作为九阶收尾人，你接下了第一单正式委托：帮一户人家找回被偷走的传家义手。委托人给的钱不多，但这是你的起点。",
+    "type": "fixer",
+    "ageRange": [19, 35],
+    "weight": 8,
+    "repeatable": false,
+    "branches": [
+      {
+        "id": "b1",
+        "text": "循着线索追查到后巷，与窃贼对峙。",
+        "conditions": { "attribute": "physique", "operator": ">=", "value": 4 },
+        "effects": { "reputation": 6, "wealth": 300, "physique": 1 }
+      },
+      {
+        "id": "b2",
+        "text": "用口才说服窃贼交出义手。",
+        "conditions": { "attribute": "fortune", "operator": ">=", "value": 3 },
+        "effects": { "reputation": 4, "wealth": 300, "fortune": 1 }
+      },
+      { "id": "b3", "text": "买一只仿品交差。", "effects": { "wealth": -200, "will": -1 } }
+    ],
+    "portrait": "fixer",
+    "tags": ["fixer", "adult"]
+  },
+  {
+    "id": 202,
+    "title": "大学的抉择",
+    "description": "大学毕业后，你站在人生的十字路口：进入翼公司当一名羽毛，稳定却要承受荒谬的税负；或者留在后巷，赌一把更大的未来。",
+    "type": "adult",
+    "ageRange": [21, 26],
+    "weight": 7,
+    "repeatable": false,
+    "branches": [
+      {
+        "id": "b1",
+        "text": "入职翼公司。",
+        "conditions": { "attribute": "intelligence", "operator": ">=", "value": 6 },
+        "effects": { "wealth": 1500, "reputation": 8 },
+        "setIdentity": "翼公司羽毛",
+        "setAffiliation": "翼公司"
+      },
+      {
+        "id": "b2",
+        "text": "留在后巷打拼。",
+        "effects": { "instinct": 1, "fortune": 1 },
+        "setIdentity": "后巷创业者",
+        "setAffiliation": "无"
+      }
+    ],
+    "portrait": "decision",
+    "pressureGain": 5,
+    "tags": ["adult", "career"]
+  },
+  {
+    "id": 203,
+    "title": "爱情与家庭",
+    "description": "你遇到了想要共度一生的人。在都市，婚姻不是爱情的延续，而是两个人在残酷世界里的资源整合。对方带来了一份婚前协议。",
+    "type": "adult",
+    "ageRange": [22, 35],
+    "weight": 5,
+    "repeatable": false,
+    "branches": [
+      { "id": "b1", "text": "签下协议，组建家庭。", "effects": { "synergy": 2, "will": 1, "wealth": -500 }, "grantTrait": "family" },
+      { "id": "b2", "text": "独自走下去。都市里，孤独也是一种自由。", "effects": { "fortune": 2, "pressure": 5 } }
+    ],
+    "portrait": "love",
+    "tags": ["adult", "emotion"]
+  },
+  {
+    "id": 204,
+    "title": "高利贷的陷阱",
+    "description": "后巷的钱庄笑容可掬地递上合同：'周息百分之五，童叟无欺。'你急需一笔钱。合同背面，密密麻麻的小字写着违约的代价。",
+    "type": "adult",
+    "ageRange": [19, 45],
+    "weight": 5,
+    "repeatable": true,
+    "cooldown": 5,
+    "branches": [
+      {
+        "id": "b1",
+        "text": "借钱（负债风险）。",
+        "effects": { "wealth": 2000, "pressure": 10 }
+      },
+      {
+        "id": "b2",
+        "text": "想想办法，绝不能借高利贷。",
+        "conditions": { "attribute": "intelligence", "operator": ">=", "value": 5 },
+        "effects": { "intelligence": 1, "wealth": 500 }
+      },
+      { "id": "b3", "text": "走开。饿死也不借。", "effects": { "will": 1 } }
+    ],
+    "portrait": "money",
+    "pressureGain": 8,
+    "tags": ["adult", "money"]
+  },
+  {
+    "id": 205,
+    "title": "深宵的邀请",
+    "description": "有人在凌晨三点十三分敲你的门。来人披着深色斗篷：'敢不敢跟我去一趟巷子深处？事成之后，三百眼。'深宵的禁忌——任何发生在深宵的暴行都不被追究。",
+    "type": "backalley",
+    "ageRange": [20, 60],
+    "weight": 4,
+    "repeatable": true,
+    "cooldown": 8,
+    "branches": [
+      {
+        "id": "b1",
+        "text": "去。三百眼值得冒一次险。",
+        "conditions": { "op": "AND", "conditions": [ { "attribute": "physique", "operator": ">=", "value": 5 }, { "attribute": "instinct", "operator": ">=", "value": 4 } ] },
+        "effects": { "wealth": 300, "reputation": 4, "pressure": 12 },
+        "grantTrait": "deep-night-eyes"
+      },
+      {
+        "id": "b2",
+        "text": "拒绝。命比钱重要。",
+        "effects": { "will": 1 }
+      }
+    ],
+    "portrait": "night",
+    "pressureGain": 10,
+    "tags": ["deep-night", "adult"]
+  },
+  {
+    "id": 206,
+    "title": "异想体的馈赠",
+    "description": "一只流浪的异想体蜷缩在你的巷子里。它没有攻击任何人，只是静静地看着你，伸出一只手掌，掌心里是一颗发光的珠子。",
+    "type": "abno",
+    "ageRange": [20, 80],
+    "weight": 3,
+    "repeatable": false,
+    "branches": [
+      {
+        "id": "b1",
+        "text": "伸手接过珠子（共鸣≥5时安全）。",
+        "conditions": { "attribute": "synergy", "operator": ">=", "value": 5 },
+        "effects": { "synergy": 2, "health": 5, "wealth": 800 }
+      },
+      {
+        "id": "b2",
+        "text": "驱赶它。异想体没一个好东西。",
+        "conditions": { "attribute": "physique", "operator": ">=", "value": 6 },
+        "effects": { "physique": 1, "pressure": 5 }
+      },
+      { "id": "b3", "text": "转身逃走。", "effects": { "pressure": 5, "instinct": 1 } }
+    ],
+    "portrait": "abno",
+    "tags": ["abno", "adult"]
+  },
+  {
+    "id": 207,
+    "title": "翼公司的压榨",
+    "description": "作为翼公司的羽毛，你每天都在高压下工作。加班、KPI、以及荒谬的税金。同事倒在了工位上，没人敢停下——因为巢的居住权，比命值钱。",
+    "type": "nest",
+    "ageRange": [22, 55],
+    "weight": 7,
+    "repeatable": true,
+    "cooldown": 2,
+    "branches": [
+      { "id": "b1", "text": "咬牙坚持，往上爬。", "effects": { "wealth": 800, "reputation": 4, "pressure": 10, "health": -3 } },
+      { "id": "b2", "text": "摸鱼保命，绩效垫底就垫底。", "effects": { "health": 2, "pressure": -5, "wealth": -200 } }
+    ],
+    "portrait": "office",
+    "pressureGain": 8,
+    "tags": ["nest", "adult"]
+  },
+  {
+    "id": 208,
+    "title": "巷口的保护费",
+    "description": "帮派成员上门收保护费了。这次的价格比上个月翻了一倍。他们说：'巢涨价了，我们也要涨。'不给钱，就收走你的铺子。",
+    "type": "backalley",
+    "ageRange": [19, 60],
+    "weight": 7,
+    "repeatable": true,
+    "cooldown": 4,
+    "branches": [
+      {
+        "id": "b1",
+        "text": "给钱，破财消灾。",
+        "effects": { "wealth": -600, "pressure": 6 }
+      },
+      {
+        "id": "b2",
+        "text": "联合巷邻一起反抗。",
+        "conditions": { "op": "AND", "conditions": [ { "attribute": "synergy", "operator": ">=", "value": 5 }, { "attribute": "physique", "operator": ">=", "value": 5 } ] },
+        "effects": { "reputation": 6, "physique": 1, "wealth": -200 },
+        "setAffiliation": "邻里守望"
+      },
+      {
+        "id": "b3",
+        "text": "加入他们，从此不交保护费。",
+        "conditions": { "attribute": "fortune", "operator": ">=", "value": 4 },
+        "effects": { "reputation": 5, "wealth": 300 },
+        "setIdentity": "帮派打手",
+        "setAffiliation": "无名帮派"
+      }
+    ],
+    "portrait": "gang",
+    "pressureGain": 7,
+    "tags": ["backalley", "gang"]
+  },
+  {
+    "id": 209,
+    "title": "金枝的微光",
+    "description": "你在一次委托的废墟里，发现了一截发光的金色枝条——金枝。传说它能感知扭曲的踪迹。你伸手碰了碰它，眼前的景象突然扭曲了一下。",
+    "type": "special",
+    "ageRange": [25, 90],
+    "weight": 3,
+    "repeatable": false,
+    "branches": [
+      { "id": "b1", "text": "将金枝收入怀中，从此与扭曲结缘。", "effects": { "instinct": 2, "synergy": 1 }, "grantTrait": "golden-branch" },
+      { "id": "b2", "text": "把它卖给出价最高的买家。", "effects": { "wealth": 5000, "instinct": -1 } }
+    ],
+    "portrait": "branch",
+    "tags": ["special", "adult"]
+  },
+  {
+    "id": 210,
+    "title": "愿力赌场",
+    "description": "你来到第十区的赌场。J公司的愿力技术将运气具现化——在这里，运气是可以买卖的。牌桌上的人眼神狂热，输赢之间，有人在欢笑，有人在坠楼。",
+    "type": "nest",
+    "ageRange": [20, 70],
+    "weight": 4,
+    "repeatable": true,
+    "cooldown": 6,
+    "branches": [
+      {
+        "id": "b1",
+        "text": "赌一把大的。",
+        "conditions": { "attribute": "fortune", "operator": ">=", "value": 5 },
+        "effects": { "wealth": 3000, "fortune": 1 }
+      },
+      {
+        "id": "b2",
+        "text": "小赌怡情。",
+        "effects": { "wealth": 200, "pressure": -3 }
+      },
+      { "id": "b3", "text": "赌博是毒药，转身离开。", "effects": { "will": 1 } }
+    ],
+    "portrait": "casino",
+    "tags": ["nest", "money"]
+  }
+]

@@ -1,0 +1,162 @@
+[
+  {
+    "id": "blood-mist",
+    "name": "血雾",
+    "type": "武器",
+    "sinTheme": "暴怒",
+    "description": "你的愤怒凝聚成猩红之雾。大巧不工的剑术，以无敌的姿态守护你该守护的东西。",
+    "effects": { "physique": 2, "will": 1 },
+    "passive": "战斗事件存活率大幅提升；暴怒相关抉择更坚定。",
+    "unlockReq": { "willMin": 6, "synergyMin": 4, "instinctMin": 3 }
+  },
+  {
+    "id": "proxy-execution",
+    "name": "代行",
+    "type": "庇护",
+    "sinTheme": "倦怠",
+    "description": "你将自我托付于命运的指令。信纸上的每一个字都成为你的铠甲。",
+    "effects": { "will": 2, "intelligence": 1 },
+    "passive": "精神压力增长减缓 30%；指使类事件收益提升。",
+    "unlockReq": { "willMin": 7, "synergyMin": 3, "instinctMin": 2 }
+  },
+  {
+    "id": "final-flame",
+    "name": "终末之焰",
+    "type": "武器",
+    "sinTheme": "忧郁",
+    "description": "将失去的一切燃尽成光。火焰既不温暖，也不伤人——只是将'终结'二字具现。",
+    "effects": { "intelligence": 1, "will": 1, "synergy": 1 },
+    "passive": "死亡事件有概率被'燃尽'逆转；异想体事件交流成功率提升。",
+    "unlockReq": { "willMin": 6, "synergyMin": 5, "instinctMin": 3 }
+  },
+  {
+    "id": "library-reign",
+    "name": "图书馆的支配",
+    "type": "庇护",
+    "sinTheme": "傲慢",
+    "description": "你愿意将一切都收纳为'馆藏'。书籍在你身后列成无穷的书架，每一本都记载着一场终局。",
+    "effects": { "intelligence": 2, "synergy": 1 },
+    "passive": "击败/收纳类事件收益提升；被讨伐风险降低。",
+    "unlockReq": { "willMin": 6, "synergyMin": 5, "instinctMin": 4 }
+  },
+  {
+    "id": "tear-of-moon",
+    "name": "月之泪",
+    "type": "庇护",
+    "sinTheme": "色欲",
+    "description": "为星星编织故事之人流下的泪。雨落下时，治愈一切病痛。",
+    "effects": { "synergy": 2, "fortune": 1 },
+    "passive": "健康回复事件频率提升；每月自动回复少量健康。",
+    "unlockReq": { "willMin": 5, "synergyMin": 6, "instinctMin": 3 }
+  },
+  {
+    "id": "clockwork-hymn",
+    "name": "机械赞歌",
+    "type": "武器",
+    "sinTheme": "傲慢",
+    "description": "齿轮教会的圣歌在你体内运转。每一颗齿轮都刻着你对'完美'的执念。",
+    "effects": { "physique": 1, "intelligence": 2 },
+    "passive": "义体/改造类事件收益大幅提升；肉体与机械的界限模糊。",
+    "unlockReq": { "willMin": 5, "synergyMin": 3, "instinctMin": 4 }
+  },
+  {
+    "id": "gluttonous-void",
+    "name": "无尽饥渴",
+    "type": "武器",
+    "sinTheme": "暴食",
+    "description": "将'吞噬'化作力量。后巷的黑暗，大湖的鲸，皆可入腹。",
+    "effects": { "physique": 2, "fortune": 1 },
+    "passive": "财富获取事件收益提升；健康恢复加快。",
+    "unlockReq": { "willMin": 5, "synergyMin": 4, "instinctMin": 3 }
+  },
+  {
+    "id": "verdant-memories",
+    "name": "青翠记忆",
+    "type": "庇护",
+    "sinTheme": "嫉妒",
+    "description": "你将对他人的羡慕酿成常青之树。绿荫之下，没有人能伤害你珍视的记忆。",
+    "effects": { "synergy": 2, "will": 1 },
+    "passive": "失去类事件的精神压力大幅降低；回忆类抉择收益提升。",
+    "unlockReq": { "willMin": 5, "synergyMin": 6, "instinctMin": 3 }
+  },
+  {
+    "id": "pale-hunt",
+    "name": "苍白猎杀",
+    "type": "武器",
+    "sinTheme": "暴食",
+    "description": "猎杀血魔者所继承的苍白之力。你成为黑暗中最先发现猎物的眼睛。",
+    "effects": { "physique": 2, "instinct": 1 },
+    "passive": "血魔/怪物类事件存活率大幅提升。",
+    "unlockReq": { "willMin": 6, "synergyMin": 3, "instinctMin": 5 }
+  },
+  {
+    "id": "resonance",
+    "name": "共振",
+    "type": "装备",
+    "sinTheme": "嫉妒",
+    "description": "与世界的频率达成共鸣。你的每一次行动，都带着难以被追踪的节奏。",
+    "effects": { "instinct": 2, "synergy": 1 },
+    "passive": "遭遇袭击时闪避率提升；情报类事件收益提升。",
+    "unlockReq": { "willMin": 5, "synergyMin": 5, "instinctMin": 5 }
+  },
+  {
+    "id": "silent-scream",
+    "name": "无声尖啸",
+    "type": "武器",
+    "sinTheme": "忧郁",
+    "description": "将你无法说出口的悲伤铸成利刃。声音消失之处，即是你存在的证明。",
+    "effects": { "intelligence": 1, "instinct": 1, "will": 1 },
+    "passive": "精神压力事件中更易保持清醒。",
+    "unlockReq": { "willMin": 6, "synergyMin": 4, "instinctMin": 4 }
+  },
+  {
+    "id": "iron-constitution",
+    "name": "钢铁意志",
+    "type": "庇护",
+    "sinTheme": "傲慢",
+    "description": "以不屈的意志构筑无形之墙。任何试图动摇你的存在，都将撞碎在墙上。",
+    "effects": { "will": 3 },
+    "passive": "扭曲抗性大幅提升；扭曲进度增长减缓 40%。",
+    "unlockReq": { "willMin": 8, "synergyMin": 3, "instinctMin": 3 }
+  },
+  {
+    "id": "star-seed",
+    "name": "星种",
+    "type": "庇护",
+    "sinTheme": "忧郁",
+    "description": "你将天空中的星星一一相连，赋予它们名字。你不再是都市的囚徒，而是星空的诗人。",
+    "effects": { "synergy": 2, "intelligence": 1 },
+    "passive": "治愈类事件收益提升；绝望类事件更易转化为希望。",
+    "unlockReq": { "willMin": 5, "synergyMin": 6, "instinctMin": 4 }
+  },
+  {
+    "id": "black-goat",
+    "name": "黑山羊的低语",
+    "type": "武器",
+    "sinTheme": "色欲",
+    "description": "来自二十三号巷的黑暗庇护。献祭之物化作你身后的兽群。",
+    "effects": { "physique": 1, "synergy": 2 },
+    "passive": "牺牲类抉择收益提升；但精神压力增长加快。",
+    "unlockReq": { "willMin": 5, "synergyMin": 5, "instinctMin": 4 }
+  },
+  {
+    "id": "timekeeper",
+    "name": "时之刻印",
+    "type": "装备",
+    "sinTheme": "倦怠",
+    "description": "T公司奇点在你身上留下刻痕。你开始能'看见'时间的流向。",
+    "effects": { "intelligence": 2, "instinct": 1 },
+    "passive": "寿命上限小幅提升；老年期健康衰减减缓。",
+    "unlockReq": { "willMin": 6, "synergyMin": 4, "instinctMin": 4 }
+  },
+  {
+    "id": "trembling-hymn",
+    "name": "颤音圣歌",
+    "type": "装备",
+    "sinTheme": "嫉妒",
+    "description": "将都市的震动谱写成歌。你听见了他人听不见的'指令'。",
+    "effects": { "synergy": 1, "intelligence": 1, "instinct": 1 },
+    "passive": "预言类事件收益提升；可窥见未来的一角。",
+    "unlockReq": { "willMin": 5, "synergyMin": 5, "instinctMin": 5 }
+  }
+]

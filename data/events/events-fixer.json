@@ -1,0 +1,210 @@
+[
+  {
+    "id": 801,
+    "title": "追踪委托",
+    "description": "委托人需要你跟踪一名目标，查明他的行踪。情报工作枯燥且危险——目标似乎察觉到了你的存在。",
+    "type": "fixer",
+    "ageRange": [18, 70],
+    "weight": 6,
+    "repeatable": true,
+    "cooldown": 3,
+    "branches": [
+      {
+        "id": "b1",
+        "text": "保持距离，耐心跟踪。",
+        "conditions": { "attribute": "instinct", "operator": ">=", "value": 5 },
+        "effects": { "wealth": 500, "instinct": 1, "reputation": 3 }
+      },
+      {
+        "id": "b2",
+        "text": "直接接触目标，套取情报。",
+        "conditions": { "attribute": "fortune", "operator": ">=", "value": 4 },
+        "effects": { "wealth": 400, "fortune": 1, "pressure": 5 }
+      }
+    ],
+    "portrait": "investigate",
+    "tags": ["fixer"]
+  },
+  {
+    "id": 802,
+    "title": "护卫任务",
+    "description": "你接下一单护卫任务：护送一名翼公司职员穿过后巷。沿途的帮派目光不善，委托人吓得发抖。",
+    "type": "fixer",
+    "ageRange": [18, 70],
+    "weight": 6,
+    "repeatable": true,
+    "cooldown": 4,
+    "branches": [
+      {
+        "id": "b1",
+        "text": "走大路，亮出武器威慑。",
+        "conditions": { "attribute": "physique", "operator": ">=", "value": 5 },
+        "effects": { "wealth": 600, "reputation": 4 }
+      },
+      {
+        "id": "b2",
+        "text": "走小路，绕开帮派地盘。",
+        "conditions": { "attribute": "instinct", "operator": ">=", "value": 5 },
+        "effects": { "wealth": 600, "instinct": 1 }
+      }
+    ],
+    "portrait": "guard",
+    "tags": ["fixer"]
+  },
+  {
+    "id": 803,
+    "title": "色彩级的风采",
+    "description": "你有幸目睹一位色彩级收尾人执行委托。那是一个人对抗一条街的画面。你在那一刻明白了：收尾人这条路的终点，是什么模样。",
+    "type": "fixer",
+    "ageRange": [25, 80],
+    "weight": 3,
+    "repeatable": false,
+    "branches": [
+      { "id": "b1", "text": "以他为目标，加倍努力。", "effects": { "will": 2, "reputation": 3 } },
+      { "id": "b2", "text": "认清现实，安稳度日。", "effects": { "pressure": -8 } }
+    ],
+    "portrait": "color",
+    "tags": ["fixer"]
+  },
+  {
+    "id": 804,
+    "title": "事务所的兴衰",
+    "description": "你的事务所因为一次失败的委托，声誉一落千丈。合伙人纷纷离开，只剩你一个人守着空荡荡的办公室。",
+    "type": "fixer",
+    "ageRange": [25, 70],
+    "weight": 4,
+    "repeatable": true,
+    "cooldown": 8,
+    "branches": [
+      { "id": "b1", "text": "独自撑起事务所，等待翻盘。", "effects": { "will": 1, "reputation": -3, "pressure": 8 } },
+      { "id": "b2", "text": "解散事务所，另寻出路。", "effects": { "instinct": 1, "fortune": 1 }, "setIdentity": "自由收尾人" }
+    ],
+    "portrait": "office",
+    "pressureGain": 8,
+    "tags": ["fixer"]
+  },
+  {
+    "id": 805,
+    "title": "大湖的鲸",
+    "description": "你接下了一份大湖捕鲸的委托。鲸鱼身上的物质价值连城，但大湖的五灾，每一条都能轻易摧毁一支船队。海面下，有什么巨大的东西在游动。",
+    "type": "fixer",
+    "ageRange": [30, 80],
+    "weight": 3,
+    "repeatable": false,
+    "branches": [
+      {
+        "id": "b1",
+        "text": "随船出海。",
+        "conditions": { "op": "AND", "conditions": [ { "attribute": "physique", "operator": ">=", "value": 6 }, { "attribute": "fortune", "operator": ">=", "value": 4 } ] },
+        "effects": { "wealth": 3000, "reputation": 8, "health": -10 }
+      },
+      { "id": "b2", "text": "放弃。命比鲸值钱。", "effects": { "instinct": 1 } }
+    ],
+    "portrait": "whale",
+    "pressureGain": 10,
+    "tags": ["fixer", "special"]
+  },
+  {
+    "id": 806,
+    "title": "废墟探险",
+    "description": "有人出钱请你去都市地下的废墟寻宝。据说那里埋着旧时代的科技与财富，也埋着无数探险者的尸骨。",
+    "type": "fixer",
+    "ageRange": [25, 80],
+    "weight": 4,
+    "repeatable": true,
+    "cooldown": 6,
+    "branches": [
+      {
+        "id": "b1",
+        "text": "深入废墟。",
+        "conditions": { "op": "AND", "conditions": [ { "attribute": "physique", "operator": ">=", "value": 5 }, { "attribute": "instinct", "operator": ">=", "value": 5 } ] },
+        "effects": { "wealth": 2000, "intelligence": 1, "health": -8 }
+      },
+      { "id": "b2", "text": "在外围捡点边角料。", "effects": { "wealth": 300, "instinct": 1 } }
+    ],
+    "portrait": "ruins",
+    "pressureGain": 8,
+    "tags": ["fixer", "special"]
+  },
+  {
+    "id": 807,
+    "title": "郊区的铁道",
+    "description": "郊区外围的铁道上，据说偶尔会驶过无人列车，留下罕见的物品。你决定去碰碰运气——高墙之外，怪物的嚎叫此起彼伏。",
+    "type": "fixer",
+    "ageRange": [30, 90],
+    "weight": 3,
+    "repeatable": true,
+    "cooldown": 8,
+    "branches": [
+      {
+        "id": "b1",
+        "text": "上铁道等车。",
+        "conditions": { "op": "AND", "conditions": [ { "attribute": "physique", "operator": ">=", "value": 5 }, { "attribute": "fortune", "operator": ">=", "value": 3 } ] },
+        "effects": { "wealth": 1500, "reputation": 4, "health": -10 }
+      },
+      { "id": "b2", "text": "掉头回城。墙外的风太危险。", "effects": { "instinct": 1 } }
+    ],
+    "portrait": "rail",
+    "pressureGain": 8,
+    "tags": ["fixer", "suburb"]
+  },
+  {
+    "id": 808,
+    "title": "Zwei的安保合同",
+    "description": "Zwei协会（安保）向你递来一份长期合同：为一家巢内的企业提供安保服务。稳定、体面、安全——除了偶尔会遇见不要命的袭击者。",
+    "type": "assoc",
+    "ageRange": [25, 60],
+    "weight": 4,
+    "repeatable": false,
+    "branches": [
+      { "id": "b1", "text": "签约。稳定比刺激重要。", "effects": { "wealth": 1000, "reputation": 5 }, "setIdentity": "协会收尾人", "setAffiliation": "Zwei协会" },
+      { "id": "b2", "text": "谢绝。自由才是我要的。", "effects": { "instinct": 1 } }
+    ],
+    "portrait": "security",
+    "tags": ["fixer", "assoc"]
+  },
+  {
+    "id": 809,
+    "title": "Seven的情报",
+    "description": "Seven协会（情报）的高层看中了你的调查能力。他们邀请你加入'七科'——专精收集与调查的科室。你将接触都市最隐秘的信息。",
+    "type": "assoc",
+    "ageRange": [25, 60],
+    "weight": 4,
+    "repeatable": false,
+    "branches": [
+      {
+        "id": "b1",
+        "text": "加入七科。",
+        "conditions": { "attribute": "intelligence", "operator": ">=", "value": 6 },
+        "effects": { "intelligence": 1, "reputation": 6 }, "setIdentity": "协会收尾人", "setAffiliation": "Seven协会"
+      },
+      { "id": "b2", "text": "情报太危险，还是算了吧。", "effects": { "instinct": 1 } }
+    ],
+    "portrait": "intel",
+    "tags": ["fixer", "assoc"]
+  },
+  {
+    "id": 810,
+    "title": "色彩之路",
+    "description": "你的名声已经传遍了收尾人圈。Hana协会的审查员登门拜访：'我们正在评估你是否适合被授予色彩称号。'你离巅峰只有一步之遥。",
+    "type": "fixer",
+    "ageRange": [35, 90],
+    "weight": 3,
+    "repeatable": false,
+    "branches": [
+      {
+        "id": "b1",
+        "text": "接受最终考核。",
+        "conditions": { "op": "AND", "conditions": [ { "attribute": "reputation", "operator": ">=", "value": 170 }, { "attribute": "physique", "operator": ">=", "value": 7 } ] },
+        "effects": { "reputation": 60 }, "setIdentity": "fixer-color", "setAffiliation": "Hana协会"
+      },
+      {
+        "id": "b2",
+        "text": "婉拒。色彩是枷锁，不是荣耀。",
+        "effects": { "will": 1 }
+      }
+    ],
+    "portrait": "color",
+    "tags": ["fixer", "legend"]
+  }
+]

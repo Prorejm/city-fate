@@ -1,0 +1,111 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  color-scheme: dark;
+}
+
+html,
+body,
+#root {
+  height: 100%;
+  margin: 0;
+}
+
+body {
+  @apply bg-void-950 text-ash-300 font-sanscn antialiased;
+  background-image:
+    radial-gradient(ellipse at 50% -20%, rgba(160, 31, 31, 0.12), transparent 60%),
+    radial-gradient(ellipse at 80% 110%, rgba(192, 154, 63, 0.06), transparent 55%);
+  background-attachment: fixed;
+  overflow-x: hidden;
+}
+
+/* 噪点颗粒 */
+.noise-overlay::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 60;
+  opacity: 0.05;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2'/%3E%3C/filter%3E%3Crect width='120' height='120' filter='url(%23n)' opacity='1'/%3E%3C/svg%3E");
+}
+
+/* 扫描线 */
+.scanlines::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 59;
+  background: repeating-linear-gradient(
+    0deg,
+    rgba(255, 255, 255, 0.025) 0px,
+    rgba(255, 255, 255, 0.025) 1px,
+    transparent 1px,
+    transparent 3px
+  );
+}
+
+/* 档案纸面板 */
+.paper-panel {
+  @apply relative bg-void-900/85 border border-void-600/60 shadow-[0_0_40px_rgba(0,0,0,0.6)];
+  backdrop-filter: blur(4px);
+}
+.paper-panel::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 3px;
+  height: 100%;
+  background: linear-gradient(180deg, #a01f1f, transparent 70%);
+}
+
+.title-serif {
+  @apply font-serifcn font-black tracking-widest;
+  text-shadow: 0 0 24px rgba(160, 31, 31, 0.5);
+}
+
+.glitch:hover {
+  animation: glitch 0.25s steps(2) infinite;
+}
+
+.crt-flicker {
+  animation: flicker 6s infinite;
+}
+@keyframes flicker {
+  0%, 100% { opacity: 1; }
+  92% { opacity: 1; }
+  93% { opacity: 0.6; }
+  94% { opacity: 1; }
+  97% { opacity: 0.85; }
+  98% { opacity: 1; }
+}
+
+.stat-bar-track {
+  @apply bg-void-700/70 h-1.5 w-full overflow-hidden rounded-full;
+}
+.stat-bar-fill {
+  @apply h-full rounded-full transition-all duration-700;
+}
+
+.scroll-thin::-webkit-scrollbar {
+  width: 6px;
+}
+.scroll-thin::-webkit-scrollbar-track {
+  background: transparent;
+}
+.scroll-thin::-webkit-scrollbar-thumb {
+  background: #33333d;
+  border-radius: 3px;
+}
+.scroll-thin::-webkit-scrollbar-thumb:hover {
+  background: #a01f1f;
+}
+
+.text-shadow-blood {
+  text-shadow: 0 0 18px rgba(160, 31, 31, 0.8);
+}

@@ -1,0 +1,163 @@
+[
+  {
+    "id": 101,
+    "title": "大学能力考试",
+    "description": "大部分巢每年举办一次的大学能力考试，将决定大部分人的人生。成绩差的去后巷的大学，然后一事无成。考场外，无数家庭在默默祈祷。",
+    "type": "teen",
+    "ageRange": [16, 18],
+    "weight": 8,
+    "repeatable": false,
+    "branches": [
+      {
+        "id": "b1",
+        "text": "拼尽全力应试（智力≥6时成功概率大幅提升）。",
+        "conditions": { "attribute": "intelligence", "operator": ">=", "value": 6 },
+        "effects": { "intelligence": 1, "reputation": 8, "will": 1 },
+        "setIdentity": "巢内学生",
+        "setAffiliation": "大学"
+      },
+      {
+        "id": "b2",
+        "text": "尽力而为，考多少算多少。",
+        "effects": { "fortune": 1, "reputation": 3 },
+        "setIdentity": "后巷大学生",
+        "setAffiliation": "后巷大学"
+      },
+      {
+        "id": "b3",
+        "text": "放弃考试，去闯荡后巷。",
+        "effects": { "instinct": 2, "wealth": 200 },
+        "setIdentity": "后巷耗子",
+        "setAffiliation": "无"
+      }
+    ],
+    "portrait": "exam",
+    "pressureGain": 10,
+    "tags": ["education", "teen"]
+  },
+  {
+    "id": 102,
+    "title": "第一份工",
+    "description": "十四五岁，你已经该为家里赚点钱了。巷口的工坊招学徒，翼公司的外包厂也在招人——报酬少得可怜，但总比饿死强。",
+    "type": "teen",
+    "ageRange": [13, 17],
+    "weight": 8,
+    "repeatable": true,
+    "cooldown": 3,
+    "branches": [
+      { "id": "b1", "text": "进工坊学手艺，虽然每天腰酸背痛。", "effects": { "intelligence": 1, "physique": 1, "wealth": 300 }, "setIdentity": "工坊学徒" },
+      { "id": "b2", "text": "去外包厂拧螺丝，钱来得直接。", "effects": { "wealth": 500, "physique": -1 } }
+    ],
+    "portrait": "working",
+    "tags": ["teen", "work"]
+  },
+  {
+    "id": 103,
+    "title": "巷口的初恋",
+    "description": "你遇到了一个让你心跳加速的人。后巷的爱情没有花前月下，只有共用的劣质烟和巷口的长夜。",
+    "type": "teen",
+    "ageRange": [14, 18],
+    "weight": 5,
+    "repeatable": false,
+    "branches": [
+      { "id": "b1", "text": "鼓起勇气表白。", "effects": { "synergy": 2, "will": 1 } },
+      { "id": "b2", "text": "把这份悸动藏在心里，专注生存。", "effects": { "intelligence": 1, "fortune": 1 } }
+    ],
+    "portrait": "love",
+    "tags": ["teen", "emotion"]
+  },
+  {
+    "id": 104,
+    "title": "收尾人的招聘",
+    "description": "一位退休收尾人在巷口贴出招聘启事：'收尾人事务所，招跑腿学徒，包教包会。'围观的人很多，敢报名的很少——这行当的死亡率，后巷人都知道。",
+    "type": "teen",
+    "ageRange": [15, 18],
+    "weight": 5,
+    "repeatable": false,
+    "branches": [
+      {
+        "id": "b1",
+        "text": "报名！命运该自己抓住。",
+        "conditions": { "op": "AND", "conditions": [ { "attribute": "physique", "operator": ">=", "value": 4 }, { "attribute": "instinct", "operator": ">=", "value": 4 } ] },
+        "effects": { "reputation": 6, "wealth": 100 },
+        "setIdentity": "收尾人（九阶）",
+        "setAffiliation": "无名事务所"
+      },
+      {
+        "id": "b2",
+        "text": "先观望几年，活下去最重要。",
+        "effects": { "instinct": 1 }
+      }
+    ],
+    "portrait": "fixer",
+    "tags": ["teen", "fixer"]
+  },
+  {
+    "id": 105,
+    "title": "义体诱惑",
+    "description": "巷口的黑诊所贴着海报：'义眼打折，义手分期付款！'你的朋友们纷纷躺上了手术台。强化义体能让你更强——但每次改造，都在透支些什么。",
+    "type": "teen",
+    "ageRange": [15, 18],
+    "weight": 4,
+    "repeatable": false,
+    "branches": [
+      { "id": "b1", "text": "装一只义眼试试。看得更远，也更冷。", "effects": { "instinct": 1, "physique": 1, "wealth": -300, "will": -1 } },
+      { "id": "b2", "text": "拒绝。血肉之躯也够用了。", "effects": { "will": 1, "health": 3 } }
+    ],
+    "portrait": "chrome",
+    "tags": ["teen", "body-mod"]
+  },
+  {
+    "id": 106,
+    "title": "烟气",
+    "description": "后巷的孩子总得尝一次烟气。这种长期存在的物质能当武器，也能麻痹神经。你的朋友说：'吸一口，什么烦恼都没了。'",
+    "type": "teen",
+    "ageRange": [13, 18],
+    "weight": 5,
+    "repeatable": false,
+    "branches": [
+      { "id": "b1", "text": "吸了一口——确实很爽。", "effects": { "pressure": -10, "will": -2, "health": -3 } },
+      { "id": "b2", "text": "推开烟枪。我还没惨到需要这个。", "effects": { "will": 2 } }
+    ],
+    "portrait": "smoke",
+    "tags": ["teen", "drug"]
+  },
+  {
+    "id": 107,
+    "title": "血液里的低语",
+    "description": "血魔眷属的孩子，身体总会传来异样的信号。你开始嗜好半生不熟的肉类，夜晚的月光也变得格外刺眼。巷口的老猎人似乎注意到了你。",
+    "type": "teen",
+    "ageRange": [13, 18],
+    "weight": 3,
+    "repeatable": false,
+    "branches": [
+      {
+        "id": "b1",
+        "text": "压制本能，绝不沦为血食。",
+        "conditions": { "attribute": "will", "operator": ">=", "value": 5 },
+        "effects": { "will": 2, "physique": 1 }
+      },
+      { "id": "b2", "text": "顺从血脉，享受力量带来的快感。", "effects": { "physique": 2, "pressure": 10 }, "grantTrait": "bloodkin" }
+    ],
+    "portrait": "blood",
+    "pressureGain": 8,
+    "tags": ["teen", "bloodkin"]
+  },
+  {
+    "id": 108,
+    "title": "应试村的深夜",
+    "description": "如果你生在应试村，深夜的灯永远不会熄。父母把全部积蓄押在你身上：'考进巢的大学，我们全家才能离开这里。'你的笔尖在纸上沙沙作响。",
+    "type": "teen",
+    "ageRange": [13, 17],
+    "weight": 6,
+    "repeatable": true,
+    "cooldown": 2,
+    "branches": [
+      { "id": "b1", "text": "继续刷题，咬碎牙也要考上。", "effects": { "intelligence": 1, "pressure": 8, "will": 1 } },
+      { "id": "b2", "text": "熬不住，趴在桌上睡着了。", "effects": { "health": 3, "pressure": -5 } }
+    ],
+    "portrait": "study",
+    "pressureGain": 6,
+    "tags": ["teen", "education"]
+  }
+]

@@ -1,0 +1,155 @@
+[
+  {
+    "id": 1,
+    "title": "第一声啼哭",
+    "description": "你在都市的某条巷子、某间巢房里降生了。产婆剪断脐带，窗外传来后巷特有的轰鸣。你的命运，从这一秒开始转动。",
+    "type": "child",
+    "ageRange": [0, 0],
+    "weight": 10,
+    "repeatable": false,
+    "branches": [
+      { "id": "b1", "text": "安静地注视着这个灰色的世界。", "effects": { "instinct": 1 }, "portrait": "calm" },
+      { "id": "b2", "text": "放声大哭，惊动了整条巷子。", "effects": { "physique": 1 }, "portrait": "cry" }
+    ],
+    "portrait": "baby",
+    "tags": ["birth"]
+  },
+  {
+    "id": 2,
+    "title": "巷口的第一次试探",
+    "description": "你刚学会走路，就踉跄着爬到了巷口。污水沟里漂着废弃的零件，远处传来帮派成员的吆喝声。母亲一把将你拽了回去。",
+    "type": "child",
+    "ageRange": [2, 4],
+    "weight": 8,
+    "repeatable": false,
+    "branches": [
+      { "id": "b1", "text": "挣扎着想要再看一眼外面的世界。", "effects": { "instinct": 1, "will": 1 } },
+      { "id": "b2", "text": "顺从地被母亲抱回屋内。", "effects": { "synergy": 1 } }
+    ],
+    "portrait": "curious",
+    "tags": ["childhood"]
+  },
+  {
+    "id": 3,
+    "title": "拾荒的学费",
+    "description": "父母教你辨认哪些废品能卖钱：黄铜管线、回收电池、偶尔出现的完好零件。捡到好东西，今天的晚饭就能多一块肉。",
+    "type": "child",
+    "ageRange": [3, 7],
+    "weight": 8,
+    "repeatable": true,
+    "cooldown": 2,
+    "branches": [
+      { "id": "b1", "text": "认真地学习辨认，成为巷子里的小拾荒专家。", "effects": { "intelligence": 1, "wealth": 100 } },
+      { "id": "b2", "text": "偷懒糊弄，把时间花在玩耍上。", "effects": { "fortune": 1 } }
+    ],
+    "portrait": "working",
+    "tags": ["childhood", "backalley"]
+  },
+  {
+    "id": 4,
+    "title": "深宵的哭声",
+    "description": "凌晨三点十三分，后巷深宵开始了。你被屋外细微的动静惊醒——那是清道夫清扫的声音。隔壁传来压抑的哭声，却没有人敢开门去看。",
+    "type": "child",
+    "ageRange": [4, 10],
+    "weight": 5,
+    "repeatable": false,
+    "branches": [
+      { "id": "b1", "text": "记住这个时刻。黑暗的味道永远刻进记忆。", "effects": { "instinct": 1, "pressure": 5 }, "grantTrait": "deep-night-eyes" },
+      { "id": "b2", "text": "捂住耳朵，假装什么都没听见。", "effects": { "will": -1, "pressure": 3 } }
+    ],
+    "portrait": "fear",
+    "pressureGain": 5,
+    "tags": ["deep-night", "trauma"]
+  },
+  {
+    "id": 5,
+    "title": "巷子里的学校",
+    "description": "后巷没有正规学校，只有巷口那间由退休收尾人开的'安全屋学堂'。教识字、教算术、教如何从帮派冲突里活下来。",
+    "type": "child",
+    "ageRange": [5, 10],
+    "weight": 8,
+    "repeatable": false,
+    "branches": [
+      { "id": "b1", "text": "认真听课，老师讲的故事里藏着活命的智慧。", "effects": { "intelligence": 1, "instinct": 1 } },
+      { "id": "b2", "text": "逃课去巷口看收尾人处理委托。", "effects": { "physique": 1, "reputation": 2 } }
+    ],
+    "portrait": "study",
+    "tags": ["childhood", "education"]
+  },
+  {
+    "id": 6,
+    "title": "帮派的'善意'",
+    "description": "巷口的帮派头目递给你一块糖，说：'跟着我干，以后这条巷子就是你的。'母亲攥紧了你的手。",
+    "type": "child",
+    "ageRange": [6, 10],
+    "weight": 5,
+    "repeatable": false,
+    "branches": [
+      { "id": "b1", "text": "接过糖，朝头目咧嘴一笑。", "effects": { "fortune": 1, "reputation": 3 }, "setAffiliation": "无名帮派" },
+      { "id": "b2", "text": "躲在母亲身后，摇摇头。", "effects": { "will": 1, "synergy": 1 } }
+    ],
+    "portrait": "wary",
+    "tags": ["gang", "childhood"]
+  },
+  {
+    "id": 7,
+    "title": "第一场雨",
+    "description": "第十一区的传说说，某年某月某夜，全世界下了一天半的雨，被雨淋到的人病痛全消。今晚，雨真的落下来了。母亲把你推出门外，说：'去淋雨。'",
+    "type": "child",
+    "ageRange": [5, 12],
+    "weight": 3,
+    "repeatable": false,
+    "branches": [
+      { "id": "b1", "text": "在雨中张开双臂，仰望天空。", "effects": { "synergy": 2, "health": 5 } },
+      { "id": "b2", "text": "不理解，但照做了——雨真的好冷。", "effects": { "health": 2 } }
+    ],
+    "portrait": "rain",
+    "tags": ["special", "childhood"]
+  },
+  {
+    "id": 8,
+    "title": "巢与后巷的墙",
+    "description": "你第一次亲眼看到巢的高墙。墙内的孩子在干净的道路上奔跑，墙外的你隔着铁丝网看他们。有人往墙上扔了一块石头，被禁忌猎人带走了。",
+    "type": "child",
+    "ageRange": [7, 12],
+    "weight": 6,
+    "repeatable": false,
+    "branches": [
+      { "id": "b1", "text": "暗暗发誓：总有一天要翻过这道墙。", "effects": { "will": 1, "intelligence": 1 } },
+      { "id": "b2", "text": "在墙边捡了个完好的玩具，开心地回家。", "effects": { "fortune": 1, "wealth": 50 } }
+    ],
+    "portrait": "looking",
+    "tags": ["childhood", "nest"]
+  },
+  {
+    "id": 9,
+    "title": "异想体的影",
+    "description": "夜里，你梦见一只从没见过的生物。它浑身是眼睛，却温和地朝你眨眼。醒来后，你发现枕头边多了一片蓝色的羽毛。",
+    "type": "child",
+    "ageRange": [6, 12],
+    "weight": 3,
+    "repeatable": false,
+    "branches": [
+      { "id": "b1", "text": "把羽毛藏进贴身口袋，相信它是某种祝福。", "effects": { "synergy": 2 }, "grantTrait": "abno-affinity" },
+      { "id": "b2", "text": "害怕地把它烧掉了。", "effects": { "pressure": 5 }, "grantTrait": "cursed-touch" }
+    ],
+    "portrait": "dream",
+    "tags": ["abno", "childhood"]
+  },
+  {
+    "id": 10,
+    "title": "巷口的第一场火并",
+    "description": "两个帮派为争夺巷口的毒品据点火并。子弹擦着你的头顶飞过，你被母亲按在墙角，闻着硝烟与血腥味。枪声持续了整整一夜。",
+    "type": "child",
+    "ageRange": [8, 12],
+    "weight": 4,
+    "repeatable": false,
+    "branches": [
+      { "id": "b1", "text": "在母亲的怀里发抖，把这一刻永远记住。", "effects": { "instinct": 2, "pressure": 8 } },
+      { "id": "b2", "text": "偷偷数着枪声的次数，记住了每种枪的声音。", "effects": { "intelligence": 1, "instinct": 1, "pressure": 5 } }
+    ],
+    "portrait": "war",
+    "pressureGain": 8,
+    "tags": ["gang", "trauma"]
+  }
+]

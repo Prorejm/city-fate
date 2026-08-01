@@ -1,0 +1,90 @@
+[
+  {
+    "id": "backalley-rat",
+    "name": "后巷耗子",
+    "district": "第七区·无名巷",
+    "description": "出生在巢与巢之间肮脏的后巷。雨水从遮雨布的破洞滴落，帮派的保护费压得父母喘不过气。你学会的第一件事，是分辨枪声的方向。",
+    "stats": { "instinct": 1, "fortune": 0 },
+    "wealth": 150,
+    "identity": "后巷耗子",
+    "affiliation": "无",
+    "traits": ["backalley-born"]
+  },
+  {
+    "id": "nest-citizen",
+    "name": "巢内市民",
+    "district": "第十区·J巢",
+    "description": "你的父母是翼公司的低级羽毛，你拥有巢的居住权——这是无数后巷人梦寐以求的东西。代价是父母每天工作到几乎发疯，只为缴清高得荒谬的税。",
+    "stats": { "intelligence": 1 },
+    "wealth": 1200,
+    "identity": "巢内学生",
+    "affiliation": "J公司",
+    "traits": ["nest-born"]
+  },
+  {
+    "id": "exam-village",
+    "name": "应试村苦读生",
+    "district": "第三区·应试村",
+    "description": "后巷中最拥挤也最严苛的区域。你的童年是成摞的习题与无休止的翼入职考试。考上巢内大学，是全家唯一的出路。",
+    "stats": { "intelligence": 2, "will": 0 },
+    "wealth": 300,
+    "identity": "应试村学生",
+    "affiliation": "无",
+    "traits": ["exam-drilled"]
+  },
+  {
+    "id": "suburb-survivor",
+    "name": "郊区幸存者",
+    "district": "都市外围·郊区",
+    "description": "都市高墙之外，怪物在废土上逡巡。你靠老旧的防御设施和稀少的猎人庇护长大。铁道上偶尔驶过的列车，会带来罕见的物品——也带来死亡。",
+    "stats": { "physique": 1, "fortune": 0 },
+    "wealth": 80,
+    "identity": "郊区难民",
+    "affiliation": "无",
+    "traits": ["suburb-hardened"]
+  },
+  {
+    "id": "wing-orphan",
+    "name": "翼属孤儿",
+    "district": "第八区·鸿园",
+    "description": "你的父母死于一场翼间战争。收养你的翼公司给了你巢的居住权与一笔抚恤金——也给了你一张终身的卖身契。他们称这叫'恩惠'。",
+    "stats": { "synergy": 1 },
+    "wealth": 2000,
+    "identity": "翼属孤儿",
+    "affiliation": "H公司",
+    "traits": ["wing-indentured"]
+  },
+  {
+    "id": "mod-experiment",
+    "name": "改造试验体",
+    "district": "第十一区·K巢",
+    "description": "你被某家公司的秘密实验室当作安瓿实验体养大。身体的每一处都在为适应药物而改造。他们没能完全抹去你的意志——你逃了出来。",
+    "stats": { "physique": 2, "will": -1 },
+    "wealth": 0,
+    "identity": "逃逸试验体",
+    "affiliation": "无",
+    "traits": ["ampoule-adapted"]
+  },
+  {
+    "id": "bloodkin-child",
+    "name": "血魔眷属",
+    "district": "第十九区·旧血魔聚居地",
+    "description": "你体内流淌着古老血魔的血。白日里你是温顺的居民，夜晚你听见血管里传来饥渴的低语。血魔猎人的目光，从未离开过你这样的存在。",
+    "stats": { "physique": 1, "synergy": 1 },
+    "wealth": 500,
+    "identity": "血魔眷属",
+    "affiliation": "无",
+    "traits": ["bloodkin"]
+  },
+  {
+    "id": "lucky-draw",
+    "name": "巢权抽奖幸运儿",
+    "district": "第二十二区·T巢",
+    "description": "T公司年度巢权抽奖，三十万分之一的中奖率，你中了。全家从后巷搬进雪白的巢。邻居们说你命好——只有你知道，时间改造手术的报名表，也摆在你家桌上。",
+    "stats": { "fortune": 2 },
+    "wealth": 5000,
+    "identity": "巢内学生",
+    "affiliation": "T公司",
+    "traits": ["fortunate"]
+  }
+]

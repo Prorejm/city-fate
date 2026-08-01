@@ -1,0 +1,147 @@
+[
+  {
+    "id": 701,
+    "title": "巢的税单",
+    "description": "翼公司的税单寄到了。高得荒谬的金额压得你喘不过气。邻居说：'巢的庇护从来不是免费的，只是账单总在最后才到。'",
+    "type": "nest",
+    "ageRange": [18, 90],
+    "weight": 6,
+    "repeatable": true,
+    "cooldown": 3,
+    "branches": [
+      { "id": "b1", "text": "咬牙缴清。巢的居住权不能丢。", "effects": { "wealth": -1200, "pressure": 8 } },
+      {
+        "id": "b2",
+        "text": "申请减免。",
+        "conditions": { "op": "AND", "conditions": [ { "attribute": "intelligence", "operator": ">=", "value": 6 }, { "attribute": "fortune", "operator": ">=", "value": 4 } ] },
+        "effects": { "wealth": -300, "intelligence": 1 }
+      }
+    ],
+    "portrait": "tax",
+    "pressureGain": 8,
+    "tags": ["nest"]
+  },
+  {
+    "id": 702,
+    "title": "重构日",
+    "description": "如果你身处第八区的鸿园，今天是'重构日'。整个鸿园的结构将重新组合，按照劳动价值与收入资产分配居住空间。富者的房间变多，贫者可能从高空坠落。",
+    "type": "nest",
+    "ageRange": [16, 100],
+    "weight": 3,
+    "repeatable": true,
+    "cooldown": 12,
+    "branches": [
+      {
+        "id": "b1",
+        "text": "拼命工作，提升劳动价值。",
+        "conditions": { "attribute": "wealth", "operator": ">=", "value": 3000 },
+        "effects": { "reputation": 4, "wealth": -500 }
+      },
+      { "id": "b2", "text": "祈求自己分到一块好地方。", "effects": { "fortune": 1, "pressure": 8 } }
+    ],
+    "portrait": "restructure",
+    "pressureGain": 8,
+    "tags": ["nest", "h-corp"]
+  },
+  {
+    "id": 703,
+    "title": "禁忌猎人",
+    "description": "你在巢内目睹了禁忌猎人的行动。一个触犯禁忌的居民被当场带走。周围的人都低下头，装作没看见。这就是巢的秩序。",
+    "type": "nest",
+    "ageRange": [16, 100],
+    "weight": 5,
+    "repeatable": true,
+    "cooldown": 4,
+    "branches": [
+      { "id": "b1", "text": "低头走开，记住禁忌的边界。", "effects": { "intelligence": 1 } },
+      { "id": "b2", "text": "多看了几眼，心里发凉。", "effects": { "instinct": 1, "pressure": 5 } }
+    ],
+    "portrait": "taboo",
+    "pressureGain": 5,
+    "tags": ["nest"]
+  },
+  {
+    "id": 704,
+    "title": "安瓿的副作用",
+    "description": "如果你在 K 公司工作，每天都要注射安瓿维持'最稳定状态'。你的身体开始出现排异反应，但合同规定：离职将失去巢的居住权。",
+    "type": "nest",
+    "ageRange": [22, 60],
+    "weight": 4,
+    "repeatable": true,
+    "cooldown": 5,
+    "branches": [
+      { "id": "b1", "text": "继续注射，保住工作。", "effects": { "health": -6, "wealth": 800, "physique": 1 } },
+      { "id": "b2", "text": "偷偷减少剂量，冒险适应。", "effects": { "health": -3, "intelligence": 1, "pressure": 6 } }
+    ],
+    "portrait": "ampoule",
+    "pressureGain": 8,
+    "tags": ["nest", "k-corp"]
+  },
+  {
+    "id": 705,
+    "title": "时间改造",
+    "description": "T公司的时间改造手术，让你'节省'了十年光阴——代价是那十年的记忆被抹去。醒来后，你看着陌生的自己，总觉得少了些什么。",
+    "type": "nest",
+    "ageRange": [25, 80],
+    "weight": 3,
+    "repeatable": false,
+    "branches": [
+      { "id": "b1", "text": "接受手术，换取时间。", "effects": { "intelligence": 1, "health": 10, "will": -1 }, "setAffiliation": "T公司" },
+      { "id": "b2", "text": "拒绝。记忆比时间宝贵。", "effects": { "will": 1 } }
+    ],
+    "portrait": "time",
+    "tags": ["nest", "t-corp"]
+  },
+  {
+    "id": 706,
+    "title": "自杀自动售货机",
+    "description": "你路过第十四区，看到了那台备受争议的'自杀自动售货机'。透明的橱窗里陈列着各种'方案'，明码标价。排队的人神情各异，有人解脱，有人犹豫。",
+    "type": "nest",
+    "ageRange": [20, 90],
+    "weight": 3,
+    "repeatable": false,
+    "branches": [
+      { "id": "b1", "text": "看了很久，然后离开。", "effects": { "will": 1, "pressure": 5 } },
+      { "id": "b2", "text": "和排队的人聊了几句，听了听他们的故事。", "effects": { "synergy": 1, "pressure": 8 } }
+    ],
+    "portrait": "vending",
+    "pressureGain": 8,
+    "tags": ["nest", "n-corp"]
+  },
+  {
+    "id": 707,
+    "title": "月长石",
+    "description": "你在 M 公司的展示厅看到了一枚月长石。传说它能增强精神，制造思维屏障。店员微笑着报价——价格高得离谱。",
+    "type": "nest",
+    "ageRange": [20, 90],
+    "weight": 3,
+    "repeatable": false,
+    "branches": [
+      {
+        "id": "b1",
+        "text": "买下它。",
+        "conditions": { "attribute": "wealth", "operator": ">=", "value": 5000 },
+        "effects": { "wealth": -5000, "will": 1 }, "grantTrait": "moonstone-shield"
+      },
+      { "id": "b2", "text": "太贵了，看看就好。", "effects": { "intelligence": 1 } }
+    ],
+    "portrait": "moonstone",
+    "tags": ["nest", "m-corp"]
+  },
+  {
+    "id": 708,
+    "title": "私人录像",
+    "description": "有人向你兜售一段'来自N巢'的录像。价格不菲。你听说过十四区的禁忌——私自录像，会招来毁灭。但好奇心像猫爪一样挠着你的心。",
+    "type": "nest",
+    "ageRange": [25, 90],
+    "weight": 3,
+    "repeatable": false,
+    "branches": [
+      { "id": "b1", "text": "忍住好奇心。有些禁忌，碰了就完蛋。", "effects": { "will": 1, "instinct": 1 } },
+      { "id": "b2", "text": "买下录像，看一眼。", "effects": { "intelligence": 1, "pressure": 15, "fortune": -2 } }
+    ],
+    "portrait": "video",
+    "pressureGain": 10,
+    "tags": ["nest", "n-corp"]
+  }
+]

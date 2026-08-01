@@ -1,0 +1,109 @@
+[
+  {
+    "id": 501,
+    "title": "百岁寿辰",
+    "description": "你活到了一百岁。这在都市是几乎不可能的成就——你的寿辰引来了一群好奇的年轻人，他们想听听'百岁老人'的故事。",
+    "type": "ancients",
+    "ageRange": [100, 110],
+    "weight": 10,
+    "repeatable": false,
+    "branches": [
+      { "id": "b1", "text": "讲述你的一生。", "effects": { "reputation": 10, "synergy": 1 } },
+      { "id": "b2", "text": "安静地享受这一天。", "effects": { "health": 5, "pressure": -15 } }
+    ],
+    "portrait": "ancient",
+    "tags": ["ancients"]
+  },
+  {
+    "id": 502,
+    "title": "都市的变迁",
+    "description": "一百年来，你亲眼看着都市变化：翼公司换了又换，后巷的街角拆迁又重建。只有天空，永远是灰色的。",
+    "type": "ancients",
+    "ageRange": [100, 150],
+    "weight": 6,
+    "repeatable": true,
+    "cooldown": 3,
+    "branches": [
+      { "id": "b1", "text": "把自己的见闻记录下来。", "effects": { "intelligence": 1, "reputation": 4 } },
+      { "id": "b2", "text": "感慨时光飞逝。", "effects": { "will": 1, "pressure": -5 } }
+    ],
+    "portrait": "ancient",
+    "tags": ["ancients"]
+  },
+  {
+    "id": 503,
+    "title": "被遗忘的老者",
+    "description": "记得你的人大多已经不在了。你走在后巷，没人知道你是那个曾经叱咤风云的收尾人。你忽然感到一阵孤独。",
+    "type": "ancients",
+    "ageRange": [105, 150],
+    "weight": 5,
+    "repeatable": false,
+    "branches": [
+      {
+        "id": "b1",
+        "text": "孤独是长寿的代价。坦然接受。",
+        "conditions": { "attribute": "will", "operator": ">=", "value": 6 },
+        "effects": { "will": 1, "pressure": -5 }
+      },
+      { "id": "b2", "text": "感到难以承受的空虚。", "effects": { "pressure": 10, "health": -5 } }
+    ],
+    "portrait": "lonely",
+    "tags": ["ancients"]
+  },
+  {
+    "id": 504,
+    "title": "奇点的挽留",
+    "description": "T公司的人找到了你：'我们可以用时间奇点，让你再活一百年。代价是，你必须为 T 公司服务。'你看着合同，犹豫了很久。",
+    "type": "special",
+    "ageRange": [100, 150],
+    "weight": 4,
+    "repeatable": false,
+    "branches": [
+      {
+        "id": "b1",
+        "text": "签下合同，继续活下去。",
+        "conditions": { "attribute": "will", "operator": ">=", "value": 5 },
+        "effects": { "health": 30, "intelligence": 1, "pressure": 10 },
+        "setAffiliation": "T公司"
+      },
+      { "id": "b2", "text": "拒绝。一生已经足够。", "effects": { "will": 2 } }
+    ],
+    "portrait": "time",
+    "tags": ["ancients", "special"]
+  },
+  {
+    "id": 505,
+    "title": "回望一生",
+    "description": "深夜，你坐在窗边回望自己的一生。后巷的灯火明明灭灭。你想起了童年的巷口、青年时的热血、中年时的疲惫。这一切，值得吗？",
+    "type": "ancients",
+    "ageRange": [110, 150],
+    "weight": 6,
+    "repeatable": false,
+    "branches": [
+      { "id": "b1", "text": "值得。我活过，抗争过。", "effects": { "will": 2, "pressure": -10 } },
+      { "id": "b2", "text": "不知道。人生就是这样稀里糊涂。", "effects": { "pressure": 5 } }
+    ],
+    "portrait": "reflect",
+    "tags": ["ancients"]
+  },
+  {
+    "id": 506,
+    "title": "光之种的余晖",
+    "description": "你感受到体内的某种东西在轻轻回应。白夜黑昼过去这么多年，光之种的光辉仍在你体内流淌。你闭上眼睛，仿佛看见了当年的光芒。",
+    "type": "special",
+    "ageRange": [110, 150],
+    "weight": 3,
+    "repeatable": false,
+    "branches": [
+      {
+        "id": "b1",
+        "text": "回应那份光芒。",
+        "conditions": { "attribute": "synergy", "operator": ">=", "value": 6 },
+        "effects": { "synergy": 2, "health": 10 }
+      },
+      { "id": "b2", "text": "闭上眼睛，沉沉睡去。", "effects": { "health": 5, "pressure": -10 } }
+    ],
+    "portrait": "light",
+    "tags": ["ancients", "special"]
+  }
+]
