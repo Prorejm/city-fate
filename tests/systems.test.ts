@@ -10,6 +10,7 @@ import { adjustAffinity, meetNpcsAtLocation } from '@/core/NpcSystem'
 import { checkStorylines } from '@/core/StorylineSystem'
 import { ensureFixerGrade, generateCommissionPool, resolveCommission, promoteFixer, isFingerMember } from '@/core/CommissionSystem'
 import { grantXp, chooseSubclass, canChooseSubclass, totalProfessionLevel, XP_THRESHOLDS } from '@/core/ProfessionSystem'
+import { addItem, equipItem, consumeItem, equipmentBonuses, rollQuality } from '@/core/ItemSystem'
 import type { GlobalMeta } from '@/types'
 
 function makeMeta(): GlobalMeta {
@@ -321,5 +322,43 @@ describe('职业系统', () => {
     run.reputation = 10
     resolveCommission(data, run, 'cm-zwei-escort', () => 0.1)
     expect(run.professionXp['fixer']).toBeGreaterThan(0)
+  })
+})
+
+describe('物品系统', () => {
+  it('加入背包并可装备', () => {
+    const { data } = makeTraverseRun(makeMeta())
+    expect(addItem(data, 'w-dagger')).toBe(true)
+    expect(data.inventory.length).toBe(1)
+    expect(equipItem(data, 0)).toBe(true)
+    expect(data.equipped['main-hand']).toBe('w-dagger')
+    expect(data.inventory.length).toBe(0)
+  })
+
+  it('装备提供属性加成与成功率修正', () => {
+    const { data } = makeTraverseRun(makeMeta())
+    addItem(data, 'w-fixer-sword')
+    equipItem(data, 0)
+    const { effects, chanceMod } = equipmentBonuses(data)
+    expect(effects.physique).toBe(2)
+    expect(chanceMod).toBe(0.04)
+  })
+
+  it('消耗品使用后从背包移除', () => {
+    const { data, run } = makeTraverseRun(makeMeta())
+    addItem(data, 'c-bandage')
+    const before = run.health
+    consumeItem(data, run, 0, (p) => {
+      if (p.health !== undefined) run.health = p.health
+    })
+    expect(run.health).toBeGreaterThan(before)
+    expect(data.inventory.length).toBe(0)
+  })
+
+  it('品质掉落返回合法品质', () => {
+    const q = rollQuality(() => 0.1)
+    expect(['white', 'green', 'blue', 'purple', 'gold']).toContain(q)
+    const q2 = rollQuality(() => 0.99)
+    expect(['white', 'green', 'blue', 'purple', 'gold']).toContain(q2)
   })
 })

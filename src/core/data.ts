@@ -12,6 +12,7 @@ import type {
   NpcDef,
   Origin,
   ProfessionDef,
+  ItemDef,
   SinFate,
   StorylineDef,
   Talent,
@@ -34,6 +35,7 @@ import storylinesData from '../../data/storylines.json'
 import associationsData from '../../data/associations.json'
 import commissionsData from '../../data/commissions.json'
 import professionsData from '../../data/professions.json'
+import itemsData from '../../data/items.json'
 import eventsChild from '../../data/events/events-child.json'
 import eventsTeen from '../../data/events/events-teen.json'
 import eventsAdult from '../../data/events/events-adult.json'
@@ -66,6 +68,7 @@ export const STORYLINES = storylinesData as StorylineDef[]
 export const ASSOCIATIONS = associationsData as AssociationDef[]
 export const COMMISSIONS = commissionsData as CommissionDef[]
 export const PROFESSIONS = professionsData as ProfessionDef[]
+export const ITEMS = itemsData as ItemDef[]
 
 const EVENT_MODULES: GameEvent[][] = [
   eventsChild,
@@ -158,6 +161,10 @@ export function findCommission(id: string): CommissionDef | undefined {
 
 export function findProfession(id: string): ProfessionDef | undefined {
   return PROFESSIONS.find((p) => p.id === id)
+}
+
+export function findItem(id: string): ItemDef | undefined {
+  return ITEMS.find((i) => i.id === id)
 }
 
 export function findTraverseTalent(id: string): TraverseTalent | undefined {

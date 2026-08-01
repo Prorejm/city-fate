@@ -25,7 +25,8 @@ import { applyDistortion, resolveSin } from '@/core/DistortionSystem'
 import { findAction, findIdentity, STORYLINES } from '@/core/data'
 import { resolveCommission, generateCommissionPool, ensureFixerGrade, isFingerMember } from '@/core/CommissionSystem'
 import { chooseSubclass as chooseSubclassCore } from '@/core/ProfessionSystem'
-import type { CommissionResult } from '@/types'
+import { consumeItem, equipItem, unequipItem } from '@/core/ItemSystem'
+import type { CommissionResult, EquipmentSlot } from '@/types'
 import { useUiStore } from './uiStore'
 
 const INITIAL_META: GlobalMeta = {
@@ -52,7 +53,7 @@ export interface CharacterDraft {
 }
 
 export interface CurrentEvent {
-  kind: 'event' | 'npc' | 'storyline' | 'result' | 'action' | 'commission' | 'commission-result'
+  kind: 'event' | 'npc' | 'storyline' | 'result' | 'action' | 'commission' | 'commission-result' | 'inventory' | 'shop'
   event?: GameEvent
   npcId?: string
   storyId?: string
@@ -84,6 +85,11 @@ interface GameStore {
   performAction: (actionId: string) => void
   performCommission: (commissionId: string) => void
   chooseSubclass: (professionId: string, subclassId: string) => void
+  useItem: (index: number) => void
+  equipItem: (index: number) => void
+  unequipItem: (slot: EquipmentSlot) => void
+  openInventory: () => void
+  openShop: () => void
   travelTo: (locationId: string) => void
   resolveNpcEvent: (npcId: string) => void
   nextEvent: () => void
@@ -209,6 +215,12 @@ export const useGameStore = create<GameStore>()(
           return
         }
 
+        // 集市购买：打开商店（不执行普通结果）
+        if (actionId === 'market-buy') {
+          set({ currentEvent: { kind: 'shop' } })
+          return
+        }
+
         // 剧情线检查
         const progressed = checkStorylines(data, run, actionId)
         for (const p of progressed) {
@@ -321,6 +333,46 @@ export const useGameStore = create<GameStore>()(
           useUiStore.getState().pushToast('子职已确定', 'info')
           set({})
         }
+      },
+
+      useItem: (index) => {
+        const { data, run } = get()
+        if (!data || !run) return
+        const result = consumeItem(data, run, index, (patch) => {
+          if (patch.health !== undefined) run.health = patch.health
+          if (patch.pressure !== undefined) run.pressure = patch.pressure
+          if (patch.foodLevel !== undefined) run.foodLevel = patch.foodLevel
+        })
+        if (result) {
+          useUiStore.getState().pushToast(`使用：${result}`, 'info')
+          set({})
+        }
+      },
+
+      equipItem: (index) => {
+        const { data } = get()
+        if (!data) return
+        if (equipItem(data, index)) {
+          useUiStore.getState().pushToast('已装备', 'info')
+          set({})
+        }
+      },
+
+      unequipItem: (slot) => {
+        const { data } = get()
+        if (!data) return
+        if (unequipItem(data, slot)) {
+          useUiStore.getState().pushToast('已卸下', 'info')
+          set({})
+        }
+      },
+
+      openInventory: () => {
+        set({ currentEvent: { kind: 'inventory' } })
+      },
+
+      openShop: () => {
+        set({ currentEvent: { kind: 'shop' } })
       },
 
       travelTo: (locationId) => {

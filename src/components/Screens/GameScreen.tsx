@@ -3,6 +3,8 @@ import { MAX_AGE } from '@/engine/GameConfig'
 import { useGameStore } from '@/stores/gameStore'
 import { AvatarPortrait } from '../Avatar/AvatarPortrait'
 import { StatBar } from '../Effects'
+import { InventoryModal } from '../InventoryModal'
+import { ShopModal } from '../ShopModal'
 import { findLocation, findAction, findNpc, findAssociation, findIdentity, PROFESSIONS } from '@/core/data'
 import { actionChance } from '@/core/ActionSystem'
 import { actionAvailable } from '@/core/LocationSystem'
@@ -451,7 +453,7 @@ function LifeLog() {
 }
 
 function HudHeader() {
-  const { data, run, goToMenu } = useGameStore()
+  const { data, run, goToMenu, openInventory } = useGameStore()
   if (!data || !run) return null
   return (
     <div className="paper-panel flex items-center justify-between gap-4 px-5 py-3">
@@ -477,9 +479,14 @@ function HudHeader() {
       </div>
       <div className="text-right">
         <div className="mb-1 font-mono text-[11px] text-ash-400">{data.affiliation || '无'}</div>
-        <button onClick={goToMenu} className="font-mono text-[11px] text-ash-600 hover:text-blood-300">
-          逃离此世
-        </button>
+        <div className="flex justify-end gap-3">
+          <button onClick={openInventory} className="font-mono text-[11px] text-ash-600 hover:text-gold-400">
+            背包
+          </button>
+          <button onClick={goToMenu} className="font-mono text-[11px] text-ash-600 hover:text-blood-300">
+            逃离此世
+          </button>
+        </div>
       </div>
     </div>
   )
@@ -562,6 +569,8 @@ export function GameScreen() {
       {currentEvent?.kind === 'storyline' && <StorylineModal ev={currentEvent} />}
       {currentEvent?.kind === 'commission' && <CommissionBoardModal />}
       {currentEvent?.kind === 'commission-result' && <CommissionResultModal ev={currentEvent} />}
+      {currentEvent?.kind === 'inventory' && <InventoryModal />}
+      {currentEvent?.kind === 'shop' && <ShopModal />}
       {currentEvent?.kind === 'event' && currentEvent.text === '叩问自我' && <VoiceCrisisModal />}
     </div>
   )

@@ -60,6 +60,8 @@ function makeData(overrides: Partial<CityFateData> = {}): CityFateData {
     unlockedAchievements: [],
     playCount: 1,
     totalLifespan: 0,
+    inventory: [],
+    equipped: {},
     ...overrides,
   }
 }

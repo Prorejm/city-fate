@@ -2,6 +2,7 @@ import type { AttributeEffects, CityFateData, CommissionDef, CommissionResult, C
 import { chance, pickN } from '@/engine/Random'
 import { applyEffects } from './PropertySystem'
 import { grantXp, xpForCommissionTier } from './ProfessionSystem'
+import { equipmentChanceMod, equipmentStatBonus } from './ItemSystem'
 import { ASSOCIATIONS, COMMISSIONS, findAssociation, findCommission, findIdentity, IDENTITIES } from './data'
 import { modernKnowledgeBonus } from './TalentSystem'
 
@@ -33,18 +34,19 @@ export function ensureFixerGrade(data: CityFateData, run: RunState): boolean {
   return false
 }
 
-/** 计算委托成功率（复用行动公式：基础 + 属性偏向 + 现代人学识） */
+/** 计算委托成功率（复用行动公式：基础 + 属性偏向 + 现代人学识 + 装备加成） */
 export function commissionChance(data: CityFateData, commission: CommissionDef): number {
   let p = commission.baseChance
   if (commission.statBias) {
     const { attr, weight } = commission.statBias
-    p += (data.stats[attr] - 5) * 0.04 * weight
+    p += (data.stats[attr] + equipmentStatBonus(data, attr) - 5) * 0.04 * weight
   }
   if (commission.statBias?.attr === 'intelligence') {
     p += modernKnowledgeBonus(data)
   }
   const tier = TIER_TABLE[commission.tier]
   p += tier.chanceMod
+  p += equipmentChanceMod(data)
   return Math.max(0.05, Math.min(0.95, p))
 }
 

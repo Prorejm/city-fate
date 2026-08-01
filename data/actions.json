@@ -35,7 +35,8 @@
     "success": {
       "text": ["你翻出一块完好的义体零件，黑市能卖个好价钱。", "废品堆里竟有一件没拆封的旧大衣，正好御寒。", "你找到一把还能用的旧匕首。"],
       "gold": 60,
-      "effects": { "instinct": 1 }
+      "effects": { "instinct": 1 },
+      "itemDrops": ["w-dagger", "c-noodle", "c-bandage"]
     },
     "fail": {
       "text": ["翻了一下午，只找到几个废铁片。", "你差点被垃圾堆里的针头扎到。"],
@@ -576,7 +577,8 @@
     "success": {
       "text": ["你在废弃设施里找到一支完好的脑啡肽安瓿。", "你收集到异想体的残留物，能卖出高价。"],
       "gold": 400,
-      "effects": { "synergy": 1, "instinct": 2, "pressure": 10 }
+      "effects": { "synergy": 1, "instinct": 2, "pressure": 10 },
+      "itemDrops": ["w-plasma-blade", "c-neurorelax", "r-star-map"]
     },
     "fail": {
       "text": ["设施深处传来不该有的动静——你逃命般地跑了出去。", "你被守株待兔的拾荒者伏击，丢下了搜到的东西。"],
@@ -619,7 +621,8 @@
     "success": {
       "text": ["你在一堆灰烬中翻出一枚完好的金枝碎片。", "图书馆遗址里，你找到了一本未被焚毁的'书页'。"],
       "gold": 600,
-      "effects": { "synergy": 2, "pressure": 8 }
+      "effects": { "synergy": 2, "pressure": 8 },
+      "itemDrops": ["r-mambrino", "r-gungnir-shard", "a-moonstone-robe"]
     },
     "fail": {
       "text": ["你被其他寻宝者盯上，夺路而逃。", "遗址里根本没有值钱的东西——都被人搬空了。"],
@@ -663,7 +666,8 @@
     "success": {
       "text": ["你与血魔缠斗至天明，终于将其击杀。材料足够你吃穿一年。", "你取回了血魔的獠牙——血魔猎人的传统在你手中延续。"],
       "gold": 800,
-      "effects": { "reputation": 12, "pressure": 12 }
+      "effects": { "reputation": 12, "pressure": 12 },
+      "itemDrops": ["w-machete", "w-crossbow", "a-blood-cloak"]
     },
     "fail": {
       "text": ["你险些成为血魔的晚餐。", "血魔太强了——你只能丢下武器逃命。"],

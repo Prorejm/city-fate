@@ -196,7 +196,25 @@ for (const n of npcs) {
   }
 }
 
-console.log(`校验完成：事件 ${allEvents.length} 条 / 成就 ${achievements.length} 条 / 协会 ${associations.length} 个 / 委托 ${commissions.length} 条`)
+// ---------- 物品校验 ----------
+const items = readJson('items.json')
+const itemIds = new Set()
+for (const it of items) {
+  if (itemIds.has(it.id)) errors.push(`items.json: ID 重复 ${it.id}`)
+  itemIds.add(it.id)
+  if (!['weapon', 'armor', 'consumable', 'relic'].includes(it.category)) {
+    errors.push(`物品 ${it.id}: category 非法 '${it.category}'`)
+  }
+  if (!['white', 'green', 'blue', 'purple', 'gold'].includes(it.quality)) {
+    errors.push(`物品 ${it.id}: quality 非法 '${it.quality}'`)
+  }
+  for (const [k] of Object.entries(it.effects ?? {})) {
+    if (!EFFECT_KEYS.includes(k)) errors.push(`物品 ${it.id}: 效果键非法 '${k}'`)
+  }
+}
+if (items.length < 20) errors.push(`items.json 物品偏少（${items.length}）`)
+
+console.log(`校验完成：事件 ${allEvents.length} 条 / 成就 ${achievements.length} 条 / 协会 ${associations.length} 个 / 委托 ${commissions.length} 条 / 物品 ${items.length} 件`)
 if (warns.length) {
   console.log(`\n⚠ 警告 ${warns.length} 条：`)
   warns.forEach((w) => console.log('  -', w))

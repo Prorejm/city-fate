@@ -13,7 +13,7 @@ export function MenuScreen() {
   return (
     <div className="relative flex min-h-screen flex-col items-center justify-center px-6 py-16">
       <div className="crt-flicker text-center">
-        <div className="mb-2 font-mono text-xs tracking-[0.4em] text-ash-500">穿越者 · 都市生存模拟</div>
+        <div className="mb-2 font-mono text-xs tracking-[0.4em] text-ash-500">穿越者 · 都市 ROGUE·RPG</div>
         <h1 className="title-serif text-5xl text-ash-300 md:text-7xl">
           都市<span className="text-blood-400">·</span>命途
         </h1>
@@ -21,6 +21,9 @@ export function MenuScreen() {
           你从另一个世界醒来，身无分文地躺在第七区的垃圾堆里。
           <br />
           26 个翼，26 座巢，无数后巷，64 亿人——活下去，直到你找到答案。
+        </p>
+        <p className="mt-3 font-mono text-[11px] tracking-widest text-blood-400/70">
+          —— 第七区求生录 ——
         </p>
       </div>
 
@@ -33,10 +36,16 @@ export function MenuScreen() {
           <span className="absolute bottom-1 left-8 right-8 h-px bg-blood-500 opacity-0 transition-opacity group-hover:opacity-100" />
         </button>
         <button
-          onClick={() => pushToast('在都市，死亡只是又一次穿越。', 'info')}
+          onClick={() => pushToast('死亡不是终点——你的每次轮回，都会让下一个你更强。', 'info')}
           className="font-mono text-xs text-ash-500 underline-offset-4 hover:text-ash-300 hover:underline"
         >
           生存说明
+        </button>
+        <button
+          onClick={() => pushToast('都市图鉴即将开放：收录你遇见过的 NPC、协会与遗物。', 'info')}
+          className="font-mono text-xs text-ash-500 underline-offset-4 hover:text-ash-300 hover:underline"
+        >
+          都市图鉴（开发中）
         </button>
       </div>
 

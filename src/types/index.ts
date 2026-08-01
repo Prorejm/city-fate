@@ -61,6 +61,9 @@ export interface CityFateData {
   unlockedAchievements: string[]
   playCount: number
   totalLifespan: number
+  // 物品系统
+  inventory: InventoryEntry[]
+  equipped: EquippedSlots
 }
 
 /** 跨周目全局数据（持久化于 cityFateData 的子集） */
@@ -300,6 +303,57 @@ export interface XpSource {
   amount: number
 }
 
+// ============ 物品系统 ============
+
+export type ItemQuality = 'white' | 'green' | 'blue' | 'purple' | 'gold'
+export type ItemCategory = 'weapon' | 'armor' | 'consumable' | 'relic'
+export type EquipmentSlot = 'main-hand' | 'off-hand' | 'armor' | 'accessory'
+
+/** 物品定义 */
+export interface ItemDef {
+  id: string
+  name: string
+  category: ItemCategory
+  slot: EquipmentSlot | ''
+  quality: ItemQuality
+  description: string
+  durability: number
+  effects?: AttributeEffects
+  chanceMod?: number
+  passive?: string
+  value: number
+  consumable?: {
+    heal?: number
+    food?: number
+    pressure?: number
+    travel?: boolean
+    revive?: boolean
+  }
+}
+
+/** 背包中的一件物品 */
+export interface InventoryEntry {
+  id: string
+  durability: number
+}
+
+/** 装备槽 */
+export interface EquippedSlots {
+  'main-hand'?: string
+  'off-hand'?: string
+  armor?: string
+  accessory?: string
+}
+
+/** 物品品质色 */
+export const QUALITY_COLORS: Record<ItemQuality, string> = {
+  white: '#c3c7cf',
+  green: '#5ac08a',
+  blue: '#5a9ac0',
+  purple: '#b07ac0',
+  gold: '#e0c060',
+}
+
 /** 天赋分类：穿越天赋 / 开局身份天赋 */
 export type TalentKind = 'traverse' | 'identity' | 'regular'
 
@@ -353,6 +407,7 @@ export interface ActionResult {
   stage?: Stage
   unlockAction?: string
   grantTrait?: string
+  itemDrops?: string[]
   storyline?: string
   storylineProgress?: number
 }

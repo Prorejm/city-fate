@@ -60,6 +60,8 @@ export function createTraverseRun(
     unlockedAchievements: [],
     playCount: 1,
     totalLifespan: 0,
+    inventory: [],
+    equipped: {},
   }
   const run: RunState = {
     health: initHealth(stats),

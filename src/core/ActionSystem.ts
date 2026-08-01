@@ -2,7 +2,8 @@ import type { AttributeEffects, CityFateData, GameAction, RunState } from '@/typ
 import { chance, weightedRandom } from '@/engine/Random'
 import { applyEffects } from './PropertySystem'
 import { grantXp } from './ProfessionSystem'
-import { findAction, findNpc } from './data'
+import { equipmentChanceMod, equipmentStatBonus } from './ItemSystem'
+import { findAction, findNpc, findItem } from './data'
 import { modernKnowledgeBonus } from './TalentSystem'
 
 export interface ActionOutcome {
@@ -18,19 +19,18 @@ export interface ActionOutcome {
   storylineProgress?: number
 }
 
-/** 计算行动成功率：基础概率 + 属性偏向 + 天赋被动 */
+/** 行动成功率：基础 + 属性偏向 + 现代人学识 + 装备加成 */
 export function actionChance(data: CityFateData, action: GameAction): number {
   let p = action.baseChance
   if (action.statBias) {
     const { attr, weight } = action.statBias
-    const v = data.stats[attr]
-    p += (v - 5) * 0.04 * weight
+    p += (data.stats[attr] + equipmentStatBonus(data, attr) - 5) * 0.04 * weight
   }
-  // 现代人学识：智力偏好的行动加成
   if (action.statBias?.attr === 'intelligence') {
     p += modernKnowledgeBonus(data)
   }
-  return Math.max(0.05, Math.min(0.97, p))
+  p += equipmentChanceMod(data)
+  return Math.max(0.05, Math.min(0.95, p))
 }
 
 /** 执行行动：判定成败、应用效果、返回结果 */
@@ -91,6 +91,15 @@ export function executeAction(
   // 职业经验（行动成功时）
   if (ok && action.xp) {
     grantXp(run, action.xp.profession, action.xp.amount)
+  }
+
+  // 物品掉落（成功时按权重掉落）
+  if (ok && outcome.itemDrops && outcome.itemDrops.length > 0) {
+    const pool = outcome.itemDrops.filter((id) => !!findItem(id))
+    if (pool.length > 0) {
+      const pick = pool[Math.floor(Math.random() * pool.length)]
+      data.inventory = [...data.inventory, { id: pick, durability: findItem(pick)?.durability ?? 0 }]
+    }
   }
 
   // 文案选择

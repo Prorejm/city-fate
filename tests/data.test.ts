@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { getAllEvents, ACHIEVEMENTS, ORIGINS, EGO_TEMPLATES, SINS, DISTORTION_FORMS, DEATH_TYPES, TRAVERSE_TALENTS, LOCATIONS, ACTIONS, NPCS, STORYLINES, ASSOCIATIONS, COMMISSIONS } from '@/core/data'
+import { getAllEvents, ACHIEVEMENTS, ORIGINS, EGO_TEMPLATES, SINS, DISTORTION_FORMS, DEATH_TYPES, TRAVERSE_TALENTS, LOCATIONS, ACTIONS, NPCS, STORYLINES, ASSOCIATIONS, COMMISSIONS, ITEMS } from '@/core/data'
 
 describe('数据完整性', () => {
   it('事件 ID 全局唯一', () => {
@@ -87,5 +87,19 @@ describe('数据完整性', () => {
       expect(assocIds.has(c.associationId)).toBe(true)
       expect(['传闻', '都市传说', '都市恶疾', '都市梦魇', '都市之星']).toContain(c.tier)
     }
+  })
+
+  it('物品库完整且含文学遗物', () => {
+    expect(ITEMS.length).toBeGreaterThanOrEqual(24)
+    expect(new Set(ITEMS.map((i) => i.id)).size).toBe(ITEMS.length)
+    const cats = new Set(ITEMS.map((i) => i.category))
+    expect(cats.has('weapon')).toBe(true)
+    expect(cats.has('armor')).toBe(true)
+    expect(cats.has('consumable')).toBe(true)
+    expect(cats.has('relic')).toBe(true)
+    // 文学遗物彩蛋
+    expect(ITEMS.some((i) => i.id === 'r-mambrino')).toBe(true)
+    expect(ITEMS.some((i) => i.id === 'r-gungnir-shard')).toBe(true)
+    expect(ITEMS.some((i) => i.id === 'r-whale-bone')).toBe(true)
   })
 })
