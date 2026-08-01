@@ -1,0 +1,44 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" width="256" height="256">
+<defs>
+  <radialGradient id="bg" cx="50%" cy="38%" r="75%">
+    <stop offset="0%" stop-color="#3a3e44"/>
+    <stop offset="55%" stop-color="#1e2129"/>
+    <stop offset="100%" stop-color="#14161c"/>
+  </radialGradient>
+  <radialGradient id="rim" cx="50%" cy="30%" r="60%">
+    <stop offset="0%" stop-color="#7a9ab0" stop-opacity="0.35"/>
+    <stop offset="100%" stop-color="#7a9ab0" stop-opacity="0"/>
+  </radialGradient>
+</defs>
+<rect width="256" height="256" fill="url(#bg)"/>
+<rect width="256" height="256" fill="url(#rim)"/>
+<g opacity="0.5">
+  <circle cx="46" cy="60" r="1.5" fill="#8a8f98"/><circle cx="210" cy="90" r="1.2" fill="#8a8f98"/>
+  <circle cx="30" cy="170" r="1" fill="#8a8f98"/><circle cx="228" cy="180" r="1.4" fill="#8a8f98"/>
+  <circle cx="120" cy="28" r="1" fill="#8a8f98"/><circle cx="180" cy="220" r="1.1" fill="#8a8f98"/>
+</g>
+<g>
+  <path d="M58 256 Q58 200 96 178 L160 178 Q198 200 198 256 Z" fill="#4a4a44"/>
+  <path d="M96 178 Q96 164 128 162 Q160 164 160 178 L160 210 Q128 220 96 210 Z" fill="#6a645c"/>
+  <path d="M118 150 L138 150 L138 176 L118 176 Z" fill="#a88462"/>
+  <rect x="106" y="128" width="44" height="34" rx="20" fill="#a88462"/>
+  <circle cx="106" cy="150" r="9" fill="#a88462"/>
+  <circle cx="150" cy="150" r="9" fill="#a88462"/>
+  
+  
+</g>
+<g>
+  
+  
+  <path d="M104 132 Q108 120 128 118 Q148 120 152 132 Q150 138 142 140 Q132 142 122 140 Q110 138 104 132 Z" fill="#efe3d0"/>
+  <ellipse cx="114" cy="138" rx="4.4" ry="3" fill="#4a3a2a"/><circle cx="114" cy="137" r="1.1" fill="#14161c"/><ellipse cx="142" cy="138" rx="4.4" ry="3" fill="#4a3a2a"/><circle cx="142" cy="137" r="1.1" fill="#14161c"/>
+  <path d="M105 126 Q112 120 120 124" stroke="#4a3a28" stroke-width="2.6" fill="none" stroke-linecap="round"/>
+  <path d="M105 126 Q112 120 120 124" stroke="#4a3a28" stroke-width="2.6" fill="none" stroke-linecap="round"/>
+  <path d="M122 154 Q128 159 134 154" fill="none" stroke="#5a4636" stroke-width="2" stroke-linecap="round"/>
+  
+  
+  <path d="M106 146 Q112 148 118 146" fill="none" stroke="#14161c" opacity="0.25" stroke-width="1.2"/><path d="M138 146 Q144 148 150 146" fill="none" stroke="#14161c" opacity="0.25" stroke-width="1.2"/><path d="M122 144 Q128 145 134 144" fill="none" stroke="#14161c" opacity="0.2" stroke-width="1"/>
+  
+  <path d="M104 162 Q104 148 110 146 L128 150 L146 146 Q152 148 152 162 Q148 184 128 188 Q108 184 104 162 Z" fill="#d0c8b8"/>
+  
+</g></svg>
